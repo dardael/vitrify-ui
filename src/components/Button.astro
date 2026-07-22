@@ -1,0 +1,182 @@
+---
+type Props = {
+  variant?: 'primary' | 'secondary' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+  href?: string
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
+  fullWidth?: boolean
+  [key: string]: unknown
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  fullWidth = false,
+  ...rest
+} = Astro.props
+
+const isLink = Boolean(href)
+const Tag = isLink ? 'a' : 'button'
+---
+
+<Tag
+  class:list={[
+    'btn',
+    `btn--${variant}`,
+    `btn--${size}`,
+    fullWidth && 'btn--full',
+  ]}
+  href={isLink ? (disabled ? undefined : href) : undefined}
+  type={!isLink ? type : undefined}
+  disabled={!isLink && disabled ? true : undefined}
+  aria-disabled={disabled ? 'true' : undefined}
+  tabindex={isLink && disabled ? -1 : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border: 2px solid transparent;
+    border-radius: var(--vf-radius-md);
+    cursor: pointer;
+    font-family: var(--vf-font-sans);
+    font-weight: var(--vf-font-weight-semibold);
+    line-height: 1;
+    text-decoration: none;
+    user-select: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color var(--vf-duration-fast) var(--vf-ease-out),
+      border-color var(--vf-duration-fast) var(--vf-ease-out),
+      color var(--vf-duration-fast) var(--vf-ease-out),
+      box-shadow var(--vf-duration-fast) var(--vf-ease-out),
+      transform var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  /* ── Sizes ── */
+  .btn--sm {
+    height: 36px;
+    padding: 0 var(--vf-spacing-4);
+    font-size: var(--vf-font-size-sm);
+    position: relative;
+  }
+
+  @media (pointer: coarse) {
+    .btn--sm::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+    }
+  }
+
+  .btn--md {
+    height: 44px;
+    padding: 0 var(--vf-spacing-6);
+    font-size: var(--vf-font-size-base);
+  }
+
+  .btn--lg {
+    height: 52px;
+    padding: 0 var(--vf-spacing-8);
+    font-size: var(--vf-font-size-lg);
+  }
+
+  .btn--full {
+    width: 100%;
+  }
+
+  /* ── Primary ── */
+  .btn--primary {
+    background: var(--vf-color-primary);
+    border-color: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+  }
+
+  .btn--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--vf-color-primary-hover);
+    border-color: var(--vf-color-primary-hover);
+    box-shadow: var(--vf-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .btn--primary:active:not(:disabled):not([aria-disabled="true"]) {
+    box-shadow: none;
+    transform: translateY(0) scale(0.96);
+  }
+
+  /* ── Secondary ── */
+  .btn--secondary {
+    background: transparent;
+    border-color: var(--vf-color-primary);
+    color: var(--vf-color-primary);
+  }
+
+  .btn--secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+    box-shadow: var(--vf-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .btn--secondary:active:not(:disabled):not([aria-disabled="true"]) {
+    box-shadow: none;
+    transform: translateY(0) scale(0.96);
+  }
+
+  /* ── Ghost ── */
+  .btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--vf-color-text);
+  }
+
+  .btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--vf-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .btn--ghost:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: scale(0.96);
+  }
+
+  /* ── Focus ── */
+  .btn:focus {
+    outline: none;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--vf-color-primary);
+    outline-offset: 3px;
+  }
+
+  /* ── Disabled ── */
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition:
+        background-color var(--vf-duration-fast) var(--vf-ease-out),
+        border-color var(--vf-duration-fast) var(--vf-ease-out),
+        color var(--vf-duration-fast) var(--vf-ease-out);
+    }
+  }
+</style>

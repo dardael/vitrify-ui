@@ -1,47 +1,54 @@
 :root {
-  /* ── Brand ── */
-  --vf-color-primary:            #3b82f6;
-  --vf-color-primary-hover:      #2563eb;
-  --vf-color-primary-foreground: #ffffff;
+  /* ── Brand colors — OKLCH ── */
+  /* Strategy: Committed — crimson on pure white */
 
-  --vf-color-secondary:            #6b7280;
-  --vf-color-secondary-hover:      #4b5563;
-  --vf-color-secondary-foreground: #ffffff;
+  --vf-color-primary:            oklch(0.57 0.195 26);
+  --vf-color-primary-hover:      oklch(0.50 0.190 26);
+  --vf-color-primary-foreground: oklch(1.000 0.000 0);
 
-  --vf-color-accent:            #f59e0b;
-  --vf-color-accent-hover:      #d97706;
-  --vf-color-accent-foreground: #ffffff;
+  --vf-color-secondary:            oklch(0.40 0.015 26);
+  --vf-color-secondary-hover:      oklch(0.32 0.015 26);
+  --vf-color-secondary-foreground: oklch(1.000 0.000 0);
+
+  --vf-color-accent:            oklch(0.82 0.135 74);
+  --vf-color-accent-hover:      oklch(0.76 0.145 74);
+  --vf-color-accent-foreground: oklch(0.20 0.040 74);
 
   /* ── Neutrals ── */
-  --vf-color-background:   #ffffff;
-  --vf-color-surface:      #f9fafb;
-  --vf-color-border:       #e5e7eb;
+  --vf-color-background: oklch(1.000 0.000 0);
+  --vf-color-surface:    oklch(0.975 0.006 26);
+  --vf-color-border:     oklch(0.880 0.007 26);
 
-  /* ── Text ── */
-  --vf-color-text:        #111827;
-  --vf-color-text-muted:  #6b7280;
-  --vf-color-text-subtle: #9ca3af;
+  /* ── Text — WCAG AAA on white bg ── */
+  --vf-color-text:        oklch(0.20 0.018 26);
+  --vf-color-text-muted:  oklch(0.40 0.010 26);
+  --vf-color-text-subtle: oklch(0.58 0.006 26);
 
   /* ── Semantic ── */
-  --vf-color-success: #16a34a;
-  --vf-color-warning: #d97706;
-  --vf-color-danger:  #dc2626;
-  --vf-color-info:    #2563eb;
+  --vf-color-success: oklch(0.52 0.165 145);
+  --vf-color-warning: oklch(0.65 0.160 74);
+  --vf-color-danger:  oklch(0.52 0.200 26);
+  --vf-color-info:    oklch(0.52 0.180 255);
 
   /* ── Typography ── */
-  --vf-font-sans:  system-ui, -apple-system, sans-serif;
-  --vf-font-serif: Georgia, 'Times New Roman', serif;
-  --vf-font-mono:  ui-monospace, 'Courier New', monospace;
+  /* Import: https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap */
+  --vf-font-sans:    'Bricolage Grotesque', system-ui, sans-serif;
+  --vf-font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --vf-font-mono:    ui-monospace, 'Courier New', monospace;
 
-  --vf-font-size-xs:   0.75rem;
-  --vf-font-size-sm:   0.875rem;
-  --vf-font-size-base: 1rem;
-  --vf-font-size-lg:   1.125rem;
-  --vf-font-size-xl:   1.25rem;
+  /* Display variation — condensed bold for headings */
+  --vf-font-display-settings: "wdth" 80, "wght" 700;
+
+  /* Fluid scale */
+  --vf-font-size-display: clamp(2.5rem, 5vw, 4.5rem);
+  --vf-font-size-heading: clamp(1.75rem, 3vw, 2.5rem);
+  --vf-font-size-subhead: clamp(1.25rem, 2vw, 1.5rem);
   --vf-font-size-2xl:  1.5rem;
-  --vf-font-size-3xl:  1.875rem;
-  --vf-font-size-4xl:  2.25rem;
-  --vf-font-size-5xl:  3rem;
+  --vf-font-size-xl:   1.25rem;
+  --vf-font-size-lg:   1.125rem;
+  --vf-font-size-base: 1rem;
+  --vf-font-size-sm:   0.875rem;
+  --vf-font-size-xs:   0.75rem;
 
   --vf-font-weight-normal:   400;
   --vf-font-weight-medium:   500;
@@ -52,19 +59,24 @@
   --vf-line-height-normal:  1.5;
   --vf-line-height-relaxed: 1.75;
 
-  /* ── Spacing ── */
+  /* ── Spacing (4px base) ── */
   --vf-spacing-1:  0.25rem;
   --vf-spacing-2:  0.5rem;
   --vf-spacing-3:  0.75rem;
   --vf-spacing-4:  1rem;
-  --vf-spacing-5:  1.25rem;
   --vf-spacing-6:  1.5rem;
   --vf-spacing-8:  2rem;
-  --vf-spacing-10: 2.5rem;
   --vf-spacing-12: 3rem;
   --vf-spacing-16: 4rem;
   --vf-spacing-20: 5rem;
   --vf-spacing-24: 6rem;
+
+  /* Fluid section rhythm */
+  --vf-section-padding: clamp(3rem, 8vw, 6rem);
+
+  /* Container */
+  --vf-container:      min(calc(100% - 2rem), 1280px);
+  --vf-container-text: min(calc(100% - 2rem), 768px);
 
   /* ── Border radius ── */
   --vf-radius-none: 0;
@@ -72,24 +84,18 @@
   --vf-radius-md:   8px;
   --vf-radius-lg:   12px;
   --vf-radius-xl:   16px;
-  --vf-radius-2xl:  24px;
   --vf-radius-full: 9999px;
 
   /* ── Shadows ── */
-  --vf-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --vf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --vf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --vf-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --vf-shadow-sm: 0 1px 2px 0 oklch(0.20 0.018 26 / 0.06);
+  --vf-shadow-md: 0 4px 12px -2px oklch(0.20 0.018 26 / 0.10);
+  --vf-shadow-lg: 0 8px 24px -4px oklch(0.20 0.018 26 / 0.12);
 
-  /* ── Transitions ── */
-  --vf-transition-fast: 150ms ease;
-  --vf-transition-base: 200ms ease;
-  --vf-transition-slow: 300ms ease;
+  /* ── Motion ── */
+  --vf-duration-fast: 150ms;
+  --vf-duration-base: 220ms;
+  --vf-duration-slow: 380ms;
+  --vf-ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --vf-ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Container widths ── */
-  --vf-container-sm:  640px;
-  --vf-container-md:  768px;
-  --vf-container-lg:  1024px;
-  --vf-container-xl:  1280px;
-  --vf-container-2xl: 1536px;
 }

@@ -1,0 +1,296 @@
+---
+import ShowcaseLayout from '../../layouts/ShowcaseLayout.astro'
+import Button from '../../components/Button.astro'
+---
+
+<ShowcaseLayout title="Showcase — Button · Vitrify">
+  <!-- Nav -->
+  <nav class="nav" aria-label="Navigation showcase">
+    <a href="/" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Showcase
+    </a>
+    <span class="nav-sep" aria-hidden="true">/</span>
+    <span class="nav-title">Button</span>
+  </nav>
+
+  <main class="page">
+
+    <!-- Header -->
+    <header class="page-header">
+      <h1>Button</h1>
+      <p>Composant atomique réutilisable. Rend un <code>&lt;button&gt;</code> ou un <code>&lt;a&gt;</code> selon la présence du prop <code>href</code>. Zéro JS, thématisable via tokens <code>--vf-*</code>.</p>
+    </header>
+
+    <!-- Variantes × Tailles -->
+    <section class="section" aria-labelledby="variants-heading">
+      <p class="section-label" id="variants-heading">Variantes</p>
+      <div class="variants-grid">
+        <div class="variant-col">
+          <p class="variant-name">Primary</p>
+          <Button size="sm">Petit</Button>
+          <Button size="md">Moyen</Button>
+          <Button size="lg">Grand</Button>
+        </div>
+        <div class="variant-col">
+          <p class="variant-name">Secondary</p>
+          <Button variant="secondary" size="sm">Petit</Button>
+          <Button variant="secondary" size="md">Moyen</Button>
+          <Button variant="secondary" size="lg">Grand</Button>
+        </div>
+        <div class="variant-col">
+          <p class="variant-name">Ghost</p>
+          <Button variant="ghost" size="sm">Petit</Button>
+          <Button variant="ghost" size="md">Moyen</Button>
+          <Button variant="ghost" size="lg">Grand</Button>
+        </div>
+      </div>
+    </section>
+
+    <!-- États -->
+    <section class="section" aria-labelledby="states-heading">
+      <p class="section-label" id="states-heading">États</p>
+
+      <div class="row">
+        <span class="row-label">Par défaut</span>
+        <Button>Envoyer</Button>
+        <Button variant="secondary">Annuler</Button>
+        <Button variant="ghost">En savoir plus</Button>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Désactivé</span>
+        <Button disabled>Envoyer</Button>
+        <Button variant="secondary" disabled>Annuler</Button>
+        <Button variant="ghost" disabled>En savoir plus</Button>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Lien</span>
+        <Button href="/contact">Nous contacter</Button>
+        <Button variant="secondary" href="/services">Nos services</Button>
+        <Button variant="ghost" href="/about">À propos</Button>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Pleine largeur</span>
+      </div>
+      <div style="max-width: 360px; margin-top: var(--vf-spacing-2);">
+        <Button fullWidth>Envoyer le formulaire</Button>
+      </div>
+    </section>
+
+    <!-- Sur fond sombre -->
+    <section aria-labelledby="dark-heading" class="dark-section">
+      <p class="section-label" id="dark-heading">Sur fond sombre</p>
+      <div class="row">
+        <Button>Réserver</Button>
+        <Button variant="secondary">En savoir plus</Button>
+        <Button variant="ghost">Voir le menu</Button>
+      </div>
+    </section>
+
+    <!-- Usage -->
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Button &#125; from 'vitrify-ui';
+---
+
+&lt;!-- Lien (rend un &lt;a&gt;) --&gt;
+&lt;Button href="/contact"&gt;Nous contacter&lt;/Button&gt;
+
+&lt;!-- Bouton de formulaire --&gt;
+&lt;Button type="submit"&gt;Envoyer&lt;/Button&gt;
+
+&lt;!-- Variantes --&gt;
+&lt;Button variant="secondary"&gt;Annuler&lt;/Button&gt;
+&lt;Button variant="ghost"&gt;En savoir plus&lt;/Button&gt;
+
+&lt;!-- Tailles --&gt;
+&lt;Button size="sm"&gt;Petit&lt;/Button&gt;
+&lt;Button size="lg"&gt;Grand CTA&lt;/Button&gt;
+
+&lt;!-- Pleine largeur --&gt;
+&lt;Button fullWidth&gt;Envoyer le formulaire&lt;/Button&gt;
+
+&lt;!-- Désactivé --&gt;
+&lt;Button disabled&gt;Indisponible&lt;/Button&gt;
+
+&lt;!-- Passer des attributs HTML natifs --&gt;
+&lt;Button id="open-menu" aria-controls="nav-menu"&gt;Menu&lt;/Button&gt;</pre>
+    </section>
+
+  </main>
+</ShowcaseLayout>
+
+<style>
+  /* ── Nav ── */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--vf-spacing-4);
+    padding: var(--vf-spacing-4) var(--vf-spacing-8);
+    border-bottom: 1px solid var(--vf-color-border);
+  }
+
+  .nav-back {
+    font-size: var(--vf-font-size-sm);
+    color: var(--vf-color-text-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vf-spacing-2);
+    transition: color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .nav-back:hover { color: var(--vf-color-primary); }
+
+  .nav-sep {
+    color: var(--vf-color-border);
+    font-size: var(--vf-font-size-sm);
+  }
+
+  .nav-title {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text);
+  }
+
+  /* ── Page ── */
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--vf-spacing-12) var(--vf-spacing-8);
+  }
+
+  .page-header {
+    margin-bottom: var(--vf-spacing-12);
+  }
+
+  .page-header h1 {
+    font-size: var(--vf-font-size-heading);
+    font-weight: var(--vf-font-weight-bold);
+    font-variation-settings: var(--vf-font-display-settings);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--vf-spacing-3);
+    text-wrap: balance;
+  }
+
+  .page-header p {
+    font-size: var(--vf-font-size-base);
+    color: var(--vf-color-text-muted);
+    max-width: 52ch;
+    line-height: var(--vf-line-height-relaxed);
+  }
+
+  /* ── Sections ── */
+  .section {
+    margin-bottom: var(--vf-spacing-16);
+  }
+
+  .section-label {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text-muted);
+    margin-bottom: var(--vf-spacing-6);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ── Row layout ── */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vf-spacing-4);
+  }
+
+  .row + .row {
+    margin-top: var(--vf-spacing-4);
+  }
+
+  .row-label {
+    font-size: var(--vf-font-size-xs);
+    color: var(--vf-color-text-subtle);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  /* ── Grid variants ── */
+  .variants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--vf-spacing-8);
+  }
+
+  .variant-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-4);
+  }
+
+  .variant-name {
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--vf-spacing-2);
+  }
+
+  /* ── Dark section ── */
+  .dark-section {
+    background: var(--vf-color-text);
+    border-radius: var(--vf-radius-lg);
+    padding: var(--vf-spacing-12) var(--vf-spacing-8);
+    margin-bottom: var(--vf-spacing-16);
+  }
+
+  .dark-section .section-label {
+    color: oklch(0.58 0.006 26);
+  }
+
+  /* Secondary on dark: white border + white text */
+  .dark-section .btn--secondary {
+    border-color: oklch(1.000 0.000 0);
+    color: oklch(1.000 0.000 0);
+  }
+
+  .dark-section :global(.btn--secondary:hover:not(:disabled):not([aria-disabled="true"])) {
+    background: oklch(1.000 0.000 0);
+    color: var(--vf-color-text);
+  }
+
+  .dark-section .btn--ghost {
+    color: oklch(0.88 0.007 26);
+  }
+
+  .dark-section :global(.btn--ghost:hover:not(:disabled):not([aria-disabled="true"])) {
+    color: oklch(1.000 0.000 0);
+  }
+
+  /* ── Usage snippet ── */
+  .code-block {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-md);
+    padding: var(--vf-spacing-6);
+    font-family: var(--vf-font-mono);
+    font-size: var(--vf-font-size-sm);
+    color: var(--vf-color-text);
+    line-height: var(--vf-line-height-relaxed);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .page { padding: var(--vf-spacing-8) var(--vf-spacing-4); }
+    .nav  { padding: var(--vf-spacing-3) var(--vf-spacing-4); }
+    .row-label { display: none; }
+    .dark-section { padding: var(--vf-spacing-8) var(--vf-spacing-4); }
+  }
+</style>
