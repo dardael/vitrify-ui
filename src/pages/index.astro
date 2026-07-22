@@ -1,17 +1,87 @@
 ---
+import '../theme/tokens.css';
 
+const componentPaths = Object.keys(import.meta.glob('./components/*.astro'));
+const templatePaths = Object.keys(import.meta.glob('./templates/*.astro'));
+
+const toName = (path: string) =>
+  path.split('/').pop()?.replace('.astro', '') ?? path;
+
+const toHref = (path: string) =>
+  path.replace(/^\./, '').replace('.astro', '');
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Vitrify — Showcase</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        font-family: var(--vf-font-sans, system-ui, sans-serif);
+        color: var(--vf-color-text, #111827);
+        background: var(--vf-color-background, #fff);
+        margin: 0;
+        padding: var(--vf-spacing-8, 2rem);
+      }
+      h1 { font-size: var(--vf-font-size-3xl, 1.875rem); margin-bottom: var(--vf-spacing-2, 0.5rem); }
+      h2 {
+        font-size: var(--vf-font-size-xl, 1.25rem);
+        margin: var(--vf-spacing-8, 2rem) 0 var(--vf-spacing-4, 1rem);
+        color: var(--vf-color-text-muted, #6b7280);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: var(--vf-spacing-4, 1rem);
+      }
+      .card {
+        display: block;
+        padding: var(--vf-spacing-4, 1rem) var(--vf-spacing-6, 1.5rem);
+        background: var(--vf-color-surface, #f9fafb);
+        border: 1px solid var(--vf-color-border, #e5e7eb);
+        border-radius: var(--vf-radius-md, 8px);
+        text-decoration: none;
+        color: var(--vf-color-text, #111827);
+        font-weight: var(--vf-font-weight-medium, 500);
+        transition: box-shadow var(--vf-transition-fast, 150ms ease);
+      }
+      .card:hover { box-shadow: var(--vf-shadow-md); }
+      .empty {
+        color: var(--vf-color-text-subtle, #9ca3af);
+        font-size: var(--vf-font-size-sm, 0.875rem);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Vitrify Showcase</h1>
+
+    <h2>Composants</h2>
+    {componentPaths.length > 0 ? (
+      <div class="grid">
+        {componentPaths.map((p) => (
+          <a class="card" href={toHref(p)}>{toName(p)}</a>
+        ))}
+      </div>
+    ) : (
+      <p class="empty">
+        Aucun composant — créer des pages dans <code>src/pages/components/</code>
+      </p>
+    )}
+
+    <h2>Templates</h2>
+    {templatePaths.length > 0 ? (
+      <div class="grid">
+        {templatePaths.map((p) => (
+          <a class="card" href={toHref(p)}>{toName(p)}</a>
+        ))}
+      </div>
+    ) : (
+      <p class="empty">
+        Aucun template — créer des pages dans <code>src/pages/templates/</code>
+      </p>
+    )}
+  </body>
 </html>

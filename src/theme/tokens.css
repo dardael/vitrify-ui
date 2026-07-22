@@ -1,0 +1,95 @@
+:root {
+  /* ── Brand ── */
+  --vf-color-primary:            #3b82f6;
+  --vf-color-primary-hover:      #2563eb;
+  --vf-color-primary-foreground: #ffffff;
+
+  --vf-color-secondary:            #6b7280;
+  --vf-color-secondary-hover:      #4b5563;
+  --vf-color-secondary-foreground: #ffffff;
+
+  --vf-color-accent:            #f59e0b;
+  --vf-color-accent-hover:      #d97706;
+  --vf-color-accent-foreground: #ffffff;
+
+  /* ── Neutrals ── */
+  --vf-color-background:   #ffffff;
+  --vf-color-surface:      #f9fafb;
+  --vf-color-border:       #e5e7eb;
+
+  /* ── Text ── */
+  --vf-color-text:        #111827;
+  --vf-color-text-muted:  #6b7280;
+  --vf-color-text-subtle: #9ca3af;
+
+  /* ── Semantic ── */
+  --vf-color-success: #16a34a;
+  --vf-color-warning: #d97706;
+  --vf-color-danger:  #dc2626;
+  --vf-color-info:    #2563eb;
+
+  /* ── Typography ── */
+  --vf-font-sans:  system-ui, -apple-system, sans-serif;
+  --vf-font-serif: Georgia, 'Times New Roman', serif;
+  --vf-font-mono:  ui-monospace, 'Courier New', monospace;
+
+  --vf-font-size-xs:   0.75rem;
+  --vf-font-size-sm:   0.875rem;
+  --vf-font-size-base: 1rem;
+  --vf-font-size-lg:   1.125rem;
+  --vf-font-size-xl:   1.25rem;
+  --vf-font-size-2xl:  1.5rem;
+  --vf-font-size-3xl:  1.875rem;
+  --vf-font-size-4xl:  2.25rem;
+  --vf-font-size-5xl:  3rem;
+
+  --vf-font-weight-normal:   400;
+  --vf-font-weight-medium:   500;
+  --vf-font-weight-semibold: 600;
+  --vf-font-weight-bold:     700;
+
+  --vf-line-height-tight:   1.25;
+  --vf-line-height-normal:  1.5;
+  --vf-line-height-relaxed: 1.75;
+
+  /* ── Spacing ── */
+  --vf-spacing-1:  0.25rem;
+  --vf-spacing-2:  0.5rem;
+  --vf-spacing-3:  0.75rem;
+  --vf-spacing-4:  1rem;
+  --vf-spacing-5:  1.25rem;
+  --vf-spacing-6:  1.5rem;
+  --vf-spacing-8:  2rem;
+  --vf-spacing-10: 2.5rem;
+  --vf-spacing-12: 3rem;
+  --vf-spacing-16: 4rem;
+  --vf-spacing-20: 5rem;
+  --vf-spacing-24: 6rem;
+
+  /* ── Border radius ── */
+  --vf-radius-none: 0;
+  --vf-radius-sm:   4px;
+  --vf-radius-md:   8px;
+  --vf-radius-lg:   12px;
+  --vf-radius-xl:   16px;
+  --vf-radius-2xl:  24px;
+  --vf-radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --vf-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --vf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --vf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --vf-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* ── Transitions ── */
+  --vf-transition-fast: 150ms ease;
+  --vf-transition-base: 200ms ease;
+  --vf-transition-slow: 300ms ease;
+
+  /* ── Container widths ── */
+  --vf-container-sm:  640px;
+  --vf-container-md:  768px;
+  --vf-container-lg:  1024px;
+  --vf-container-xl:  1280px;
+  --vf-container-2xl: 1536px;
+}
