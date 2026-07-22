@@ -1,5 +1,5 @@
 {
-  "name": "vitrify",
+  "name": "vitrify-ui",
   "type": "module",
   "version": "0.0.1",
   "description": "Astro UI component library for vitrine sites",

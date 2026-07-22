@@ -115,7 +115,7 @@ Un projet consommateur surcharge les tokens à la racine de son CSS :
 
 ```css
 /* mon-site/src/styles/theme.css */
-@import 'vitrify/theme';   /* valeurs par défaut */
+@import 'vitrify-ui/theme';   /* valeurs par défaut */
 
 :root {
   --vf-color-primary:       #7c3aed;
@@ -133,14 +133,14 @@ Un projet consommateur surcharge les tokens à la racine de son CSS :
 
 **1. Choisir un nom unique**
 
-Le nom `vitrify` est peut-être déjà pris sur npm. Utiliser un nom scopé avec ton username npm garantit l'unicité :
+Le nom `vitrify-ui` est peut-être déjà pris sur npm. Utiliser un nom scopé avec ton username npm garantit l'unicité :
 
 ```sh
 # Vérifier si le nom est libre
-npm info vitrify
+npm info vitrify-ui
 
 # Si pris → dans package.json, changer "name":
-# "vitrify"  →  "@ton-username-npm/vitrify"
+# "vitrify-ui"  →  "@ton-username-npm/vitrify-ui"
 ```
 
 **2. Créer un compte npmjs.com** (si pas encore fait) : https://www.npmjs.com/signup
@@ -159,12 +159,12 @@ npm publish --access public
 ```
 
 > `--access public` est obligatoire pour les packages scopés (`@username/...`).
-> Pour un nom non scopé (`vitrify`), npm le publie public par défaut.
+> Pour un nom non scopé (`vitrify-ui`), npm le publie public par défaut.
 
 **5. Vérifier**
 
 ```sh
-npm info vitrify          # ou npm info @ton-username/vitrify
+npm info vitrify-ui          # ou npm info @ton-username/vitrify-ui
 ```
 
 ---
@@ -204,14 +204,14 @@ npm pack --dry-run
 ## Utiliser Vitrify dans un autre projet Astro
 
 ```sh
-npm install vitrify          # ou @ton-username/vitrify
+npm install vitrify-ui          # ou @ton-username/vitrify-ui
 ```
 
 ```astro
 ---
 // src/pages/index.astro
-import 'vitrify/theme';
-import { Button } from 'vitrify';
+import 'vitrify-ui/theme';
+import { Button } from 'vitrify-ui';
 ---
 <html>
   <body>
@@ -225,7 +225,7 @@ Surcharger le thème dans le layout global :
 
 ```css
 /* src/styles/global.css */
-@import 'vitrify/theme';
+@import 'vitrify-ui/theme';
 
 :root {
   --vf-color-primary: #16a34a;
