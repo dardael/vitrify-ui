@@ -1,43 +1,150 @@
-# Astro Starter Kit: Minimal
+# Vitrify
+
+Bibliothèque de composants et templates Astro pour sites vitrines. Distribuée en package npm, avec une showcase intégrée pour visualiser les composants.
+
+## Démarrage rapide
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
+# → http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+La showcase liste automatiquement tous les composants et templates disponibles.
 
-## 🚀 Project Structure
+## Structure
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/
+├── components/        # Composants exportés (Button, Card, Nav…)
+├── templates/         # Templates de sections (Hero, Footer…)
+├── theme/
+│   └── tokens.css     # Variables CSS --vf-* (couleurs, typo, spacing…)
+├── pages/             # Showcase uniquement — non exporté
+│   ├── index.astro    # Index auto-généré
+│   ├── components/    # Une page par composant
+│   └── templates/     # Une page par template
+└── index.ts           # Point d'entrée du package
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Ajouter un composant
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### 1. Créer le composant
 
-Any static assets, like images, can be placed in the `public/` directory.
+```astro
+<!-- src/components/Button.astro -->
+---
+interface Props {
+  variant?: 'primary' | 'secondary';
+  href?: string;
+}
+const { variant = 'primary', href } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
 
-## 🧞 Commands
+<Tag class:list={['btn', `btn--${variant}`]} href={href}>
+  <slot />
+</Tag>
 
-All commands are run from the root of the project, from a terminal:
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--vf-spacing-3) var(--vf-spacing-6);
+    border-radius: var(--vf-radius-md);
+    font-family: var(--vf-font-sans);
+    font-weight: var(--vf-font-weight-semibold);
+    font-size: var(--vf-font-size-base);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--vf-transition-fast);
+  }
+  .btn--primary {
+    background: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+  }
+  .btn--primary:hover { background: var(--vf-color-primary-hover); }
+  .btn--secondary {
+    background: var(--vf-color-secondary);
+    color: var(--vf-color-secondary-foreground);
+  }
+  .btn--secondary:hover { background: var(--vf-color-secondary-hover); }
+</style>
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### 2. L'exporter dans `src/index.ts`
 
-## 👀 Want to learn more?
+```ts
+export { default as Button } from './components/Button.astro';
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### 3. Créer sa page showcase
+
+```astro
+<!-- src/pages/components/Button.astro -->
+---
+import '../../theme/tokens.css';
+import Button from '../../components/Button.astro';
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Showcase — Button</title>
+  </head>
+  <body style="padding: 2rem; font-family: system-ui">
+    <h1>Button</h1>
+
+    <h2>Primary</h2>
+    <Button>Envoyer</Button>
+    <Button href="#">Lien</Button>
+
+    <h2>Secondary</h2>
+    <Button variant="secondary">Annuler</Button>
+  </body>
+</html>
+```
+
+La page apparaît automatiquement dans la showcase à `http://localhost:4321`.
+
+## Thème
+
+Tous les composants utilisent des variables CSS préfixées `--vf-*`. Voir `src/theme/tokens.css` pour la liste complète.
+
+Un projet consommateur surcharge les tokens à la racine de son CSS :
+
+```css
+/* mon-site/src/styles/theme.css */
+@import 'vitrify/theme';   /* valeurs par défaut */
+
+:root {
+  --vf-color-primary:       #7c3aed;
+  --vf-color-primary-hover: #6d28d9;
+  --vf-font-sans:           'Poppins', sans-serif;
+  --vf-radius-md:           12px;
+}
+```
+
+## Utiliser Vitrify dans un autre projet
+
+```sh
+npm install vitrify
+```
+
+```astro
+---
+// src/pages/index.astro
+import 'vitrify/theme';
+import { Button, HeroSection } from 'vitrify';
+---
+<Button>Contactez-nous</Button>
+```
+
+## Commandes
+
+| Commande              | Action                                   |
+| :-------------------- | :--------------------------------------- |
+| `npm run dev`         | Showcase sur `localhost:4321`            |
+| `npm run build`       | Build de la showcase vers `./dist/`      |
+| `npm run preview`     | Prévisualiser le build                   |
+| `npm run astro check` | Vérification TypeScript des composants   |
