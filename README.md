@@ -2,7 +2,7 @@
 
 Bibliothèque de composants et templates Astro pour sites vitrines. Distribuée en package npm, avec une showcase intégrée pour visualiser les composants.
 
-## Démarrage rapide
+## Démarrage rapide (développement)
 
 ```sh
 npm install
@@ -20,7 +20,7 @@ src/
 ├── templates/         # Templates de sections (Hero, Footer…)
 ├── theme/
 │   └── tokens.css     # Variables CSS --vf-* (couleurs, typo, spacing…)
-├── pages/             # Showcase uniquement — non exporté
+├── pages/             # Showcase uniquement — non exporté, non publié
 │   ├── index.astro    # Index auto-généré
 │   ├── components/    # Une page par composant
 │   └── templates/     # Une page par template
@@ -125,26 +125,132 @@ Un projet consommateur surcharge les tokens à la racine de son CSS :
 }
 ```
 
-## Utiliser Vitrify dans un autre projet
+---
+
+## Publier une nouvelle version sur npm
+
+### Première fois — configuration
+
+**1. Choisir un nom unique**
+
+Le nom `vitrify` est peut-être déjà pris sur npm. Utiliser un nom scopé avec ton username npm garantit l'unicité :
 
 ```sh
-npm install vitrify
+# Vérifier si le nom est libre
+npm info vitrify
+
+# Si pris → dans package.json, changer "name":
+# "vitrify"  →  "@ton-username-npm/vitrify"
+```
+
+**2. Créer un compte npmjs.com** (si pas encore fait) : https://www.npmjs.com/signup
+
+**3. Se connecter**
+
+```sh
+npm login
+# → saisir username, password, email, code OTP
+```
+
+**4. Premier publish**
+
+```sh
+npm publish --access public
+```
+
+> `--access public` est obligatoire pour les packages scopés (`@username/...`).
+> Pour un nom non scopé (`vitrify`), npm le publie public par défaut.
+
+**5. Vérifier**
+
+```sh
+npm info vitrify          # ou npm info @ton-username/vitrify
+```
+
+---
+
+### Publier une mise à jour
+
+```sh
+# 1. Bump la version selon le type de changement
+npm version patch   # 0.0.1 → 0.0.2  (bug fix)
+npm version minor   # 0.0.1 → 0.1.0  (nouveau composant, rétro-compatible)
+npm version major   # 0.0.1 → 1.0.0  (breaking change, API modifiée)
+
+# 2. Publier
+npm publish --access public
+```
+
+`npm version` met à jour `package.json` et crée un commit + tag git automatiquement.
+
+**Ce qui est publié** (contrôlé par le champ `"files"` dans `package.json`) :
+- `src/components/` — composants
+- `src/templates/` — templates
+- `src/theme/` — tokens CSS
+- `src/index.ts` — entrée du package
+- `README.md`, `package.json` — automatiques
+
+**Ce qui n'est PAS publié** :
+- `src/pages/` — showcase (pages de test)
+- `node_modules/`, `public/`, `.astro/` — exclus par défaut
+
+Vérifier avant de publier :
+```sh
+npm pack --dry-run
+```
+
+---
+
+## Utiliser Vitrify dans un autre projet Astro
+
+```sh
+npm install vitrify          # ou @ton-username/vitrify
 ```
 
 ```astro
 ---
 // src/pages/index.astro
 import 'vitrify/theme';
-import { Button, HeroSection } from 'vitrify';
+import { Button } from 'vitrify';
 ---
-<Button>Contactez-nous</Button>
+<html>
+  <body>
+    <Button>Contactez-nous</Button>
+    <Button variant="secondary" href="/contact">En savoir plus</Button>
+  </body>
+</html>
 ```
+
+Surcharger le thème dans le layout global :
+
+```css
+/* src/styles/global.css */
+@import 'vitrify/theme';
+
+:root {
+  --vf-color-primary: #16a34a;
+  --vf-font-sans: 'Lato', sans-serif;
+}
+```
+
+```astro
+---
+// src/layouts/Layout.astro
+import '../styles/global.css';
+---
+<slot />
+```
+
+---
 
 ## Commandes
 
-| Commande              | Action                                   |
-| :-------------------- | :--------------------------------------- |
-| `npm run dev`         | Showcase sur `localhost:4321`            |
-| `npm run build`       | Build de la showcase vers `./dist/`      |
-| `npm run preview`     | Prévisualiser le build                   |
-| `npm run astro check` | Vérification TypeScript des composants   |
+| Commande                  | Action                                        |
+| :------------------------ | :-------------------------------------------- |
+| `npm run dev`             | Showcase sur `localhost:4321`                 |
+| `npm run build`           | Build de la showcase vers `./dist/`           |
+| `npm run preview`         | Prévisualiser le build                        |
+| `npm run astro check`     | Vérification TypeScript des composants        |
+| `npm version patch\|minor\|major` | Bumper la version avant publication   |
+| `npm publish --access public` | Publier sur npmjs.com                     |
+| `npm pack --dry-run`      | Vérifier les fichiers qui seront publiés      |

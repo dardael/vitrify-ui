@@ -21,7 +21,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "prepublishOnly": "astro check"
   },
   "peerDependencies": {
     "astro": ">=4.0.0"
