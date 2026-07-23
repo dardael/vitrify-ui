@@ -1,24 +1,12 @@
 ---
-import ShowcaseLayout from '../../layouts/ShowcaseLayout.astro'
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
 import Button from '../../components/Button.astro'
 ---
 
-<ShowcaseLayout title="Showcase — Button · Vitrify">
-  <!-- Nav -->
-  <nav class="nav" aria-label="Navigation showcase">
-    <a href="/" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Showcase
-    </a>
-    <span class="nav-sep" aria-hidden="true">/</span>
-    <span class="nav-title">Button</span>
-  </nav>
+<ShowcasePage component="Button">
 
   <main class="page">
 
-    <!-- Header -->
     <header class="page-header">
       <h1>Button</h1>
       <p>Composant atomique réutilisable. Rend un <code>&lt;button&gt;</code> ou un <code>&lt;a&gt;</code> selon la présence du prop <code>href</code>. Zéro JS, thématisable via tokens <code>--vf-*</code>.</p>
@@ -124,42 +112,10 @@ import &#123; Button &#125; from 'vitrify-ui';
     </section>
 
   </main>
-</ShowcaseLayout>
+
+</ShowcasePage>
 
 <style>
-  /* ── Nav ── */
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: var(--vf-spacing-4);
-    padding: var(--vf-spacing-4) var(--vf-spacing-8);
-    border-bottom: 1px solid var(--vf-color-border);
-  }
-
-  .nav-back {
-    font-size: var(--vf-font-size-sm);
-    color: var(--vf-color-text-muted);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vf-spacing-2);
-    transition: color var(--vf-duration-fast) var(--vf-ease-out);
-  }
-
-  .nav-back:hover { color: var(--vf-color-primary); }
-
-  .nav-sep {
-    color: var(--vf-color-border);
-    font-size: var(--vf-font-size-sm);
-  }
-
-  .nav-title {
-    font-size: var(--vf-font-size-sm);
-    font-weight: var(--vf-font-weight-semibold);
-    color: var(--vf-color-text);
-  }
-
-  /* ── Page ── */
   .page {
     max-width: 960px;
     margin: 0 auto;
@@ -170,34 +126,9 @@ import &#123; Button &#125; from 'vitrify-ui';
     margin-bottom: var(--vf-spacing-12);
   }
 
-  .page-header h1 {
-    font-size: var(--vf-font-size-heading);
-    font-weight: var(--vf-font-weight-bold);
-    font-variation-settings: var(--vf-font-display-settings);
-    letter-spacing: -0.02em;
-    margin-bottom: var(--vf-spacing-3);
-    text-wrap: balance;
-  }
-
-  .page-header p {
-    font-size: var(--vf-font-size-base);
-    color: var(--vf-color-text-muted);
-    max-width: 52ch;
-    line-height: var(--vf-line-height-relaxed);
-  }
-
-  /* ── Sections ── */
-  .section {
-    margin-bottom: var(--vf-spacing-16);
-  }
-
-  .section-label {
-    font-size: var(--vf-font-size-sm);
-    font-weight: var(--vf-font-weight-semibold);
-    color: var(--vf-color-text-muted);
-    margin-bottom: var(--vf-spacing-6);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .page-header code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.85em;
   }
 
   /* ── Row layout ── */
@@ -253,8 +184,7 @@ import &#123; Button &#125; from 'vitrify-ui';
     color: oklch(0.58 0.006 26);
   }
 
-  /* Secondary on dark: white border + white text */
-  .dark-section .btn--secondary {
+  .dark-section :global(.btn--secondary) {
     border-color: oklch(1.000 0.000 0);
     color: oklch(1.000 0.000 0);
   }
@@ -272,24 +202,9 @@ import &#123; Button &#125; from 'vitrify-ui';
     color: oklch(1.000 0.000 0);
   }
 
-  /* ── Usage snippet ── */
-  .code-block {
-    background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-radius-md);
-    padding: var(--vf-spacing-6);
-    font-family: var(--vf-font-mono);
-    font-size: var(--vf-font-size-sm);
-    color: var(--vf-color-text);
-    line-height: var(--vf-line-height-relaxed);
-    overflow-x: auto;
-    white-space: pre;
-  }
-
   /* ── Mobile ── */
   @media (max-width: 600px) {
     .page { padding: var(--vf-spacing-8) var(--vf-spacing-4); }
-    .nav  { padding: var(--vf-spacing-3) var(--vf-spacing-4); }
     .row-label { display: none; }
     .dark-section { padding: var(--vf-spacing-8) var(--vf-spacing-4); }
   }

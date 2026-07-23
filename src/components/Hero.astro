@@ -1,0 +1,220 @@
+---
+type Props = {
+  headline: string
+  tagline?: string
+  theme?: 'light' | 'dark'
+  as?: 'h1' | 'h2' | 'h3'
+}
+
+const { headline, tagline, theme = 'light', as: Tag = 'h1' } = Astro.props
+const hasBadge  = Astro.slots.has('badge')
+const hasVisual = Astro.slots.has('visual')
+---
+
+<section class:list={['hero', `hero--${theme}`]}>
+  <div class:list={['hero__inner', hasVisual && 'hero__inner--split']}>
+
+    <div class="hero__content">
+      {hasBadge && (
+        <div class="hero__badge">
+          <slot name="badge" />
+        </div>
+      )}
+      <Tag class="hero__headline">{headline}</Tag>
+      {tagline && <p class="hero__tagline">{tagline}</p>}
+      <div class="hero__cta">
+        <slot name="cta" />
+      </div>
+    </div>
+
+    {hasVisual && (
+      <div class="hero__visual">
+        <slot name="visual" />
+      </div>
+    )}
+
+  </div>
+</section>
+
+<style>
+  .hero {
+    overflow: hidden;
+  }
+
+  /* ── Layout ── */
+  .hero__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  .hero__inner--split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-12);
+  }
+
+  @media (min-width: 768px) {
+    .hero__inner--split {
+      grid-template-columns: 54fr 46fr;
+      align-items: center;
+      gap: clamp(2.5rem, 5vw, 5rem);
+    }
+  }
+
+  /* ── Themes ── */
+  .hero--light {
+    background: var(--vf-color-background);
+  }
+
+  .hero--dark {
+    background: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+  }
+
+  /* ── Badge ── */
+  .hero__badge {
+    margin-bottom: var(--vf-spacing-6);
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    letter-spacing: 0.05em;
+  }
+
+  .hero--light .hero__badge { color: var(--vf-color-primary); }
+  .hero--dark  .hero__badge { color: oklch(1 0 0 / 0.65); }
+
+  /* ── Headline ── */
+  .hero__headline {
+    font-family: var(--vf-font-display);
+    font-size: var(--vf-font-size-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--vf-spacing-4);
+    text-wrap: balance;
+  }
+
+  .hero--light .hero__headline { color: var(--vf-color-primary); }
+  .hero--dark  .hero__headline { color: var(--vf-color-primary-foreground); }
+
+  /* ── Tagline ── */
+  .hero__tagline {
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0 0 var(--vf-spacing-8);
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  .hero--light .hero__tagline { color: var(--vf-color-text-muted); }
+  .hero--dark  .hero__tagline { color: oklch(1 0 0 / 0.72); }
+
+  /* ── CTA group ── */
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-spacing-3);
+    align-items: center;
+  }
+
+  /* ── Visual slot ── */
+  .hero__visual {
+    width: 100%;
+  }
+
+  .hero--light .hero__visual :global(img) {
+    outline: 1px solid rgba(0, 0, 0, 0.10);
+    outline-offset: -1px;
+  }
+
+  .hero--dark .hero__visual :global(img) {
+    outline: 1px solid rgba(255, 255, 255, 0.10);
+    outline-offset: -1px;
+  }
+
+  /* ── Button overrides — dark theme ── */
+
+  /* Inverted button palette: white bg on crimson */
+  .hero--dark {
+    --_btn-inv-hover:  oklch(0.94 0.008 26);  /* near-white warm, for hover */
+    --_btn-inv-active: oklch(0.88 0.012 26);  /* slightly deeper, for press */
+  }
+
+  .hero--dark :global(.btn--primary) {
+    background: var(--vf-color-primary-foreground);
+    border-color: var(--vf-color-primary-foreground);
+    color: var(--vf-color-primary);
+  }
+
+  .hero--dark :global(.btn--primary:hover:not(:disabled):not([aria-disabled="true"])) {
+    background: var(--_btn-inv-hover);
+    border-color: var(--_btn-inv-hover);
+    box-shadow: none;
+  }
+
+  .hero--dark :global(.btn--primary:active:not(:disabled):not([aria-disabled="true"])) {
+    background: var(--_btn-inv-active);
+    border-color: var(--_btn-inv-active);
+  }
+
+  .hero--dark :global(.btn--secondary) {
+    background: transparent;
+    border-color: oklch(1 0 0 / 0.28);
+    color: var(--vf-color-primary-foreground);
+  }
+
+  .hero--dark :global(.btn--secondary:hover:not(:disabled):not([aria-disabled="true"])) {
+    background: oklch(1 0 0 / 0.10);
+    border-color: oklch(1 0 0 / 0.40);
+    color: var(--vf-color-primary-foreground);
+    box-shadow: none;
+  }
+
+  .hero--dark :global(.btn--ghost) {
+    color: oklch(1 0 0 / 0.75);
+  }
+
+  .hero--dark :global(.btn--ghost:hover:not(:disabled):not([aria-disabled="true"])) {
+    color: var(--vf-color-primary-foreground);
+    background: oklch(1 0 0 / 0.08);
+    text-decoration: none;
+  }
+
+  /* ── Motion ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__badge {
+      animation: vf-hero-up 0.45s var(--vf-ease-out) both;
+    }
+
+    .hero__headline {
+      animation: vf-hero-reveal 0.65s var(--vf-ease-out) 0.05s both;
+    }
+
+    .hero__tagline {
+      animation: vf-hero-up 0.55s var(--vf-ease-out) 0.18s both;
+    }
+
+    .hero__cta {
+      animation: vf-hero-up 0.55s var(--vf-ease-out) 0.28s both;
+    }
+
+    .hero__visual {
+      animation: vf-hero-side 0.70s var(--vf-ease-out) 0.12s both;
+    }
+
+    @keyframes vf-hero-reveal {
+      from { clip-path: inset(0 105% 0 0); }
+      to   { clip-path: inset(0 0%   0 0); }
+    }
+
+    @keyframes vf-hero-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes vf-hero-side {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+  }
+</style>

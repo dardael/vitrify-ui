@@ -1,0 +1,389 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Hero from '../../components/Hero.astro'
+import Button from '../../components/Button.astro'
+---
+
+<ShowcasePage component="Hero">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Hero</h1>
+      <p>
+        Section principale above-the-fold. Deux thèmes : <code>light</code> (fond blanc, titre cramoisie)
+        et <code>dark</code> (fond cramoisie, texte blanc). Slots pour le contenu visuel, les CTA et un
+        badge optionnel. Zéro JS, animations CSS natives.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant: dark -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+
+    <Hero
+      headline="Composants Astro pour sites vitrines."
+      tagline="Beaux par défaut. Thématisables par nature. Zéro JS requis — du HTML sémantique, des tokens CSS, livrables en heures."
+      theme="dark"
+    >
+      <span slot="badge">v0.1 · open source</span>
+
+      <Fragment slot="cta">
+        <Button href="/components">Voir les composants</Button>
+        <Button
+          variant="ghost"
+          href="https://www.npmjs.com/package/vitrify-ui"
+          style="font-family: var(--vf-font-mono); font-size: 0.825rem;"
+        >
+          npm install vitrify-ui
+        </Button>
+      </Fragment>
+
+      <figure slot="visual" class="code-demo" aria-label="Exemple d'utilisation du composant Hero">
+        <div class="code-demo__bar" aria-hidden="true">
+          <span class="code-demo__dot"></span>
+          <span class="code-demo__dot"></span>
+          <span class="code-demo__dot"></span>
+          <span class="code-demo__file">HeroPage.astro</span>
+        </div>
+        <pre class="code-demo__pre"><code class="code-demo__code"><span class="t-cm">---</span>
+<span class="t-kw">import</span> { <span class="t-tag">Hero</span>, <span class="t-tag">Button</span> }
+  <span class="t-kw">from</span> <span class="t-str">'vitrify-ui'</span>
+<span class="t-cm">---</span>
+
+<span class="t-tag">&lt;Hero</span>
+  headline=<span class="t-str">"Plombier à Lyon"</span>
+  tagline=<span class="t-str">"Gilles Marchand"</span>
+<span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;Button</span>
+    slot=<span class="t-str">"cta"</span>
+    href=<span class="t-str">"/contact"</span>
+  <span class="t-tag">&gt;</span>Devis gratuit<span class="t-tag">&lt;/Button&gt;</span>
+<span class="t-tag">&lt;/Hero&gt;</span></code></pre>
+      </figure>
+    </Hero>
+  </div>
+
+  <!-- Variant: light -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" (défaut)</p>
+    </div>
+
+    <Hero
+      headline="Plombier & Chauffagiste à Lyon"
+      tagline="Interventions rapides en plomberie, chauffage et sanitaire sur Lyon et sa métropole. Devis gratuit sous 24h."
+      theme="light"
+    >
+      <span slot="badge">Plomberie · Chauffage · Sanitaire</span>
+
+      <Fragment slot="cta">
+        <Button href="/contact">Demander un devis</Button>
+        <Button variant="ghost" href="tel:+33478000000">04 78 XX XX XX</Button>
+      </Fragment>
+
+      <figure slot="visual" class="img-placeholder" aria-label="Emplacement de l'image métier">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="img-placeholder__icon">
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <p class="img-placeholder__label">
+          Photo via <code>&lt;slot name="visual"&gt;</code>
+        </p>
+      </figure>
+    </Hero>
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>headline</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte du titre principal. Requis.</td>
+            </tr>
+            <tr>
+              <td><code>tagline</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Sous-titre / accroche. Optionnel.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc + titre cramoisie, ou fond cramoisie + texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h1' | 'h2' | 'h3'</code></td>
+              <td><code>'h1'</code></td>
+              <td>Niveau sémantique du titre. Adapter selon la hiérarchie de la page.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label" style="margin-top: var(--vf-spacing-8)">Slots</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>badge</code></td>
+              <td>Kicker optionnel au-dessus du titre (ex : catégorie, version, label).</td>
+            </tr>
+            <tr>
+              <td><code>cta</code></td>
+              <td>Groupe de boutons CTA. Utiliser le composant <code>Button</code>.</td>
+            </tr>
+            <tr>
+              <td><code>visual</code></td>
+              <td>Colonne droite en desktop : image, illustration, capture d'écran, etc. Déclenche le layout 2 colonnes.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Hero, Button &#125; from 'vitrify-ui';
+---
+
+&lt;!-- Variante light (défaut) avec image --&gt;
+&lt;Hero
+  headline="Plombier &amp; Chauffagiste à Lyon"
+  tagline="Interventions rapides. Devis gratuit sous 24h."
+&gt;
+  &lt;span slot="badge"&gt;Plomberie · Chauffage · Sanitaire&lt;/span&gt;
+
+  &lt;Fragment slot="cta"&gt;
+    &lt;Button href="/contact"&gt;Demander un devis&lt;/Button&gt;
+    &lt;Button variant="ghost" href="tel:+33478000000"&gt;04 78 XX XX XX&lt;/Button&gt;
+  &lt;/Fragment&gt;
+
+  &lt;img
+    slot="visual"
+    src="/images/plombier-lyon.jpg"
+    alt="Gilles Marchand, plombier à Lyon, en intervention"
+    width="640"
+    height="480"
+    loading="eager"
+  /&gt;
+&lt;/Hero&gt;
+
+&lt;!-- Variante dark --&gt;
+&lt;Hero
+  headline="Restaurant traditionnel alsacien"
+  theme="dark"
+  as="h2"
+&gt;
+  &lt;Button slot="cta" href="/menu"&gt;Voir le menu&lt;/Button&gt;
+&lt;/Hero&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  /* ── Shared container ── */
+  .container {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 5vw, 3rem);
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    padding: var(--vf-spacing-12) 0 var(--vf-spacing-8);
+    border-bottom: 1px solid var(--vf-color-border);
+  }
+
+  .page-header code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.85em;
+  }
+
+  /* ── Variant blocks ── */
+  .variant-block {
+    padding-top: var(--vf-spacing-8);
+  }
+
+  .variant-block--bordered {
+    border-top: 1px solid var(--vf-color-border);
+  }
+
+  .variant-label {
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text-subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--vf-spacing-4);
+  }
+
+  /* ── Code demo (dark hero visual) ── */
+  .code-demo {
+    background: oklch(0.36 0.148 26);
+    border-radius: var(--vf-radius-lg);
+    overflow: hidden;
+    border: none;
+    margin: 0;
+    width: 100%;
+  }
+
+  .code-demo__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 0.9rem;
+    background: oklch(0.30 0.132 26);
+  }
+
+  .code-demo__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: oklch(1 0 0 / 0.15);
+    display: inline-block;
+  }
+
+  .code-demo__file {
+    font-family: var(--vf-font-mono);
+    font-size: 0.7rem;
+    color: oklch(0.68 0.042 26);
+    margin-left: 6px;
+  }
+
+  .code-demo__pre {
+    padding: 1.1rem;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .code-demo__code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.78rem;
+    line-height: 1.75;
+    color: oklch(0.90 0.012 26);
+    white-space: pre;
+    display: block;
+  }
+
+  .t-kw  { color: oklch(0.82 0.135 74); }
+  .t-str { color: oklch(0.88 0.068 74); }
+  .t-tag { color: oklch(0.82 0.100 26); }
+  .t-cm  { color: oklch(0.65 0.042 26); }
+
+  /* ── Image placeholder (light hero visual) ── */
+  .img-placeholder {
+    border: 1.5px dashed oklch(0.57 0.195 26 / 0.22);
+    border-radius: var(--vf-radius-lg);
+    background: var(--vf-color-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vf-spacing-4);
+    padding: var(--vf-spacing-12) var(--vf-spacing-8);
+    margin: 0;
+    min-height: 220px;
+    width: 100%;
+  }
+
+  .img-placeholder__icon {
+    color: oklch(0.57 0.195 26 / 0.30);
+  }
+
+  .img-placeholder__label {
+    font-size: var(--vf-font-size-sm);
+    color: var(--vf-color-text-subtle);
+    text-align: center;
+  }
+
+  /* ── Props & Usage ── */
+  .page {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-spacing-16) clamp(1rem, 5vw, 3rem);
+  }
+
+  .props-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-md);
+  }
+
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--vf-font-size-sm);
+    min-width: 520px;
+  }
+
+  .props-table th {
+    text-align: left;
+    padding: var(--vf-spacing-3) var(--vf-spacing-4);
+    background: var(--vf-color-surface);
+    color: var(--vf-color-text-muted);
+    font-weight: var(--vf-font-weight-semibold);
+    font-size: var(--vf-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--vf-color-border);
+  }
+
+  .props-table td {
+    padding: var(--vf-spacing-3) var(--vf-spacing-4);
+    color: var(--vf-color-text);
+    line-height: var(--vf-line-height-relaxed);
+    border-bottom: 1px solid var(--vf-color-border);
+    vertical-align: top;
+  }
+
+  .props-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .props-table code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.8em;
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-sm);
+    padding: 1px 5px;
+    color: var(--vf-color-primary);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .page-header { padding: var(--vf-spacing-8) 0 var(--vf-spacing-6); }
+    .page { padding: var(--vf-spacing-10) clamp(1rem, 5vw, 3rem); }
+  }
+</style>
