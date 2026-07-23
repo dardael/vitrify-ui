@@ -1,0 +1,449 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Card from '../../components/Card.astro'
+import Button from '../../components/Button.astro'
+---
+
+<ShowcasePage component="Card">
+
+  <main class="page">
+
+    <header class="page-header container">
+      <h1>Card</h1>
+      <p>
+        Conteneur de contenu réutilisable. Supporte image, tag, corps de texte, footer CTA.
+        Rendu en <code>&lt;article&gt;</code> ou en <code>&lt;a&gt;</code> selon la présence du prop <code>href</code>.
+      </p>
+    </header>
+
+    <!-- ── Sans image — Services ── -->
+    <section class="showcase-section" aria-labelledby="services-heading">
+      <div class="container">
+        <p class="variant-label" id="services-heading">Sans image — Services</p>
+        <div class="card-grid">
+          <Card
+            title="Dépannage d'urgence"
+            body="Intervention rapide en cas de fuite, canalisation bouchée ou coupure d'eau. Disponible 7j/7, y compris jours fériés."
+            tag="Urgence"
+            href="/services/depannage"
+          >
+            <Button slot="footer" variant="ghost" href="/services/depannage" size="sm">
+              En savoir plus →
+            </Button>
+          </Card>
+
+          <Card
+            title="Rénovation salle de bain"
+            body="Conception et pose complète — du carrelage à la robinetterie. Devis gratuit sous 48 h."
+            tag="Installation"
+            href="/services/renovation"
+          >
+            <Button slot="footer" variant="ghost" href="/services/renovation" size="sm">
+              En savoir plus →
+            </Button>
+          </Card>
+
+          <Card
+            title="Entretien chaudière"
+            body="Révision annuelle obligatoire, détartrage et réglage. Contrat d'entretien annuel disponible."
+            tag="Entretien"
+            href="/services/entretien"
+          >
+            <Button slot="footer" variant="ghost" href="/services/entretien" size="sm">
+              Demander un devis →
+            </Button>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Avec image — Réalisations ── -->
+    <section class="showcase-section showcase-section--tinted" aria-labelledby="portfolio-heading">
+      <div class="container">
+        <p class="variant-label" id="portfolio-heading">Avec image — Réalisations</p>
+        <div class="card-grid">
+          <Card
+            title="Restaurant Chez Mireille"
+            body="Site vitrine avec menu en ligne, réservation intégrée et galerie photo. Lyon, 2024."
+            tag="Restaurant"
+            href="/realisations/chez-mireille"
+          >
+            <div slot="image" class="ph ph--warm"></div>
+          </Card>
+
+          <Card
+            title="Cabinet Fontaine Dentaire"
+            body="Refonte complète, prise de rendez-vous en ligne et fiche Google My Business optimisée."
+            tag="Santé"
+            href="/realisations/cabinet-fontaine"
+          >
+            <div slot="image" class="ph ph--cool"></div>
+          </Card>
+
+          <Card
+            title="Poterie Maison Besson"
+            body="Boutique artisanale avec catalogue produits et atelier de découverte. Nantes, 2024."
+            tag="Artisanat"
+            href="/realisations/maison-besson"
+          >
+            <div slot="image" class="ph ph--earth"></div>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Ratio 4/3 — Équipe ── -->
+    <section class="showcase-section" aria-labelledby="team-heading">
+      <div class="container">
+        <p class="variant-label" id="team-heading">Ratio 4/3 — Équipe</p>
+        <div class="card-grid card-grid--narrow">
+          <Card
+            title="Marie-Claire Vidal"
+            body="Responsable clientèle et coordination des chantiers."
+            tag="Équipe"
+            imageRatio="4/3"
+            imageAlt="Portrait de Marie-Claire Vidal"
+            variant="surface"
+          >
+            <div slot="image" class="ph ph--portrait-a"></div>
+          </Card>
+
+          <Card
+            title="Thomas Berger"
+            body="Maître plombier, 12 ans d'expérience en rénovation."
+            tag="Équipe"
+            imageRatio="4/3"
+            imageAlt="Portrait de Thomas Berger"
+            variant="surface"
+          >
+            <div slot="image" class="ph ph--portrait-b"></div>
+          </Card>
+
+          <Card
+            title="Amandine Leroux"
+            body="Assistante administrative et devis en ligne."
+            tag="Équipe"
+            imageRatio="4/3"
+            imageAlt="Portrait d'Amandine Leroux"
+            variant="surface"
+          >
+            <div slot="image" class="ph ph--portrait-c"></div>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Variant primary ── -->
+    <section class="showcase-section showcase-section--primary" aria-labelledby="primary-heading">
+      <div class="container">
+        <p class="variant-label variant-label--on-primary" id="primary-heading">Variant primary</p>
+        <div class="card-grid">
+          <Card
+            title="Intervention sous 2 heures"
+            body="Pour toute urgence plomberie en zone lyonnaise, nous garantissons l'arrivée d'un technicien en moins de deux heures."
+            tag="Garantie"
+            variant="primary"
+          />
+
+          <Card
+            title="10 ans de garantie pièces"
+            body="Toutes les pièces posées par nos équipes sont couvertes une décennie — robinetterie, chauffe-eau, canalisations."
+            tag="Garantie"
+            variant="primary"
+          />
+
+          <Card
+            title="Devis gratuit et sans engagement"
+            body="Prenez rendez-vous en ligne, notre technicien évalue gratuitement vos besoins sur place."
+            tag="Offre"
+            variant="primary"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Props ── -->
+    <section class="showcase-section" aria-labelledby="props-heading">
+      <div class="container">
+        <p class="variant-label" id="props-heading">Props</p>
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead>
+              <tr>
+                <th>Prop</th>
+                <th>Type</th>
+                <th>Défaut</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>title</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>Titre de la carte (obligatoire)</td>
+              </tr>
+              <tr>
+                <td><code>body</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>Texte descriptif</td>
+              </tr>
+              <tr>
+                <td><code>tag</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>Étiquette de catégorie (ex. "Urgence", "Équipe")</td>
+              </tr>
+              <tr>
+                <td><code>href</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>Rend toute la carte cliquable (rendu en <code>&lt;a&gt;</code>)</td>
+              </tr>
+              <tr>
+                <td><code>target</code></td>
+                <td><code>'_blank' | '_self'</code></td>
+                <td>—</td>
+                <td>Attribut <code>target</code> du lien (+ <code>rel</code> auto si <code>_blank</code>)</td>
+              </tr>
+              <tr>
+                <td><code>variant</code></td>
+                <td><code>'default' | 'surface' | 'primary'</code></td>
+                <td><code>'default'</code></td>
+                <td>Apparence de la carte</td>
+              </tr>
+              <tr>
+                <td><code>imageSrc</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>URL de l'image (alternative au slot <code>image</code>)</td>
+              </tr>
+              <tr>
+                <td><code>imageAlt</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Texte alternatif de l'image (obligatoire si image)</td>
+              </tr>
+              <tr>
+                <td><code>imageRatio</code></td>
+                <td><code>'16/9' | '4/3' | '1/1'</code></td>
+                <td><code>'16/9'</code></td>
+                <td>Ratio d'aspect de la zone image</td>
+              </tr>
+              <tr>
+                <td><code>titleAs</code></td>
+                <td><code>'h2' | 'h3' | 'h4'</code></td>
+                <td><code>'h3'</code></td>
+                <td>Niveau de titre pour respecter la hiérarchie de la page</td>
+              </tr>
+              <tr>
+                <td><code>as</code></td>
+                <td><code>'article' | 'div'</code></td>
+                <td><code>'article'</code></td>
+                <td>Élément de base (ignoré si <code>href</code> fourni)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: var(--vf-spacing-6);">
+          <p class="variant-label">Slots</p>
+          <div class="props-table-wrap">
+            <table class="props-table">
+              <thead>
+                <tr><th>Slot</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>image</code></td>
+                  <td>
+                    Contenu de la zone image — <code>&lt;img&gt;</code>, <code>&lt;picture&gt;</code>, ou tout élément HTML.
+                    Utilisez <code>imageSrc</code> pour un cas simple.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>footer</code></td>
+                  <td>Zone de pied de carte — boutons, liens, prix, métadonnées.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Usage ── -->
+    <section class="showcase-section" aria-labelledby="usage-heading">
+      <div class="container">
+        <p class="variant-label" id="usage-heading">Usage</p>
+        <pre class="code-block">---
+import &#123; Card &#125; from 'vitrify-ui';
+---
+
+&lt;!-- Carte simple (sans image) --&gt;
+&lt;Card
+  title="Dépannage d'urgence"
+  body="Intervention rapide 7j/7."
+  tag="Urgence"
+  href="/services/depannage"
+/&gt;
+
+&lt;!-- Carte avec image via prop --&gt;
+&lt;Card
+  title="Restaurant Chez Mireille"
+  body="Site vitrine avec menu en ligne."
+  tag="Restaurant"
+  href="/realisations/chez-mireille"
+  imageSrc="/images/mireille.jpg"
+  imageAlt="Salle du restaurant, tables en lin blanc"
+/&gt;
+
+&lt;!-- Carte avec slot image (picture responsive) --&gt;
+&lt;Card title="Poterie Maison Besson" tag="Artisanat"&gt;
+  &lt;picture slot="image"&gt;
+    &lt;source srcset="/img/besson-800.webp" type="image/webp" /&gt;
+    &lt;img src="/img/besson-800.jpg" alt="Atelier de céramique" loading="lazy" /&gt;
+  &lt;/picture&gt;
+  &lt;div slot="footer"&gt;
+    &lt;Button href="/contact"&gt;Demander un devis&lt;/Button&gt;
+  &lt;/div&gt;
+&lt;/Card&gt;
+
+&lt;!-- Variant primary (fond cramoisi) --&gt;
+&lt;Card
+  title="Intervention sous 2 heures"
+  body="Garanti en zone lyonnaise."
+  tag="Garantie"
+  variant="primary"
+/&gt;
+
+&lt;!-- Ratio carré (portrait équipe) --&gt;
+&lt;Card
+  title="Marie-Claire Vidal"
+  body="Responsable clientèle."
+  tag="Équipe"
+  imageRatio="1/1"
+  imageSrc="/images/marie-claire.jpg"
+  imageAlt="Portrait de Marie-Claire Vidal"
+  variant="surface"
+  titleAs="h4"
+/&gt;</pre>
+      </div>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .page {
+    padding-bottom: var(--vf-spacing-24);
+  }
+
+  /* ── Sections ── */
+  .showcase-section {
+    padding: var(--vf-spacing-12) 0;
+    border-top: 1px solid var(--vf-color-border);
+  }
+
+  .showcase-section--tinted {
+    background: var(--vf-color-surface);
+    border-color: transparent;
+  }
+
+  .showcase-section--primary {
+    background: var(--vf-color-text);
+    border-color: transparent;
+  }
+
+  /* ── Labels ── */
+  .variant-label {
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--vf-spacing-6);
+  }
+
+  .variant-label--on-primary {
+    color: var(--vf-color-text-subtle);
+  }
+
+  /* ── Card grids ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--vf-spacing-6);
+  }
+
+  .card-grid--narrow {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  /* ── Image placeholders (showcase only) ── */
+  .ph {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ph--warm {
+    background: linear-gradient(
+      140deg,
+      oklch(0.62 0.14 30)  0%,
+      oklch(0.44 0.16 22) 100%
+    );
+  }
+
+  .ph--cool {
+    background: linear-gradient(
+      140deg,
+      oklch(0.62 0.07 240) 0%,
+      oklch(0.44 0.09 250) 100%
+    );
+  }
+
+  .ph--earth {
+    background: linear-gradient(
+      140deg,
+      oklch(0.65 0.09 70)  0%,
+      oklch(0.46 0.10 55)  100%
+    );
+  }
+
+  .ph--portrait-a {
+    background: linear-gradient(
+      160deg,
+      oklch(0.78 0.04 26)  0%,
+      oklch(0.60 0.07 26)  100%
+    );
+  }
+
+  .ph--portrait-b {
+    background: linear-gradient(
+      160deg,
+      oklch(0.72 0.05 200) 0%,
+      oklch(0.55 0.07 210) 100%
+    );
+  }
+
+  .ph--portrait-c {
+    background: linear-gradient(
+      160deg,
+      oklch(0.78 0.06 100) 0%,
+      oklch(0.58 0.09 90)  100%
+    );
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .card-grid--narrow {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

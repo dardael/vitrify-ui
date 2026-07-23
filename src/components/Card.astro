@@ -1,0 +1,251 @@
+---
+type Props = {
+  title: string
+  body?: string
+  tag?: string
+  href?: string
+  target?: '_blank' | '_self'
+  variant?: 'default' | 'surface' | 'primary'
+  imageSrc?: string
+  imageAlt?: string  // required when imageSrc is provided
+  imageRatio?: '16/9' | '4/3' | '1/1'
+  titleAs?: 'h2' | 'h3' | 'h4'
+  as?: 'article' | 'div'
+}
+
+const {
+  title,
+  body,
+  tag,
+  href,
+  target,
+  variant = 'default',
+  imageSrc,
+  imageAlt,
+  imageRatio = '16/9',
+  titleAs: TitleTag = 'h3',
+  as: BaseTag = 'article',
+} = Astro.props
+
+const isLink = Boolean(href)
+const CardTag = isLink ? 'a' : BaseTag
+
+const aspectVal = imageRatio.replace('/', ' / ')
+
+const hasImage  = Boolean(imageSrc) || Astro.slots.has('image')
+const hasFooter = Astro.slots.has('footer')
+---
+
+<CardTag
+  class:list={['vf-card', `vf-card--${variant}`, isLink && 'vf-card--link']}
+  href={isLink ? href : undefined}
+  target={isLink ? target : undefined}
+  rel={isLink && target === '_blank' ? 'noopener noreferrer' : undefined}
+>
+  {hasImage && (
+    <div class="vf-card__media" style={`--_aspect: ${aspectVal}`}>
+      <slot name="image">
+        {imageSrc && (
+          <img src={imageSrc} alt={imageAlt} loading="lazy" decoding="async" />
+        )}
+      </slot>
+    </div>
+  )}
+
+  <div class="vf-card__body">
+    {tag && <span class="vf-card__tag">{tag}</span>}
+    <TitleTag class="vf-card__title">{title}</TitleTag>
+    {body && <p class="vf-card__text">{body}</p>}
+  </div>
+
+  {hasFooter && (
+    <footer class="vf-card__footer">
+      <slot name="footer" />
+    </footer>
+  )}
+</CardTag>
+
+<style>
+  /* ── Base ── */
+  .vf-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--vf-radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      transform       var(--vf-duration-base) var(--vf-ease-out),
+      box-shadow      var(--vf-duration-base) var(--vf-ease-out),
+      border-color    var(--vf-duration-base) var(--vf-ease-out);
+  }
+
+  /* ── Variants ── */
+  .vf-card--default {
+    background: var(--vf-color-background);
+    border: 1px solid var(--vf-color-border);
+  }
+
+  .vf-card--surface {
+    background: var(--vf-color-surface);
+    border: 1px solid transparent;
+  }
+
+  .vf-card--primary {
+    background: var(--vf-color-primary);
+    border: 1px solid transparent;
+  }
+
+  /* ── Link hover ── */
+  .vf-card--link {
+    cursor: pointer;
+  }
+
+  .vf-card--link:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--vf-shadow-lg);
+  }
+
+  .vf-card--link:active {
+    transform: scale(0.96);
+    box-shadow: var(--vf-shadow-sm);
+  }
+
+  .vf-card--link:hover:not(.vf-card--primary) {
+    border-color: var(--vf-color-primary);
+  }
+
+  /* Focus ring on card-as-link (outline renders outside overflow:hidden) */
+  .vf-card--link:focus {
+    outline: none;
+  }
+
+  .vf-card--link:focus-visible {
+    outline: 3px solid var(--vf-color-primary);
+    outline-offset: 3px;
+  }
+
+  /* ── Media ── */
+  .vf-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--_aspect, 16 / 9);
+    overflow: hidden;
+    background: var(--vf-color-surface);
+    flex-shrink: 0;
+  }
+
+  /* Subtle outline on top of image content */
+  .vf-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .vf-card--primary .vf-card__media {
+    background: var(--vf-color-primary-hover);
+  }
+
+  /* Fills any direct child in the slot (img, div, picture…) */
+  .vf-card__media :global(> *) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .vf-card__media :global(img),
+  .vf-card__media :global(picture > img) {
+    object-fit: cover;
+    transition: transform var(--vf-duration-slow) var(--vf-ease-out);
+  }
+
+  .vf-card--link:hover .vf-card__media :global(img),
+  .vf-card--link:hover .vf-card__media :global(picture > img) {
+    transform: scale(1.04);
+  }
+
+  /* ── Body ── */
+  .vf-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-3);
+    padding: var(--vf-spacing-6) var(--vf-spacing-6) 0;
+  }
+
+  /* Bottom padding when body is last child (no footer) */
+  .vf-card__body:last-child {
+    padding-bottom: var(--vf-spacing-6);
+  }
+
+  /* ── Tag ── */
+  .vf-card__tag {
+    display: inline-block;
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    line-height: 1;
+    color: var(--vf-color-primary);
+  }
+
+  .vf-card--primary .vf-card__tag {
+    color: var(--vf-color-on-primary-muted);
+  }
+
+  /* ── Title ── */
+  .vf-card__title {
+    font-family: var(--vf-font-display);
+    font-variation-settings: "wdth" 80, "wght" 700;
+    font-size: var(--vf-font-size-xl);
+    line-height: var(--vf-line-height-tight);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--vf-color-text);
+  }
+
+  .vf-card--primary .vf-card__title {
+    color: var(--vf-color-on-primary);
+  }
+
+  /* ── Body text ── */
+  .vf-card__text {
+    font-size: var(--vf-font-size-base);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0;
+    text-wrap: pretty;
+    color: var(--vf-color-text-muted);
+  }
+
+  .vf-card--primary .vf-card__text {
+    color: var(--vf-color-on-primary-muted);
+  }
+
+  /* ── Footer ── */
+  .vf-card__footer {
+    padding: var(--vf-spacing-4) var(--vf-spacing-6) var(--vf-spacing-6);
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vf-card {
+      transition: none;
+    }
+
+    .vf-card--link:hover,
+    .vf-card--link:active {
+      transform: none;
+    }
+
+    .vf-card__media :global(img),
+    .vf-card__media :global(picture > img) {
+      transition: none;
+    }
+  }
+</style>
