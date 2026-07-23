@@ -150,9 +150,48 @@ const hasCta = Astro.slots.has('cta')
 </script>
 
 <style>
+  /* ── Theme tokens ── */
+  .navbar--light {
+    --_bg:              var(--vf-color-background);
+    --_border:          var(--vf-color-border);
+    --_logo:            var(--vf-color-primary);
+    --_link:            var(--vf-color-text-muted);
+    --_link-on:         var(--vf-color-primary);
+    --_underline:       var(--vf-color-primary);
+    --_bar:             var(--vf-color-text);
+    --_toggle-hover:    var(--vf-color-surface);
+    --_focus:           var(--vf-color-primary);
+    --_mobile-bg:       var(--vf-color-background);
+    --_mobile-border:   var(--vf-color-border);
+    --_mobile-link:     var(--vf-color-text);
+    --_mobile-link-on:  var(--vf-color-primary);
+    --_scrolled-shadow: var(--vf-shadow-md);
+    --_img-outline:     rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar--dark {
+    --_bg:              var(--vf-color-primary);
+    --_border:          var(--vf-color-on-primary-border);
+    --_logo:            var(--vf-color-on-primary);
+    --_link:            var(--vf-color-on-primary-muted);
+    --_link-on:         var(--vf-color-on-primary);
+    --_underline:       var(--vf-color-on-primary);
+    --_bar:             var(--vf-color-on-primary);
+    --_toggle-hover:    var(--vf-color-on-primary-subtle);
+    --_focus:           var(--vf-color-on-primary);
+    --_mobile-bg:       var(--vf-color-primary-hover);
+    --_mobile-border:   var(--vf-color-on-primary-border);
+    --_mobile-link:     var(--vf-color-on-primary-muted);
+    --_mobile-link-on:  var(--vf-color-on-primary);
+    --_scrolled-shadow: 0 4px 20px -2px oklch(0.20 0.018 26 / 0.25);
+    --_img-outline:     rgba(255, 255, 255, 0.1);
+  }
+
   /* ── Base ── */
   .navbar {
     --_h: 56px;
+    background: var(--_bg);
+    border-bottom: 1px solid var(--_border);
     position: relative;
     width: 100%;
     z-index: 100;
@@ -169,7 +208,8 @@ const hasCta = Astro.slots.has('cta')
   }
 
   .navbar--scrolled {
-    box-shadow: var(--vf-shadow-md);
+    box-shadow: var(--_scrolled-shadow);
+    border-bottom-color: transparent;
   }
 
   /* ── Inner row ── */
@@ -197,6 +237,7 @@ const hasCta = Astro.slots.has('cta')
     font-weight: 700;
     letter-spacing: -0.025em;
     text-decoration: none;
+    color: var(--_logo);
     display: inline-flex;
     align-items: center;
     gap: var(--vf-spacing-2);
@@ -206,16 +247,14 @@ const hasCta = Astro.slots.has('cta')
   .navbar__logo :global(img) {
     max-height: 32px;
     width: auto;
+    outline: 1px solid var(--_img-outline);
+    outline-offset: -1px;
   }
 
   .navbar__logo :global(a:focus-visible) {
-    outline: 2px solid var(--vf-color-primary);
+    outline: 2px solid var(--_focus);
     outline-offset: 3px;
     border-radius: var(--vf-radius-sm);
-  }
-
-  .navbar--dark .navbar__logo :global(a:focus-visible) {
-    outline-color: var(--vf-color-on-primary);
   }
 
   /* ── Desktop nav ── */
@@ -248,8 +287,15 @@ const hasCta = Astro.slots.has('cta')
     font-weight: var(--vf-font-weight-medium);
     letter-spacing: 0.01em;
     text-decoration: none;
+    color: var(--_link);
     position: relative;
+    -webkit-font-smoothing: antialiased;
     transition: color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .navbar__link:hover,
+  .navbar__link--active {
+    color: var(--_link-on);
   }
 
   .navbar__link::after {
@@ -260,6 +306,7 @@ const hasCta = Astro.slots.has('cta')
     right: var(--vf-spacing-4);
     height: 2px;
     border-radius: 1px;
+    background: var(--_underline);
     transform-origin: left center;
     transform: scaleX(0);
     transition: transform var(--vf-duration-base) var(--vf-ease-out);
@@ -271,7 +318,7 @@ const hasCta = Astro.slots.has('cta')
   }
 
   .navbar__link:focus-visible {
-    outline: 2px solid var(--vf-color-primary);
+    outline: 2px solid var(--_focus);
     outline-offset: 2px;
     border-radius: var(--vf-radius-sm);
   }
@@ -311,17 +358,17 @@ const hasCta = Astro.slots.has('cta')
       transform        var(--vf-duration-fast) var(--vf-ease-out);
   }
 
+  .navbar__toggle:hover {
+    background: var(--_toggle-hover);
+  }
+
   .navbar__toggle:active {
     transform: scale(0.96);
   }
 
   .navbar__toggle:focus-visible {
-    outline: 2px solid var(--vf-color-primary);
+    outline: 2px solid var(--_focus);
     outline-offset: 2px;
-  }
-
-  .navbar--dark .navbar__toggle:focus-visible {
-    outline-color: var(--vf-color-on-primary);
   }
 
   @media (min-width: 768px) {
@@ -333,6 +380,7 @@ const hasCta = Astro.slots.has('cta')
     width: 20px;
     height: 2px;
     border-radius: 1px;
+    background: var(--_bar);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -358,6 +406,8 @@ const hasCta = Astro.slots.has('cta')
 
   /* ── Mobile menu ── */
   .navbar__mobile {
+    background: var(--_mobile-bg);
+    border-bottom: 1px solid var(--_mobile-border);
     overflow: hidden;
     max-height: 0;
     visibility: hidden;
@@ -378,10 +428,6 @@ const hasCta = Astro.slots.has('cta')
     .navbar__mobile { display: none; }
   }
 
-  .navbar__mobile-inner {
-    /* wrapper preserved for future slot duplication or padding additions */
-  }
-
   .navbar__mobile-nav {
     padding: var(--vf-spacing-2) 0;
   }
@@ -392,6 +438,14 @@ const hasCta = Astro.slots.has('cta')
     padding: 0;
   }
 
+  .navbar__mobile-item {
+    border-bottom: 1px solid var(--_mobile-border);
+  }
+
+  .navbar__mobile-item:last-child {
+    border-bottom: none;
+  }
+
   .navbar__mobile-link {
     display: flex;
     align-items: center;
@@ -400,16 +454,19 @@ const hasCta = Astro.slots.has('cta')
     font-size: var(--vf-font-size-lg);
     font-weight: var(--vf-font-weight-medium);
     text-decoration: none;
+    color: var(--_mobile-link);
+    -webkit-font-smoothing: antialiased;
     transition: color var(--vf-duration-fast) var(--vf-ease-out);
   }
 
-  .navbar__mobile-link:focus-visible {
-    outline: 2px solid var(--vf-color-primary);
-    outline-offset: -2px;
+  .navbar__mobile-link:hover,
+  .navbar__mobile-link--active {
+    color: var(--_mobile-link-on);
   }
 
-  .navbar--dark .navbar__mobile-link:focus-visible {
-    outline-color: var(--vf-color-on-primary);
+  .navbar__mobile-link:focus-visible {
+    outline: 2px solid var(--_focus);
+    outline-offset: -2px;
   }
 
   .navbar__mobile-cta {
@@ -437,136 +494,7 @@ const hasCta = Astro.slots.has('cta')
     }
   }
 
-  /* ── LIGHT ── */
-  .navbar--light {
-    background: var(--vf-color-background);
-    border-bottom: 1px solid var(--vf-color-border);
-  }
-
-  .navbar--light.navbar--scrolled {
-    border-bottom-color: transparent;
-  }
-
-  .navbar--light .navbar__logo :global(a) {
-    color: var(--vf-color-primary);
-  }
-
-  .navbar--light .navbar__link {
-    color: var(--vf-color-text-muted);
-  }
-
-  .navbar--light .navbar__link:hover,
-  .navbar--light .navbar__link--active {
-    color: var(--vf-color-primary);
-  }
-
-  .navbar--light .navbar__link::after {
-    background: var(--vf-color-primary);
-  }
-
-  .navbar--light .navbar__toggle {
-    color: var(--vf-color-text);
-  }
-
-  .navbar--light .navbar__toggle:hover {
-    background: var(--vf-color-surface);
-  }
-
-  .navbar--light .navbar__bar {
-    background: var(--vf-color-text);
-  }
-
-  .navbar--light .navbar__mobile {
-    background: var(--vf-color-background);
-    border-bottom: 1px solid var(--vf-color-border);
-  }
-
-  .navbar--light .navbar__mobile-item {
-    border-bottom: 1px solid var(--vf-color-border);
-  }
-
-  .navbar--light .navbar__mobile-item:last-child {
-    border-bottom: none;
-  }
-
-  .navbar--light .navbar__mobile-link {
-    color: var(--vf-color-text);
-  }
-
-  .navbar--light .navbar__mobile-link:hover,
-  .navbar--light .navbar__mobile-link--active {
-    color: var(--vf-color-primary);
-  }
-
-  .navbar--light .navbar__logo :global(img) {
-    outline: 1px solid rgba(0, 0, 0, 0.1);
-    outline-offset: -1px;
-  }
-
-  /* ── DARK ── */
-  .navbar--dark {
-    background: var(--vf-color-primary);
-    border-bottom: 1px solid var(--vf-color-on-primary-border);
-  }
-
-  .navbar--dark.navbar--scrolled {
-    box-shadow: 0 4px 20px -2px oklch(0.20 0.018 26 / 0.25);
-    border-bottom-color: transparent;
-  }
-
-  .navbar--dark .navbar__logo :global(a) {
-    color: var(--vf-color-on-primary);
-  }
-
-  .navbar--dark .navbar__link {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .navbar--dark .navbar__link:hover,
-  .navbar--dark .navbar__link--active {
-    color: var(--vf-color-on-primary);
-  }
-
-  .navbar--dark .navbar__link::after {
-    background: var(--vf-color-on-primary);
-  }
-
-  .navbar--dark .navbar__toggle:hover {
-    background: var(--vf-color-on-primary-subtle);
-  }
-
-  .navbar--dark .navbar__bar {
-    background: var(--vf-color-on-primary);
-  }
-
-  .navbar--dark .navbar__mobile {
-    background: var(--vf-color-primary-hover);
-    border-bottom: 1px solid var(--vf-color-on-primary-border);
-  }
-
-  .navbar--dark .navbar__mobile-item {
-    border-bottom: 1px solid var(--vf-color-on-primary-border);
-  }
-
-  .navbar--dark .navbar__mobile-item:last-child {
-    border-bottom: none;
-  }
-
-  .navbar--dark .navbar__mobile-link {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .navbar--dark .navbar__mobile-link:hover,
-  .navbar--dark .navbar__mobile-link--active {
-    color: var(--vf-color-on-primary);
-  }
-
-  .navbar--dark .navbar__logo :global(img) {
-    outline: 1px solid rgba(255, 255, 255, 0.1);
-    outline-offset: -1px;
-  }
-
-  /* Dark CTA — white button on crimson */
+  /* ── Dark CTA — white button on crimson ── */
   .navbar--dark .navbar__cta :global(.btn--primary),
   .navbar--dark .navbar__mobile-cta :global(.btn--primary) {
     background: var(--vf-color-on-primary);
