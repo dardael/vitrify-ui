@@ -42,7 +42,7 @@ const getInitials = (name: string) =>
 
     {items.length > 0 && (
       <ul class="testimonials__grid" role="list">
-        {items.map((item: Testimonial, i: number) => (
+        {items.map((item, i) => (
           <li
             class:list={['testimonials__item', featured && i === 0 && 'testimonials__item--featured']}
             style={`--i: ${i}`}

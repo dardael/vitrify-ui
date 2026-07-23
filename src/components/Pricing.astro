@@ -31,6 +31,7 @@ const {
 
 function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | 'inverted' {
   if (plan.ctaVariant) return plan.ctaVariant
+  if (theme === 'dark') return plan.featured ? 'primary' : 'inverted'
   return plan.featured ? 'inverted' : 'secondary'
 }
 ---
@@ -120,10 +121,19 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
 </section>
 
 <style>
-  /* ── Section ── */
+  /* ── Section — private shadow tokens (replace with --vf-shadow-* when theme adds them) ── */
   .vf-pricing {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --_shadow-featured:           0 12px 40px -8px oklch(0.57 0.195 26 / 0.40),
+                                  0  4px 12px -2px oklch(0.57 0.195 26 / 0.25);
+    --_shadow-featured-hover:     0 16px 48px -8px oklch(0.57 0.195 26 / 0.50),
+                                  0  6px 16px -2px oklch(0.57 0.195 26 / 0.30);
+    --_shadow-dark-featured:      0 16px 48px -8px oklch(0.20 0.018 26 / 0.30),
+                                  0  4px 16px -2px oklch(0.20 0.018 26 / 0.15);
+    --_shadow-dark-featured-hover:0 16px 48px -8px oklch(0.15 0.03  26 / 0.35),
+                                  0  6px 16px -2px oklch(0.15 0.03  26 / 0.20);
+    --_shadow-dark-default-hover: 0  4px 20px      oklch(0.15 0.03  26 / 0.30);
   }
 
   .vf-pricing__inner {
@@ -182,31 +192,34 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     transition-timing-function: var(--vf-ease-out);
   }
 
-  /* ── Default plan ── */
+  /*
+   * Scoped color vars — set once per card variant, consumed by all children.
+   * Theme overrides just flip these two rules; no per-element cascade needed.
+   */
   .vf-plan--default {
     background: var(--vf-color-background);
     border: 1px solid var(--vf-color-border);
+    --c-text:   var(--vf-color-text);
+    --c-muted:  var(--vf-color-text-muted);
+    --c-border: var(--vf-color-border);
+    --c-check:  var(--vf-color-primary);
   }
 
-  /* ── Featured plan ── */
   .vf-plan--featured {
     background: var(--vf-color-primary);
     color: var(--vf-color-on-primary);
-    box-shadow:
-      0 12px 40px -8px oklch(0.57 0.195 26 / 0.40),
-      0 4px 12px -2px oklch(0.57 0.195 26 / 0.25);
+    box-shadow: var(--_shadow-featured);
     position: relative;
     z-index: 1;
+    --c-text:   var(--vf-color-on-primary);
+    --c-muted:  var(--vf-color-on-primary-muted);
+    --c-border: var(--vf-color-on-primary-border);
+    --c-check:  var(--vf-color-on-primary);
   }
 
   @media (min-width: 768px) {
-    .vf-plan--default {
-      padding-block: var(--vf-spacing-8);
-    }
-
-    .vf-plan--featured {
-      padding-block: var(--vf-spacing-12);
-    }
+    .vf-plan--default  { padding-block: var(--vf-spacing-8); }
+    .vf-plan--featured { padding-block: var(--vf-spacing-12); }
   }
 
   /* ── Plan name ── */
@@ -218,14 +231,7 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     letter-spacing: -0.02em;
     margin: 0 0 var(--vf-spacing-2);
     text-wrap: balance;
-  }
-
-  .vf-plan--default .vf-plan__name {
-    color: var(--vf-color-text);
-  }
-
-  .vf-plan--featured .vf-plan__name {
-    color: var(--vf-color-on-primary);
+    color: var(--c-text);
   }
 
   /* ── Description ── */
@@ -234,29 +240,14 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     line-height: var(--vf-line-height-relaxed);
     margin: 0;
     text-wrap: pretty;
-  }
-
-  .vf-plan--default .vf-plan__desc {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-plan--featured .vf-plan__desc {
-    color: var(--vf-color-on-primary-muted);
+    color: var(--c-muted);
   }
 
   /* ── Price block ── */
   .vf-plan__price {
     padding-block: var(--vf-spacing-6);
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-  }
-
-  .vf-plan--default .vf-plan__price {
-    border-color: var(--vf-color-border);
-  }
-
-  .vf-plan--featured .vf-plan__price {
-    border-color: var(--vf-color-on-primary-border);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
   }
 
   .vf-plan__price-row {
@@ -273,20 +264,13 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     line-height: 1;
     letter-spacing: -0.04em;
     font-variant-numeric: tabular-nums;
+    color: var(--c-text);
   }
 
   .vf-plan__amount--text {
     font-size: var(--vf-font-size-subhead);
     font-variation-settings: "wdth" 80, "wght" 700;
     letter-spacing: -0.02em;
-  }
-
-  .vf-plan--default .vf-plan__amount {
-    color: var(--vf-color-text);
-  }
-
-  .vf-plan--featured .vf-plan__amount {
-    color: var(--vf-color-on-primary);
   }
 
   /* ── Currency + period ── */
@@ -302,27 +286,13 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     font-size: var(--vf-font-size-lg);
     font-weight: var(--vf-font-weight-semibold);
     line-height: 1;
+    color: var(--c-muted);
   }
 
   .vf-plan__period {
     font-size: var(--vf-font-size-xs);
     white-space: nowrap;
-  }
-
-  .vf-plan--default .vf-plan__currency {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-plan--default .vf-plan__period {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-plan--featured .vf-plan__currency {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .vf-plan--featured .vf-plan__period {
-    color: var(--vf-color-on-primary-muted);
+    color: var(--c-muted);
   }
 
   /* ── Feature list ── */
@@ -342,27 +312,13 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     gap: var(--vf-spacing-3);
     font-size: var(--vf-font-size-sm);
     line-height: var(--vf-line-height-relaxed);
+    color: var(--c-muted);
   }
 
   .vf-plan__check {
     flex-shrink: 0;
     margin-top: 0.3em;
-  }
-
-  .vf-plan--default .vf-plan__feature {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-plan--default .vf-plan__check {
-    color: var(--vf-color-primary);
-  }
-
-  .vf-plan--featured .vf-plan__feature {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .vf-plan--featured .vf-plan__check {
-    color: var(--vf-color-on-primary);
+    color: var(--c-check);
   }
 
   /* ── CTA — pinned to bottom ── */
@@ -396,77 +352,24 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     color: var(--vf-color-on-primary-muted);
   }
 
-  /* Non-featured on crimson: deeper crimson bg, white text */
+  /* Dark: flip card palettes via scoped vars — no per-element overrides needed */
   .vf-pricing--dark .vf-plan--default {
     background: var(--vf-color-primary-hover);
     border-color: var(--vf-color-on-primary-border);
+    --c-text:   var(--vf-color-on-primary);
+    --c-muted:  var(--vf-color-on-primary-muted);
+    --c-border: var(--vf-color-on-primary-border);
+    --c-check:  var(--vf-color-on-primary-subtle);
   }
 
-  .vf-pricing--dark .vf-plan--default .vf-plan__name {
-    color: var(--vf-color-on-primary);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__desc {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__price {
-    border-color: var(--vf-color-on-primary-border);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__amount {
-    color: var(--vf-color-on-primary);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__currency,
-  .vf-pricing--dark .vf-plan--default .vf-plan__period {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__feature {
-    color: var(--vf-color-on-primary-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--default .vf-plan__check {
-    color: var(--vf-color-on-primary-subtle);
-  }
-
-  /* Featured on crimson: white card — the peak */
   .vf-pricing--dark .vf-plan--featured {
     background: var(--vf-color-background);
     color: var(--vf-color-text);
-    box-shadow:
-      0 16px 48px -8px oklch(0.20 0.018 26 / 0.30),
-      0 4px 16px -2px oklch(0.20 0.018 26 / 0.15);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__name {
-    color: var(--vf-color-text);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__desc {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__price {
-    border-color: var(--vf-color-border);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__amount {
-    color: var(--vf-color-text);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__currency,
-  .vf-pricing--dark .vf-plan--featured .vf-plan__period {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__feature {
-    color: var(--vf-color-text-muted);
-  }
-
-  .vf-pricing--dark .vf-plan--featured .vf-plan__check {
-    color: var(--vf-color-primary);
+    box-shadow: var(--_shadow-dark-featured);
+    --c-text:   var(--vf-color-text);
+    --c-muted:  var(--vf-color-text-muted);
+    --c-border: var(--vf-color-border);
+    --c-check:  var(--vf-color-primary);
   }
 
   /* ── Hover — lift on interaction ── */
@@ -477,21 +380,17 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
     }
 
     .vf-plan--featured:hover {
-      box-shadow:
-        0 16px 48px -8px oklch(0.57 0.195 26 / 0.50),
-        0 6px 16px -2px oklch(0.57 0.195 26 / 0.30);
+      box-shadow: var(--_shadow-featured-hover);
       transform: translateY(-6px);
     }
 
     .vf-pricing--dark .vf-plan--default:hover {
-      box-shadow: 0 4px 20px oklch(0.15 0.03 26 / 0.30);
+      box-shadow: var(--_shadow-dark-default-hover);
       transform: translateY(-2px);
     }
 
     .vf-pricing--dark .vf-plan--featured:hover {
-      box-shadow:
-        0 16px 48px -8px oklch(0.15 0.03 26 / 0.35),
-        0 6px 16px -2px oklch(0.15 0.03 26 / 0.20);
+      box-shadow: var(--_shadow-dark-featured-hover);
       transform: translateY(-6px);
     }
   }
@@ -514,16 +413,13 @@ function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | '
           el.style.transform = 'translateY(0) scale(1)'
           obs.unobserve(el)
 
-          // After reveal finishes, clear all inline styles so CSS hover takes over
-          el.addEventListener('transitionend', () => {
-            el.style.opacity = ''
-            el.style.transform = ''
-            el.style.transitionProperty = ''
-            el.style.transitionDuration = ''
-            el.style.transitionTimingFunction = ''
-            el.style.transitionDelay = ''
-            el.style.willChange = ''
-          }, { once: true })
+          // Clear inline styles after the last transition property finishes,
+          // so CSS hover rules can take over cleanly.
+          el.addEventListener('transitionend', function onRevealEnd(e) {
+            if (e.propertyName !== 'transform') return
+            el.removeEventListener('transitionend', onRevealEnd)
+            el.style.cssText = ''
+          })
         })
       },
       { threshold: 0.08 },

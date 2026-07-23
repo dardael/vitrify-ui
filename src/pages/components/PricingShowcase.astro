@@ -4,7 +4,7 @@ import Pricing from '../../components/Pricing.astro'
 
 import type { PricingPlan } from '../../components/Pricing.astro'
 
-const basePlans: PricingPlan[] = [
+const plans: PricingPlan[] = [
   {
     name: 'Essentiel',
     price: 490,
@@ -58,11 +58,6 @@ const basePlans: PricingPlan[] = [
   },
 ]
 
-const darkPlans: PricingPlan[] = basePlans.map((plan) =>
-  plan.featured
-    ? { ...plan, ctaVariant: 'primary' }
-    : { ...plan, ctaVariant: 'inverted' },
-)
 ---
 
 <ShowcasePage component="Pricing">
@@ -87,7 +82,7 @@ const darkPlans: PricingPlan[] = basePlans.map((plan) =>
     <Pricing
       title="Nos formules"
       lead="Des tarifs clairs, sans surprise. Adaptés aux agences web qui livrent régulièrement des sites vitrines à leurs clients."
-      plans={basePlans}
+      plans={plans}
       theme="light"
     />
   </div>
@@ -100,7 +95,7 @@ const darkPlans: PricingPlan[] = basePlans.map((plan) =>
     <Pricing
       title="Nos formules"
       lead="Des tarifs clairs, sans surprise. Adaptés aux agences web qui livrent régulièrement des sites vitrines à leurs clients."
-      plans={darkPlans}
+      plans={plans}
       theme="dark"
     />
   </div>
@@ -171,43 +166,6 @@ const darkPlans: PricingPlan[] = basePlans.map((plan) =>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="cta-variants-heading">
-      <p class="section-label" id="cta-variants-heading">Variants de bouton par thème</p>
-      <div class="props-table-wrap">
-        <table class="props-table">
-          <thead>
-            <tr>
-              <th>Contexte</th>
-              <th>Formule</th>
-              <th>ctaVariant recommandé</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>theme="light"</td>
-              <td>non featured</td>
-              <td><code>secondary</code> (défaut)</td>
-            </tr>
-            <tr>
-              <td>theme="light"</td>
-              <td>featured</td>
-              <td><code>inverted</code> (défaut)</td>
-            </tr>
-            <tr>
-              <td>theme="dark"</td>
-              <td>non featured</td>
-              <td><code>inverted</code> (à passer explicitement)</td>
-            </tr>
-            <tr>
-              <td>theme="dark"</td>
-              <td>featured</td>
-              <td><code>primary</code> (à passer explicitement)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
     <section class="section" aria-labelledby="usage-heading">
       <p class="section-label" id="usage-heading">Usage</p>
       <pre class="code-block">---
@@ -246,22 +204,10 @@ const plans = [
 ---
 
 &lt;!-- Thème light --&gt;
-&lt;Pricing
-  title="Nos formules"
-  lead="Des tarifs clairs, sans surprise."
-  plans=&#123;plans&#125;
-/&gt;
+&lt;Pricing title="Nos formules" lead="Des tarifs clairs, sans surprise." plans=&#123;plans&#125; /&gt;
 
-&lt;!-- Thème dark — adapter les ctaVariant pour le contraste --&gt;
-&lt;Pricing
-  title="Nos formules"
-  lead="Des tarifs clairs, sans surprise."
-  plans=&#123;plans.map(p =&gt; p.featured
-    ? &#123; ...p, ctaVariant: 'primary' &#125;
-    : &#123; ...p, ctaVariant: 'inverted' &#125;
-  )&#125;
-  theme="dark"
-/&gt;</pre>
+&lt;!-- Thème dark — les variantes de bouton sont calculées automatiquement --&gt;
+&lt;Pricing title="Nos formules" lead="Des tarifs clairs, sans surprise." plans=&#123;plans&#125; theme="dark" /&gt;</pre>
     </section>
 
   </main>
