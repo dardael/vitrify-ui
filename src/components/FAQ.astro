@@ -1,8 +1,5 @@
 ---
-export type FAQItem = {
-  question: string
-  answer:   string  // supports inline HTML: <a>, <strong>, <code>…
-}
+import type { FAQItem } from '../types'
 
 export type Props = {
   items:      FAQItem[]
@@ -25,7 +22,7 @@ const {
 
 <section
   class:list={['vf-faq', `vf-faq--${theme}`]}
-  aria-label={title ?? 'Foire aux questions'}
+  aria-label={title || undefined}
 >
   <div class="vf-faq__inner">
 
@@ -253,7 +250,7 @@ const {
   @media (prefers-reduced-motion: no-preference) {
     details[open] > .vf-faq__panel .vf-faq__panel-inner {
       animation: vf-faq-reveal var(--vf-duration-base) var(--vf-ease-out) both;
-      animation-delay: 80ms;
+      animation-delay: 80ms; /* let grid-row start expanding before fading content in */
     }
   }
 
