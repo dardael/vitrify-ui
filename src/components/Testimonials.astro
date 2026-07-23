@@ -1,0 +1,340 @@
+---
+import type { Testimonial } from '../types'
+import Stars from './Stars.astro'
+
+type HeadingLevel = 'h2' | 'h3' | 'h4'
+
+type Props = {
+  items:       Testimonial[]
+  heading?:    string
+  subheading?: string
+  as?:         HeadingLevel
+  theme?:      'light' | 'dark'
+  featured?:   boolean
+}
+
+const {
+  items      = [],
+  heading,
+  subheading,
+  as:         Tag = 'h2',
+  theme       = 'light',
+  featured    = false,
+} = Astro.props
+
+const hasHeader = heading || subheading || Astro.slots.has('header')
+
+const getInitials = (name: string) =>
+  name.trim().split(/\s+/).map(w => w[0] ?? '').join('').toUpperCase().slice(0, 2)
+---
+
+<section class:list={['testimonials', `testimonials--${theme}`]}>
+  <div class="testimonials__inner">
+
+    {hasHeader && (
+      <header class="testimonials__header">
+        <slot name="header">
+          {subheading && <p class="testimonials__sub">{subheading}</p>}
+          {heading    && <Tag class="testimonials__heading">{heading}</Tag>}
+        </slot>
+      </header>
+    )}
+
+    {items.length > 0 && (
+      <ul class="testimonials__grid" role="list">
+        {items.map((item, i) => (
+          <li
+            class:list={['testimonials__item', featured && i === 0 && 'testimonials__item--featured']}
+            style={`--i: ${i}`}
+          >
+            <figure class="testimonials__card">
+
+              {item.rating && <Stars rating={item.rating} />}
+
+              <blockquote class="testimonials__quote">
+                <p>{item.quote}</p>
+              </blockquote>
+
+              <figcaption class="testimonials__attribution">
+                <div class="testimonials__avatar" aria-hidden="true">
+                  {item.avatar ? (
+                    <img
+                      src={item.avatar}
+                      alt={item.avatarAlt ?? item.author}
+                      width="48" height="48"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="testimonials__initials">{getInitials(item.author)}</span>
+                  )}
+                </div>
+                <div class="testimonials__author-info">
+                  <strong class="testimonials__author">{item.author}</strong>
+                  {(item.role || item.company) && (
+                    <span class="testimonials__role">
+                      {[item.role, item.company].filter(Boolean).join(' · ')}
+                    </span>
+                  )}
+                </div>
+              </figcaption>
+
+            </figure>
+          </li>
+        ))}
+      </ul>
+    )}
+
+  </div>
+</section>
+
+<style>
+  /* ── Theme tokens ── */
+  .testimonials--light {
+    --_bg:              var(--vf-color-background);
+    --_featured-border: var(--vf-color-primary);
+    --_grid-border:     var(--vf-color-border);
+    --_mark:            var(--vf-color-primary);
+    --_text:            var(--vf-color-text);
+    --_muted:           var(--vf-color-text-muted);
+    --_sep:             var(--vf-color-border);
+    --_star-on:         var(--vf-color-accent);
+    --_star-off:        var(--vf-color-border);
+    --_avatar-bg:       var(--vf-color-primary);
+    --_avatar-fg:       var(--vf-color-primary-foreground);
+    --_img-outline:     rgba(0, 0, 0, 0.10);
+    --_heading:         var(--vf-color-text);
+  }
+
+  .testimonials--dark {
+    --_bg:              var(--vf-color-primary);
+    --_featured-border: var(--vf-color-on-primary);
+    --_grid-border:     var(--vf-color-on-primary-border);
+    --_mark:            var(--vf-color-on-primary-muted);
+    --_text:            var(--vf-color-on-primary);
+    --_muted:           var(--vf-color-on-primary-muted);
+    --_sep:             var(--vf-color-on-primary-border);
+    --_star-on:         var(--vf-color-accent);
+    --_star-off:        var(--vf-color-on-primary-border);
+    --_avatar-bg:       var(--vf-color-on-primary-subtle);
+    --_avatar-fg:       var(--vf-color-on-primary);
+    --_img-outline:     rgba(255, 255, 255, 0.10);
+    --_heading:         var(--vf-color-on-primary);
+  }
+
+  /* ── Base ── */
+  .testimonials {
+    background: var(--_bg);
+    width: 100%;
+    font-family: var(--vf-font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .testimonials__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-12);
+  }
+
+  /* ── Header ── */
+  .testimonials__header {
+    max-width: 52ch;
+  }
+
+  .testimonials__sub {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    color: var(--_muted);
+    margin: 0 0 var(--vf-spacing-3);
+    letter-spacing: 0.01em;
+    text-wrap: pretty;
+  }
+
+  .testimonials__heading {
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--_heading);
+    margin: 0;
+    text-wrap: balance;
+    line-height: var(--vf-line-height-tight);
+  }
+
+  /* ── Grid ── */
+  .testimonials__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-8);
+  }
+
+  @media (min-width: 640px) {
+    .testimonials__grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--vf-spacing-8) var(--vf-spacing-12);
+    }
+  }
+
+  .testimonials__item {
+    display: flex;
+  }
+
+  .testimonials__item--featured {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Card ── */
+  .testimonials__card {
+    margin: 0;
+    padding-top: var(--vf-spacing-6);
+    border-top: 1px solid var(--_grid-border);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .testimonials__item--featured .testimonials__card {
+    padding-top: var(--vf-spacing-8);
+    border-top: 2px solid var(--_featured-border);
+  }
+
+  /* ── Quote ── */
+  .testimonials__quote {
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .testimonials__quote::before {
+    content: '\201C';
+    font-family: var(--vf-font-display);
+    font-variation-settings: "wdth" 75, "wght" 800;
+    font-size: 2.5rem;
+    line-height: 0.75;
+    color: var(--_mark);
+    display: block;
+    margin-bottom: var(--vf-spacing-3);
+    user-select: none;
+  }
+
+  .testimonials__item--featured .testimonials__quote {
+    flex: none;
+    margin-bottom: var(--vf-spacing-8);
+  }
+
+  .testimonials__item--featured .testimonials__quote::before {
+    font-size: clamp(3rem, 6vw, 5rem);
+  }
+
+  .testimonials__quote p {
+    font-size: var(--vf-font-size-base);
+    line-height: var(--vf-line-height-relaxed);
+    color: var(--_text);
+    margin: 0 0 var(--vf-spacing-6);
+    text-wrap: pretty;
+    flex: 1;
+  }
+
+  .testimonials__item--featured .testimonials__quote p {
+    font-size: var(--vf-font-size-subhead);
+    font-weight: var(--vf-font-weight-medium);
+    max-width: 68ch;
+    margin-bottom: 0;
+  }
+
+  /* ── Attribution ── */
+  .testimonials__attribution {
+    display: flex;
+    align-items: center;
+    gap: var(--vf-spacing-3);
+    padding-top: var(--vf-spacing-4);
+    border-top: 1px solid var(--_sep);
+    margin-top: auto;
+  }
+
+  .testimonials__item--featured .testimonials__attribution {
+    margin-top: 0;
+  }
+
+  /* ── Avatar ── */
+  .testimonials__avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--vf-radius-full);
+    background: var(--_avatar-bg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .testimonials__item--featured .testimonials__avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .testimonials__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    outline: 1px solid var(--_img-outline);
+    outline-offset: -1px;
+  }
+
+  .testimonials__initials {
+    font-family: var(--vf-font-display);
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-bold);
+    color: var(--_avatar-fg);
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+
+  /* ── Author info ── */
+  .testimonials__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .testimonials__author {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--_text);
+    line-height: var(--vf-line-height-normal);
+    display: block;
+  }
+
+  .testimonials__role {
+    font-size: var(--vf-font-size-xs);
+    color: var(--_muted);
+    line-height: var(--vf-line-height-normal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Animation ── */
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes testimonial-rise {
+      from { transform: translateY(18px); }
+      to   { transform: translateY(0); }
+    }
+
+    .testimonials__item {
+      animation: testimonial-rise var(--vf-duration-slow) var(--vf-ease-out) both;
+      animation-delay: calc(var(--i, 0) * 75ms + 90ms);
+    }
+  }
+</style>

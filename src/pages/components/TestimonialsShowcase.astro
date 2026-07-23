@@ -1,0 +1,337 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Testimonials from '../../components/Testimonials.astro'
+import type { Testimonial } from '../../types'
+
+const restaurant: Testimonial[] = [
+  {
+    quote:   'Nous avons organisé notre repas d\'anniversaire ici. Service impeccable, poissons d\'une fraîcheur absolue. On reviendra sans hésitation.',
+    author:  'Isabelle Moreau',
+    role:    'Cliente fidèle',
+    rating:  5,
+  },
+  {
+    quote:   'La bouillabaisse est authentique comme je n\'en avais pas mangé depuis mon enfance à Marseille. Merci pour cette générosité !',
+    author:  'Jean-Paul Roux',
+    company: 'Marseille',
+    rating:  5,
+  },
+  {
+    quote:   'Belle découverte du quartier. L\'ambiance du Panier est incomparable. Accueil chaleureux et cuisine qui respecte les saisons.',
+    author:  'Camille Lefèvre',
+    role:    'Touriste',
+    rating:  4,
+  },
+  {
+    quote:   'Réservation facile, table prête à l\'heure, chef attentionné. Une adresse que je recommande à tous mes collègues de passage à Marseille.',
+    author:  'Thomas Bernard',
+    role:    'Chef de projet',
+    rating:  5,
+  },
+]
+
+const plombier: Testimonial[] = [
+  {
+    quote:   'Fuite détectée et réparée en moins de deux heures, un samedi matin. Tarif honnête et équipe rassurante. Merci !',
+    author:  'Marie Fontaine',
+    rating:  5,
+  },
+  {
+    quote:   'Chauffe-eau changé en une demi-journée. Travail soigné, espace de travail laissé propre. Je ne chercherai plus d\'autre plombier.',
+    author:  'Laurent Gimenez',
+    role:    'Propriétaire',
+    rating:  5,
+  },
+  {
+    quote:   'Urgence de nuit gérée avec professionnalisme. L\'artisan était là en 45 minutes. On ne peut que recommander.',
+    author:  'Hélène Vidal',
+    role:    'Cliente',
+    rating:  5,
+  },
+]
+
+const cabinet: Testimonial[] = [
+  {
+    quote:   'Nous avons confié la cession de notre entreprise familiale à Maître Delacroix. Sa rigueur, sa disponibilité et sa capacité à vulgariser des dossiers complexes ont rendu cette transition sereine. Un accompagnement d\'une valeur inestimable.',
+    author:  'François Dumont',
+    role:    'PDG',
+    company: 'Dumont Industries',
+    rating:  5,
+  },
+  {
+    quote:   'Conseils clairs, réactifs et toujours adaptés à notre situation. Le cabinet a su anticiper des risques que nous n\'avions pas vus.',
+    author:  'Nathalie Perrin',
+    role:    'Dirigeante',
+  },
+  {
+    quote:   'Excellente expertise en droit du travail. Les restructurations ont été gérées humainement et juridiquement sans faille.',
+    author:  'Sophie Martin',
+    role:    'DRH',
+  },
+  {
+    quote:   'Contrat de bail commercial négocié en deux semaines. Efficacité et professionnalisme du début à la fin.',
+    author:  'Éric Rousseau',
+    role:    'Entrepreneur',
+  },
+]
+
+const minimal: Testimonial[] = [
+  {
+    quote:  'Un travail soigné, livré dans les délais. Site modern, rapide, parfaitement adapté à notre clientèle.',
+    author: 'Aurélie Blanc',
+    role:   'Gérante',
+  },
+  {
+    quote:  'Équipe réactive, à l\'écoute de nos besoins. Le résultat dépasse nos attentes.',
+    author: 'Marc Tissot',
+    role:   'Directeur commercial',
+  },
+  {
+    quote:  'Très bonne expérience de bout en bout. Notre site génère aujourd\'hui des demandes de contact quotidiennes.',
+    author: 'Caroline Duval',
+    role:   'Fondatrice',
+  },
+]
+---
+
+<ShowcasePage component="Testimonials">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Testimonials</h1>
+      <p>
+        Section témoignages pour sites vitrines. Deux thèmes : <code>light</code> et <code>dark</code>.
+        Mise en avant optionnelle du premier avis (<code>featured</code>). Étoiles, avatar avec initiales, zéro JavaScript.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1: Light, grid -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" — grid (défaut)</p>
+    </div>
+    <Testimonials
+      theme="light"
+      heading="Ce que nos clients disent"
+      subheading="Brasserie du Panier · Marseille"
+      items={restaurant}
+    />
+  </div>
+
+  <!-- Variant 2: Dark, grid -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — grid</p>
+    </div>
+    <Testimonials
+      theme="dark"
+      heading="Avis clients vérifiés"
+      subheading="PlombPro Express · Lyon"
+      items={plombier}
+    />
+  </div>
+
+  <!-- Variant 3: Light, featured -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" — featured={true}</p>
+    </div>
+    <Testimonials
+      theme="light"
+      heading="Ils nous font confiance"
+      items={cabinet}
+      featured
+    />
+  </div>
+
+  <!-- Variant 4: Dark, featured -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — featured={true}</p>
+    </div>
+    <Testimonials
+      theme="dark"
+      items={cabinet}
+      featured
+    />
+  </div>
+
+  <!-- Variant 5: Minimal — no heading, no ratings -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">Minimal — sans titre, sans étoiles</p>
+    </div>
+    <Testimonials
+      theme="light"
+      items={minimal}
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>items</code></td>
+              <td><code>Testimonial[]</code></td>
+              <td><code>[]</code></td>
+              <td>Liste des témoignages à afficher.</td>
+            </tr>
+            <tr>
+              <td><code>heading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section.</td>
+            </tr>
+            <tr>
+              <td><code>subheading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte secondaire affiché au-dessus du titre.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h2' | 'h3' | 'h4'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre — adapter selon la hiérarchie de la page.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisie avec texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>featured</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Met en avant le premier item en format héro. Les suivants forment la grille.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label section-label--spaced">Type Testimonial</p>
+      <pre class="code-block">type Testimonial = &#123;
+  quote:      string             // texte du témoignage
+  author:     string             // nom complet de l'auteur
+  role?:      string             // poste ou titre (ex. "Cliente", "PDG")
+  company?:   string             // entreprise ou localisation
+  rating?:    1 | 2 | 3 | 4 | 5 // note sur 5 étoiles (optionnel)
+  avatar?:    string             // URL d'une photo de profil
+  avatarAlt?: string             // alt text de l'avatar (défaut : le nom)
+&#125;</pre>
+
+      <p class="section-label section-label--spaced">Slot</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>header</code></td>
+              <td>Remplace le rendu par défaut du titre. Utile pour insérer un badge, un logo de source (Google Reviews, Trustpilot…), ou tout HTML personnalisé.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Testimonials &#125; from 'vitrify-ui';
+import type &#123; Testimonial &#125; from 'vitrify-ui';
+
+const avis: Testimonial[] = [
+  &#123;
+    quote:   'Intervention rapide, tarif honnête, travail impeccable. Je recommande sans hésitation.',
+    author:  'Sophie Bernard',
+    role:    'Cliente',
+    rating:  5,
+  &#125;,
+  &#123;
+    quote:   'Équipe professionnelle et rassurante. La rénovation de notre salle de bain est une réussite.',
+    author:  'Marc Tissot',
+    role:    'Propriétaire',
+    company: 'Lyon 6e',
+    rating:  5,
+  &#125;,
+];
+---
+
+&lt;!-- Grille simple --&gt;
+&lt;Testimonials
+  heading="Avis clients"
+  items=&#123;avis&#125;
+/&gt;
+
+&lt;!-- Avec premier avis en vedette --&gt;
+&lt;Testimonials
+  heading="Ce que nos clients disent"
+  items=&#123;avis&#125;
+  featured
+/&gt;
+
+&lt;!-- Thème dark --&gt;
+&lt;Testimonials
+  theme="dark"
+  heading="Ils nous font confiance"
+  items=&#123;avis&#125;
+/&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="schema-heading">
+      <p class="section-label" id="schema-heading">Schema.org</p>
+      <p style="color: var(--vf-color-text-muted); font-size: var(--vf-font-size-sm); line-height: var(--vf-line-height-relaxed); margin-bottom: var(--vf-spacing-4);">
+        Pour le référencement, enrichir les témoignages avec le type <code>Review</code> ou <code>AggregateRating</code> selon le contexte.
+      </p>
+      <pre class="code-block">&lt;script type="application/ld+json"&gt;
+&#123;
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "PlombPro Express",
+  "aggregateRating": &#123;
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "3"
+  &#125;,
+  "review": [
+    &#123;
+      "@type": "Review",
+      "reviewRating": &#123; "@type": "Rating", "ratingValue": "5" &#125;,
+      "author": &#123; "@type": "Person", "name": "Marie Fontaine" &#125;,
+      "reviewBody": "Fuite détectée et réparée en moins de deux heures."
+    &#125;
+  ]
+&#125;
+&lt;/script&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .section-label--spaced {
+    margin-top: var(--vf-spacing-8);
+  }
+</style>
