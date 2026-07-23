@@ -6,6 +6,7 @@ export { default as Section }      from './components/Section.astro';
 export { default as Features }     from './components/Features.astro';
 export { default as Footer }       from './components/Footer.astro';
 export { default as Testimonials } from './components/Testimonials.astro';
+export { default as FAQ }          from './components/FAQ.astro';
 
 // Types
-export type { FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial } from './types';
+export type { FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem } from './types';
