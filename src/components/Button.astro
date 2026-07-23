@@ -1,6 +1,6 @@
 ---
 type Props = {
-  variant?: 'primary' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'inverted'
   size?: 'sm' | 'md' | 'lg'
   href?: string
   type?: 'button' | 'submit' | 'reset'
@@ -114,6 +114,26 @@ const Tag = isLink ? 'a' : 'button'
   .btn--primary:active:not(:disabled):not([aria-disabled="true"]) {
     box-shadow: none;
     transform: translateY(0) scale(0.96);
+  }
+
+  /* ── Inverted (white button on crimson/dark surface) ── */
+  .btn--inverted {
+    --_hover:  oklch(0.94 0.008 26);
+    --_active: oklch(0.88 0.012 26);
+    background: var(--vf-color-primary-foreground);
+    border-color: var(--vf-color-primary-foreground);
+    color: var(--vf-color-primary);
+  }
+
+  .btn--inverted:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--_hover);
+    border-color: var(--_hover);
+    box-shadow: none;
+  }
+
+  .btn--inverted:active:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--_active);
+    border-color: var(--_active);
   }
 
   /* ── Secondary ── */
