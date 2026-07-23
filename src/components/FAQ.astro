@@ -1,0 +1,274 @@
+---
+import type { FAQItem } from '../types'
+
+export type Props = {
+  items:      FAQItem[]
+  title?:     string
+  lead?:      string
+  titleAs?:   'h2' | 'h3'
+  theme?:     'light' | 'dark'
+  openFirst?: boolean
+}
+
+const {
+  items,
+  title,
+  lead,
+  titleAs: TitleTag = 'h2',
+  theme     = 'light',
+  openFirst = true,
+} = Astro.props
+---
+
+<section
+  class:list={['vf-faq', `vf-faq--${theme}`]}
+  aria-label={title || undefined}
+>
+  <div class="vf-faq__inner">
+
+    {(title || lead) && (
+      <header class="vf-faq__header">
+        {title && <TitleTag class="vf-faq__title">{title}</TitleTag>}
+        {lead  && <p class="vf-faq__lead">{lead}</p>}
+      </header>
+    )}
+
+    <div class="vf-faq__list">
+      {items.map((item, i) => (
+        <details class="vf-faq__item" open={openFirst && i === 0}>
+          <summary class="vf-faq__summary">
+            <span class="vf-faq__question">{item.question}</span>
+            <span class="vf-faq__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <div class="vf-faq__panel">
+            <div class="vf-faq__panel-inner">
+              <div class="vf-faq__answer" set:html={item.answer} />
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Shell ── */
+  .vf-faq {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .vf-faq__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  /* ── Header ── */
+  .vf-faq__header {
+    max-width: 54ch;
+    margin-bottom: var(--vf-spacing-12);
+  }
+
+  .vf-faq__title {
+    font-family:            var(--vf-font-display);
+    font-size:              var(--vf-font-size-heading);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height:            1.1;
+    letter-spacing:         -0.025em;
+    margin:                 0 0 var(--vf-spacing-4);
+    text-wrap:              balance;
+  }
+
+  .vf-faq__lead {
+    font-size:   var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    margin:      0;
+    text-wrap:   pretty;
+  }
+
+  /* ── List ── */
+  .vf-faq__list {
+    border-top: 1px solid var(--vf-color-border);
+  }
+
+  /* ── Item ── */
+  .vf-faq__item {
+    border-bottom: 1px solid var(--vf-color-border);
+  }
+
+  /* ── Summary trigger ── */
+  .vf-faq__summary {
+    display:         flex;
+    align-items:     flex-start;
+    justify-content: space-between;
+    gap:             var(--vf-spacing-6);
+    padding:         var(--vf-spacing-6) 0;
+    cursor:          pointer;
+    list-style:      none;
+    min-height:      44px;
+    user-select:     none;
+  }
+
+  /* Remove native disclosure marker */
+  .vf-faq__summary::-webkit-details-marker { display: none; }
+
+  .vf-faq__summary:focus         { outline: none; }
+  .vf-faq__summary:focus-visible {
+    outline:        3px solid var(--vf-color-primary);
+    outline-offset: 4px;
+    border-radius:  var(--vf-radius-sm);
+  }
+
+  /* ── Question text ── */
+  .vf-faq__question {
+    font-family:  var(--vf-font-sans);
+    font-size:    var(--vf-font-size-lg);
+    font-weight:  var(--vf-font-weight-semibold);
+    line-height:  var(--vf-line-height-tight);
+    text-wrap:    balance;
+    transition:   color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  /* ── Chevron icon ── */
+  .vf-faq__icon {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    flex-shrink:     0;
+    width:           20px;
+    height:          20px;
+    margin-top:      2px; /* optical: center 20px icon on 22.5px first text line */
+    transition:      transform var(--vf-duration-base) var(--vf-ease-out),
+                     color    var(--vf-duration-fast)  var(--vf-ease-out);
+  }
+
+  details[open] > .vf-faq__summary .vf-faq__icon {
+    transform: rotate(180deg);
+  }
+
+  /* ── Panel — grid-rows animation, no JS ── */
+  .vf-faq__panel {
+    display:            grid;
+    grid-template-rows: 0fr;
+    transition:         grid-template-rows var(--vf-duration-slow) var(--vf-ease-out);
+  }
+
+  details[open] > .vf-faq__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .vf-faq__panel-inner {
+    overflow: hidden;
+  }
+
+  /* ── Answer body ── */
+  .vf-faq__answer {
+    padding-bottom: var(--vf-spacing-6);
+    font-size:      var(--vf-font-size-base);
+    line-height:    var(--vf-line-height-relaxed);
+    max-width:      68ch;
+    text-wrap:      pretty;
+  }
+
+  /* Strip default margin from block elements inside answer */
+  .vf-faq__answer :global(p)        { margin: 0 0 var(--vf-spacing-3); }
+  .vf-faq__answer :global(p:last-child) { margin-bottom: 0; }
+  .vf-faq__answer :global(ul),
+  .vf-faq__answer :global(ol)       {
+    margin: 0 0 var(--vf-spacing-3);
+    padding-left: var(--vf-spacing-6);
+  }
+  .vf-faq__answer :global(li)       { margin-bottom: var(--vf-spacing-1); }
+  .vf-faq__answer :global(a)        {
+    color:           currentColor;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ── Light theme ── */
+  .vf-faq--light {
+    background: var(--vf-color-background);
+  }
+
+  .vf-faq--light .vf-faq__title    { color: var(--vf-color-primary); }
+  .vf-faq--light .vf-faq__lead     { color: var(--vf-color-text-muted); }
+  .vf-faq--light .vf-faq__question { color: var(--vf-color-text); }
+  .vf-faq--light .vf-faq__answer   { color: var(--vf-color-text-muted); }
+  .vf-faq--light .vf-faq__icon     { color: var(--vf-color-text-subtle); }
+
+  .vf-faq--light .vf-faq__summary:hover .vf-faq__question {
+    color: var(--vf-color-primary);
+  }
+
+  .vf-faq--light details[open] > .vf-faq__summary .vf-faq__question,
+  .vf-faq--light details[open] > .vf-faq__summary .vf-faq__icon {
+    color: var(--vf-color-primary);
+  }
+
+  /* ── Dark theme ── */
+  .vf-faq--dark {
+    background: var(--vf-color-primary);
+  }
+
+  .vf-faq--dark .vf-faq__list {
+    border-top-color: var(--vf-color-on-primary-border);
+  }
+  .vf-faq--dark .vf-faq__item {
+    border-bottom-color: var(--vf-color-on-primary-border);
+  }
+
+  .vf-faq--dark .vf-faq__title    { color: var(--vf-color-on-primary); }
+  .vf-faq--dark .vf-faq__lead     { color: var(--vf-color-on-primary-muted); }
+  .vf-faq--dark .vf-faq__question { color: var(--vf-color-on-primary); }
+  .vf-faq--dark .vf-faq__answer   { color: var(--vf-color-on-primary-muted); }
+  .vf-faq--dark .vf-faq__icon     { color: var(--vf-color-on-primary-subtle); }
+
+  .vf-faq--dark .vf-faq__answer :global(a) {
+    color: var(--vf-color-accent);
+  }
+
+  .vf-faq--dark .vf-faq__summary:hover .vf-faq__question {
+    color: oklch(1 0 0 / 0.85);
+  }
+
+  .vf-faq--dark .vf-faq__summary:focus-visible {
+    outline-color: var(--vf-color-on-primary);
+  }
+
+  .vf-faq--dark details[open] > .vf-faq__summary .vf-faq__question,
+  .vf-faq--dark details[open] > .vf-faq__summary .vf-faq__icon {
+    color: var(--vf-color-accent);
+  }
+
+  /* ── Content reveal — fade + slide up on open, one-shot keyframe ── */
+  @media (prefers-reduced-motion: no-preference) {
+    details[open] > .vf-faq__panel .vf-faq__panel-inner {
+      animation: vf-faq-reveal var(--vf-duration-base) var(--vf-ease-out) both;
+      animation-delay: 80ms; /* let grid-row start expanding before fading content in */
+    }
+  }
+
+  @keyframes vf-faq-reveal {
+    from {
+      opacity:   0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity:   1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vf-faq__panel    { transition: none; }
+    .vf-faq__icon     { transition: none; }
+    .vf-faq__question { transition: none; }
+  }
+</style>

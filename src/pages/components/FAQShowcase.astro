@@ -1,0 +1,310 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import FAQ from '../../components/FAQ.astro'
+import type { FAQItem } from '../../types'
+
+const plombier: FAQItem[] = [
+  {
+    question: 'Intervenez-vous en urgence le week-end ?',
+    answer:   `Oui, notre équipe est disponible <strong>7j/7, de 7h à 22h</strong>, y compris les jours fériés. Une majoration de 20 % s’applique hors heures ouvrées.`,
+  },
+  {
+    question: `Quel est le délai d’intervention habituel ?`,
+    answer:   `Pour les urgences (fuite active, rupture de canalisation), nous intervenons en moins de <strong>2 heures</strong> sur Lyon et sa première couronne. Pour les travaux programmés, le délai est de 2 à 5 jours ouvrés.`,
+  },
+  {
+    question: `Établissez-vous un devis avant de commencer ?`,
+    answer:   `Toujours. Le diagnostic initial est gratuit. Le devis, détaillé et sans engagement, est remis avant toute intervention. Vous signez, nous commençons — jamais l’inverse.`,
+  },
+  {
+    question: `Quels modes de paiement acceptez-vous ?`,
+    answer:   `Carte bancaire, virement, chèque et espèces (dans la limite légale de 1 000 €). Un <a href="#">financement en plusieurs fois</a> est possible pour les travaux supérieurs à 500 €.`,
+  },
+]
+
+const restaurant: FAQItem[] = [
+  {
+    question: `Faut-il réserver à l’avance ?`,
+    answer:   `La réservation est recommandée, surtout le week-end. Vous pouvez réserver par téléphone, en ligne via notre site, ou directement en salle si des places sont disponibles.`,
+  },
+  {
+    question: `Proposez-vous des menus pour les groupes ?`,
+    answer:   `Oui, à partir de 10 personnes nous proposons des menus de groupe à partir de 35 € par personne, boissons comprises. Contactez-nous pour établir un devis personnalisé.`,
+  },
+  {
+    question: `La carte change-t-elle selon les saisons ?`,
+    answer:   `Entièrement. Notre chef renouvelle la carte <strong>quatre fois par an</strong> pour suivre les produits de saison du marché de la Plaine. Certains plats du terroir restent disponibles toute l’année.`,
+  },
+  {
+    question: `Avez-vous des options végétariennes ou sans gluten ?`,
+    answer:   `Plusieurs plats végétariens figurent à la carte en permanence. Pour les régimes sans gluten ou les allergies spécifiques, merci de nous prévenir lors de la réservation — le chef adapte volontiers.`,
+  },
+]
+
+const avocat: FAQItem[] = [
+  {
+    question: `Comment se déroule la première consultation ?`,
+    answer:   `La première consultation dure environ 45 minutes. Elle permet d’analyser votre situation, d’évaluer la faisabilité juridique de votre projet et de vous proposer une stratégie. Elle est facturée 150 € HT.`,
+  },
+  {
+    question: `Dans quels délais puis-je obtenir un rendez-vous ?`,
+    answer:   `En règle générale sous 48 à 72 heures ouvrées. Pour les situations urgentes (convocation judiciaire imminente, garde à vue), contactez-nous par téléphone — nous dégageons un créneau le jour même.`,
+  },
+  {
+    question: `Travaillez-vous sur honoraires fixes ou au résultat ?`,
+    answer:   `Les deux formules coexistent selon la nature du dossier. Les honoraires fixes sont habituels pour le conseil et la rédaction d’actes. Un complément de résultat peut être prévu pour les contentieux, dans le respect des règles déontologiques.`,
+  },
+]
+---
+
+<ShowcasePage component="FAQ">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>FAQ</h1>
+      <p>
+        Section accordéon question/réponse. Animation CSS pure — aucun JavaScript.
+        Deux thèmes : <code>light</code> et <code>dark</code>. Accessible au clavier, indexé par Google.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1 — Light, sans titre -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" — sans titre</p>
+    </div>
+    <FAQ
+      theme="light"
+      items={plombier}
+    />
+  </div>
+
+  <!-- Variant 2 — Light, avec titre + lead -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" — avec titre et lead</p>
+    </div>
+    <FAQ
+      theme="light"
+      title="Questions fréquentes"
+      lead="Tout ce que vous devez savoir avant de réserver votre table au Bistrot du Panier."
+      items={restaurant}
+    />
+  </div>
+
+  <!-- Variant 3 — Dark, avec titre + lead -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — avec titre et lead</p>
+    </div>
+    <FAQ
+      theme="dark"
+      title="Vos questions, nos réponses"
+      lead="Quelques précisions sur notre fonctionnement pour aborder votre dossier avec sérénité."
+      items={avocat}
+    />
+  </div>
+
+  <!-- Variant 4 — Dark, sans titre, openFirst désactivé -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — openFirst={false}</p>
+    </div>
+    <FAQ
+      theme="dark"
+      items={plombier}
+      openFirst={false}
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>items</code></td>
+              <td><code>FAQItem[]</code></td>
+              <td>—</td>
+              <td>Liste des paires question/réponse.</td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section (optionnel).</td>
+            </tr>
+            <tr>
+              <td><code>lead</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Chapeau affiché sous le titre.</td>
+            </tr>
+            <tr>
+              <td><code>titleAs</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre — adapter selon la hiérarchie de la page.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisi avec texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>openFirst</code></td>
+              <td><code>boolean</code></td>
+              <td><code>true</code></td>
+              <td>Ouvre le premier item au chargement. Recommandé pour le référencement (contenu visible sans interaction).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label section-label--spaced">Type FAQItem</p>
+      <pre class="code-block">type FAQItem = &#123;
+  question: string   // texte de la question
+  answer:   string   // réponse — HTML inline accepté : &lt;a&gt;, &lt;strong&gt;, &lt;code&gt;, &lt;ul&gt;…
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; FAQ &#125; from 'vitrify-ui';
+import type &#123; FAQItem &#125; from 'vitrify-ui';
+
+const faq: FAQItem[] = [
+  &#123;
+    question: 'Intervenez-vous en urgence le week-end ?',
+    answer:   'Oui, notre équipe est disponible &lt;strong&gt;7j/7, de 7h à 22h&lt;/strong&gt;.',
+  &#125;,
+  &#123;
+    question: 'Quel est le délai d\'intervention habituel ?',
+    answer:   'Moins de 2 heures pour les urgences sur Lyon et sa couronne.',
+  &#125;,
+];
+---
+
+&lt;!-- Simple --&gt;
+&lt;FAQ items=&#123;faq&#125; /&gt;
+
+&lt;!-- Avec titre et thème sombre --&gt;
+&lt;FAQ
+  theme="dark"
+  title="Questions fréquentes"
+  lead="Tout ce qu'il faut savoir avant de nous contacter."
+  items=&#123;faq&#125;
+/&gt;
+
+&lt;!-- Comme sous-section (h3) --&gt;
+&lt;FAQ
+  titleAs="h3"
+  title="Encore des questions ?"
+  items=&#123;faq&#125;
+  openFirst=&#123;false&#125;
+/&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="schema-heading">
+      <p class="section-label" id="schema-heading">Schema.org</p>
+      <p class="schema-note">
+        Le balisage <code>FAQPage</code> permet à Google d'afficher les réponses directement dans les résultats de recherche (rich results). À insérer dans la page qui utilise le composant.
+      </p>
+      <pre class="code-block">&lt;script type="application/ld+json"&gt;
+&#123;
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    &#123;
+      "@type": "Question",
+      "name": "Intervenez-vous en urgence le week-end ?",
+      "acceptedAnswer": &#123;
+        "@type": "Answer",
+        "text": "Oui, notre équipe est disponible 7j/7, de 7h à 22h."
+      &#125;
+    &#125;
+  ]
+&#125;
+&lt;/script&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="a11y-heading">
+      <p class="section-label" id="a11y-heading">Accessibilité</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Comportement</th>
+              <th>Implémentation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ouvrir / fermer</td>
+              <td><kbd>Entrée</kbd> ou <kbd>Espace</kbd> sur le résumé (natif <code>&lt;details&gt;</code>)</td>
+            </tr>
+            <tr>
+              <td>Navigation clavier</td>
+              <td><kbd>Tab</kbd> entre les items — chaque <code>&lt;summary&gt;</code> est focusable</td>
+            </tr>
+            <tr>
+              <td>Focus visible</td>
+              <td>Anneau cramoisi 3px, offset 4px sur <code>:focus-visible</code></td>
+            </tr>
+            <tr>
+              <td>Lecteur d'écran</td>
+              <td>Rôle natif <em>disclosure widget</em> — état ouvert/fermé annoncé automatiquement</td>
+            </tr>
+            <tr>
+              <td>Mouvement réduit</td>
+              <td>Transitions désactivées via <code>prefers-reduced-motion: reduce</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .section-label--spaced { margin-top: var(--vf-spacing-8); }
+
+  .schema-note {
+    color:         var(--vf-color-text-muted);
+    font-size:     var(--vf-font-size-sm);
+    line-height:   var(--vf-line-height-relaxed);
+    margin-bottom: var(--vf-spacing-4);
+    max-width:     60ch;
+  }
+
+  .schema-note code { font-family: var(--vf-font-mono); font-size: 0.85em; }
+
+  kbd {
+    display:        inline-block;
+    font-family:    var(--vf-font-mono);
+    font-size:      0.75em;
+    padding:        1px 5px;
+    border:         1px solid var(--vf-color-border);
+    border-radius:  var(--vf-radius-sm);
+    background:     var(--vf-color-surface);
+    color:          var(--vf-color-text);
+    white-space:    nowrap;
+  }
+</style>
