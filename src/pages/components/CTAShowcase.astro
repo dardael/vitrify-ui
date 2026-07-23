@@ -1,0 +1,215 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import CTA from '../../components/CTA.astro'
+---
+
+<ShowcasePage component="CTA">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>CTA</h1>
+      <p>
+        Bandeau intermédiaire avec accroche et bouton. Deux thèmes : <code>dark</code> (fond cramoisi)
+        et <code>light</code> (fond surface). Deux mises en page : <code>centered</code> et <code>split</code>.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1 — dark + centered (default) -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="dark" layout="centered" (défaut)</p>
+    </div>
+    <CTA
+      headline="Votre site vitrine, prêt en quelques heures."
+      lead="Des composants Astro qui ressemblent à quelque chose dès l'import — sans repartir de zéro à chaque client."
+      ctaLabel="Parcourir les composants"
+      ctaHref="#"
+    />
+  </div>
+
+  <!-- Variant 2 — dark + split -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" layout="split"</p>
+    </div>
+    <CTA
+      theme="dark"
+      layout="split"
+      headline="Prêt à livrer votre prochain client ?"
+      lead="Installez Vitrify, choisissez vos composants, personnalisez les tokens. Votre site, votre identité."
+      ctaLabel="npm install vitrify-ui"
+      ctaHref="#"
+    />
+  </div>
+
+  <!-- Variant 3 — dark + split + extra slot -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" layout="split" + slot extra</p>
+    </div>
+    <CTA
+      theme="dark"
+      layout="split"
+      headline="Transformez votre menuiserie en vitrine digitale."
+      lead="Un site professionnel, mobile-first, référencé sur Google — livré en une journée."
+      ctaLabel="Demander un devis gratuit"
+      ctaHref="#"
+    >
+      <a slot="extra" href="#">Voir nos réalisations →</a>
+    </CTA>
+  </div>
+
+  <!-- Variant 4 — light + centered -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" layout="centered"</p>
+    </div>
+    <CTA
+      theme="light"
+      layout="centered"
+      headline="Une table pour ce soir ?"
+      lead="Réservez en ligne, disponible 24h/24. Confirmation immédiate par SMS."
+      ctaLabel="Réserver une table"
+      ctaHref="#"
+    />
+  </div>
+
+  <!-- Variant 5 — light + split -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" layout="split"</p>
+    </div>
+    <CTA
+      theme="light"
+      layout="split"
+      headline="Votre dossier mérite une analyse sérieuse."
+      lead="Première consultation offerte — diagnostic juridique, sans engagement."
+      ctaLabel="Prendre rendez-vous"
+      ctaHref="#"
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>headline</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Accroche principale. Rendue en condensed bold.</td>
+            </tr>
+            <tr>
+              <td><code>lead</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Sous-titre optionnel, affiché sous l'accroche.</td>
+            </tr>
+            <tr>
+              <td><code>ctaLabel</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte du bouton principal.</td>
+            </tr>
+            <tr>
+              <td><code>ctaHref</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>URL de destination du bouton.</td>
+            </tr>
+            <tr>
+              <td><code>titleAs</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre — adapter selon la hiérarchie de la page.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'dark'</code></td>
+              <td><code>dark</code> : fond cramoisi, texte et bouton inversés. <code>light</code> : fond surface, accroche cramoisie.</td>
+            </tr>
+            <tr>
+              <td><code>layout</code></td>
+              <td><code>'centered' | 'split'</code></td>
+              <td><code>'centered'</code></td>
+              <td><code>centered</code> : tout centré. <code>split</code> : texte à gauche, bouton à droite sur desktop.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="slots-heading">
+      <p class="section-label" id="slots-heading">Slots</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>extra</code></td>
+              <td>Action secondaire affichée sous le bouton — lien texte, note, ghost button.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; CTA &#125; from 'vitrify-ui';
+---
+
+&lt;!-- Bandeau cramoisi centré (défaut) --&gt;
+&lt;CTA
+  headline="Votre site vitrine, prêt en quelques heures."
+  lead="Des composants Astro prêts à l'emploi, thématisables par client."
+  ctaLabel="Parcourir les composants"
+  ctaHref="/components"
+/&gt;
+
+&lt;!-- Split avec lien secondaire --&gt;
+&lt;CTA
+  theme="dark"
+  layout="split"
+  headline="Prêt à livrer votre prochain client ?"
+  ctaLabel="npm install vitrify-ui"
+  ctaHref="https://npmjs.com/package/vitrify-ui"
+&gt;
+  &lt;a slot="extra" href="/docs"&gt;Lire la documentation →&lt;/a&gt;
+&lt;/CTA&gt;
+
+&lt;!-- Thème clair, dans une h3 --&gt;
+&lt;CTA
+  theme="light"
+  titleAs="h3"
+  headline="Une table pour ce soir ?"
+  lead="Réservez en ligne, disponible 24h/24."
+  ctaLabel="Réserver"
+  ctaHref="/reservation"
+/&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>

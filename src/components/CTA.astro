@@ -1,0 +1,228 @@
+---
+import Button from './Button.astro'
+
+export type Props = {
+  headline: string
+  lead?: string
+  ctaLabel: string
+  ctaHref: string
+  titleAs?: 'h2' | 'h3'
+  theme?: 'light' | 'dark'
+  layout?: 'centered' | 'split'
+}
+
+const {
+  headline,
+  lead,
+  ctaLabel,
+  ctaHref,
+  titleAs: Tag = 'h2',
+  theme = 'dark',
+  layout = 'centered',
+} = Astro.props
+
+const hasExtra = Astro.slots.has('extra')
+---
+
+<section class:list={['cta', `cta--${theme}`, `cta--${layout}`]}>
+  <div class="cta__inner">
+    <div class="cta__text">
+      <Tag class="cta__headline">{headline}</Tag>
+      {lead && <p class="cta__lead">{lead}</p>}
+    </div>
+    <div class="cta__action">
+      <Button href={ctaHref} size="lg">{ctaLabel}</Button>
+      {hasExtra && (
+        <div class="cta__extra">
+          <slot name="extra" />
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Structure ── */
+  .cta {
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .cta__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-8);
+  }
+
+  /* ── Layouts ── */
+  .cta--centered .cta__inner {
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta--centered .cta__text {
+    max-width: 52ch;
+  }
+
+  .cta--split .cta__inner {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .cta--split .cta__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(2rem, 6vw, 4rem);
+    }
+
+    .cta--split .cta__text {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .cta--split .cta__action {
+      flex: 0 0 auto;
+    }
+  }
+
+  /* ── Typography ── */
+  .cta__headline {
+    font-family: var(--vf-font-display);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--vf-spacing-3);
+    text-wrap: balance;
+  }
+
+  .cta__lead {
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0;
+    max-width: 50ch;
+    text-wrap: pretty;
+  }
+
+  /* ── Actions ── */
+  .cta__action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vf-spacing-3);
+  }
+
+  .cta--split .cta__action {
+    align-items: flex-start;
+  }
+
+  .cta__extra {
+    font-size: var(--vf-font-size-sm);
+  }
+
+  /* ── Dark theme (crimson) ── */
+  .cta--dark {
+    background: var(--vf-color-primary);
+  }
+
+  .cta--dark .cta__headline {
+    color: var(--vf-color-on-primary);
+  }
+
+  .cta--dark .cta__lead {
+    color: var(--vf-color-on-primary-muted);
+  }
+
+  .cta--dark .cta__extra {
+    color: var(--vf-color-on-primary-subtle);
+  }
+
+  /* Inverted button: white bg + crimson text on crimson background */
+  .cta--dark :global(.btn--primary) {
+    background: var(--vf-color-primary-foreground);
+    border-color: var(--vf-color-primary-foreground);
+    color: var(--vf-color-primary);
+  }
+
+  .cta--dark :global(.btn--primary:hover:not(:disabled):not([aria-disabled="true"])) {
+    background: oklch(0.94 0.008 26);
+    border-color: oklch(0.94 0.008 26);
+    box-shadow: none;
+  }
+
+  .cta--dark :global(.btn--primary:active:not(:disabled):not([aria-disabled="true"])) {
+    background: oklch(0.88 0.012 26);
+    border-color: oklch(0.88 0.012 26);
+  }
+
+  /* Extra slot links on dark */
+  .cta--dark :global(.cta__extra a) {
+    color: var(--vf-color-on-primary-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .cta--dark :global(.cta__extra a:hover) {
+    color: var(--vf-color-on-primary);
+  }
+
+  /* ── Light theme ── */
+  .cta--light {
+    background: var(--vf-color-surface);
+  }
+
+  .cta--light .cta__headline {
+    color: var(--vf-color-primary);
+  }
+
+  .cta--light .cta__lead {
+    color: var(--vf-color-text-muted);
+  }
+
+  .cta--light .cta__extra {
+    color: var(--vf-color-text-subtle);
+  }
+
+  .cta--light :global(.cta__extra a) {
+    color: var(--vf-color-text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .cta--light :global(.cta__extra a:hover) {
+    color: var(--vf-color-primary);
+  }
+
+  /* ── Focus ── */
+  .cta :global(.btn:focus-visible) {
+    outline-color: currentColor;
+  }
+
+  /* ── Motion ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .cta__headline {
+      animation: vf-cta-up 0.45s var(--vf-ease-out) both;
+    }
+
+    .cta__lead {
+      animation: vf-cta-up 0.40s var(--vf-ease-out) 0.08s both;
+    }
+
+    .cta__action {
+      animation: vf-cta-up 0.40s var(--vf-ease-out) 0.16s both;
+    }
+
+    @keyframes vf-cta-up {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
