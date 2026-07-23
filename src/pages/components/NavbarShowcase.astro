@@ -1,0 +1,248 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Navbar from '../../components/Navbar.astro'
+import Button from '../../components/Button.astro'
+
+const navLinks = [
+  { label: 'Accueil',     href: '#' },
+  { label: 'Services',    href: '#', active: true },
+  { label: 'Réalisations',href: '#' },
+  { label: 'À propos',   href: '#' },
+  { label: 'Contact',     href: '#' },
+]
+---
+
+<ShowcasePage component="Navbar">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Navbar</h1>
+      <p>
+        Barre de navigation responsive. Deux thèmes : <code>light</code> (fond blanc, logo et liens cramoisies)
+        et <code>dark</code> (fond cramoisie, texte blanc). Menu hamburger animé sur mobile, support
+        sticky avec ombre au défilement. Zéro dépendance externe.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant: light -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" (défaut)</p>
+    </div>
+    <div class="demo-frame">
+      <Navbar links={navLinks} theme="light">
+        <a href="/" slot="logo">Vitrify</a>
+        <Button href="#" size="sm" slot="cta">Devis gratuit</Button>
+      </Navbar>
+    </div>
+  </div>
+
+  <!-- Variant: dark -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+    <div class="demo-frame">
+      <Navbar links={navLinks} theme="dark">
+        <a href="/" slot="logo">Vitrify</a>
+        <Button href="#" size="sm" slot="cta">Devis gratuit</Button>
+      </Navbar>
+    </div>
+  </div>
+
+  <!-- Variant: sticky scrolled -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">sticky={true} — ombre au défilement</p>
+    </div>
+    <div class="sticky-demo" role="region" aria-label="Démo sticky — faites défiler">
+      <div class="sticky-demo__viewport">
+        <Navbar links={navLinks} theme="light" sticky id="sticky-demo-navbar">
+          <a href="/" slot="logo">Vitrify</a>
+          <Button href="#" size="sm" slot="cta">Devis gratuit</Button>
+        </Navbar>
+        <div class="sticky-demo__content">
+          <p>↑ Faites défiler vers le haut pour voir l'ombre apparaître</p>
+          <p>La barre reste collée en haut pendant le défilement</p>
+          <p>L'ombre s'efface quand vous êtes en haut de page</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No CTA variant -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">Sans CTA</p>
+    </div>
+    <div class="demo-frame">
+      <Navbar links={navLinks} theme="light">
+        <a href="/" slot="logo">Vitrify</a>
+      </Navbar>
+    </div>
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>links</code></td>
+              <td><code>NavLink[]</code></td>
+              <td><code>[]</code></td>
+              <td>Tableau de liens de navigation. Chaque item : <code>&#123; label, href, active? &#125;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc + logo cramoisie, ou fond cramoisie + texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>sticky</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Active <code>position: sticky; top: 0</code> avec ombre au défilement.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label" style="margin-top: var(--vf-spacing-8)">Slots</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>logo</code></td>
+              <td>Logo ou nom de marque. Mettre un <code>&lt;a href="/"&gt;</code> pour le lien retour accueil. Accepte aussi une <code>&lt;img&gt;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>cta</code></td>
+              <td>Bouton d'appel à l'action (ex : "Devis gratuit"). Affiché à droite sur desktop, en bas du menu mobile. Utiliser le composant <code>Button</code> avec <code>size="sm"</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label" style="margin-top: var(--vf-spacing-8)">Type NavLink</p>
+      <pre class="code-block">type NavLink = &#123;
+  label:  string   // texte du lien
+  href:   string   // URL cible
+  active?: boolean // lien actif (aria-current="page")
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Navbar, Button &#125; from 'vitrify-ui';
+
+const links = [
+  &#123; label: 'Accueil',      href: '/'          &#125;,
+  &#123; label: 'Services',     href: '/services', active: true &#125;,
+  &#123; label: 'Réalisations', href: '/portfolio' &#125;,
+  &#123; label: 'Contact',      href: '/contact'   &#125;,
+];
+---
+
+&lt;!-- Sticky, thème light --&gt;
+&lt;Navbar links=&#123;links&#125; sticky&gt;
+  &lt;a href="/" slot="logo"&gt;Mon Atelier&lt;/a&gt;
+  &lt;Button href="/contact" size="sm" slot="cta"&gt;Devis gratuit&lt;/Button&gt;
+&lt;/Navbar&gt;
+
+&lt;!-- Thème dark (fond cramoisie) --&gt;
+&lt;Navbar links=&#123;links&#125; theme="dark"&gt;
+  &lt;a href="/" slot="logo"&gt;Mon Atelier&lt;/a&gt;
+  &lt;Button href="/contact" size="sm" slot="cta"&gt;Nous contacter&lt;/Button&gt;
+&lt;/Navbar&gt;
+
+&lt;!-- Logo image --&gt;
+&lt;Navbar links=&#123;links&#125;&gt;
+  &lt;a href="/" slot="logo"&gt;
+    &lt;img src="/logo.svg" alt="Mon Atelier" width="120" height="32" /&gt;
+  &lt;/a&gt;
+&lt;/Navbar&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  /* Sticky demo: scrollable container */
+  .sticky-demo {
+    margin-top: var(--vf-spacing-4);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-lg);
+    overflow: hidden;
+  }
+
+  .sticky-demo__viewport {
+    height: 220px;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .sticky-demo__viewport .navbar--sticky {
+    position: sticky;
+    top: 0;
+  }
+
+  .sticky-demo__content {
+    padding: var(--vf-spacing-8) clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-6);
+    height: 400px;
+  }
+
+  .sticky-demo__content p {
+    font-size: var(--vf-font-size-sm);
+    color: var(--vf-color-text-subtle);
+  }
+
+  /* Override shadow detection for scroll container */
+  .sticky-demo__viewport .navbar--sticky {
+    transition: box-shadow var(--vf-duration-base) var(--vf-ease-out);
+  }
+
+  /* Demo frame — gives a slight bg so light navbar border is visible */
+  .demo-frame {
+    background: var(--vf-color-surface);
+  }
+</style>
+
+<script>
+  /* Sticky demo uses container scroll, not window — rebind the observer */
+  const viewport = document.querySelector<HTMLElement>('.sticky-demo__viewport')
+  const stickyNav = viewport?.querySelector<HTMLElement>('.navbar--sticky')
+
+  if (viewport && stickyNav) {
+    const update = () => {
+      stickyNav.classList.toggle('navbar--scrolled', viewport.scrollTop > 2)
+    }
+    viewport.addEventListener('scroll', update, { passive: true })
+    update()
+  }
+</script>
