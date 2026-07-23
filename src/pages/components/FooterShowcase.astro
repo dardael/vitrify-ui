@@ -1,6 +1,7 @@
 ---
 import ShowcasePage from '../../layouts/ShowcasePage.astro'
 import Footer from '../../components/Footer.astro'
+import type { SocialLink } from '../../types'
 
 const columns = [
   {
@@ -32,9 +33,9 @@ const columns = [
   },
 ]
 
-const socials = [
-  { label: 'Facebook', href: '#', icon: 'facebook' as const },
-  { label: 'Instagram', href: '#', icon: 'instagram' as const },
+const socials: SocialLink[] = [
+  { label: 'Facebook', href: '#', icon: 'facebook' },
+  { label: 'Instagram', href: '#', icon: 'instagram' },
 ]
 
 const year = new Date().getFullYear()
@@ -189,7 +190,7 @@ const year = new Date().getFullYear()
         </table>
       </div>
 
-      <p class="section-label" style="margin-top: var(--vf-spacing-8)">Slots</p>
+      <p class="section-label section-label--spaced">Slots</p>
       <div class="props-table-wrap">
         <table class="props-table">
           <thead>
@@ -290,5 +291,9 @@ const socials = [
 
   .demo-frame--dark {
     background: var(--vf-color-primary);
+  }
+
+  .section-label--spaced {
+    margin-top: var(--vf-spacing-8);
   }
 </style>

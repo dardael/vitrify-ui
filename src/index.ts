@@ -5,3 +5,6 @@ export { default as Hero }     from './components/Hero.astro';
 export { default as Section }  from './components/Section.astro';
 export { default as Features } from './components/Features.astro';
 export { default as Footer }   from './components/Footer.astro';
+
+// Types
+export type { FooterLink, FooterColumn, SocialIcon, SocialLink } from './types';

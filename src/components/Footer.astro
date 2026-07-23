@@ -1,8 +1,5 @@
 ---
-type FooterLink   = { label: string; href: string }
-type FooterColumn = { heading: string; links: FooterLink[] }
-type SocialIcon   = 'github' | 'instagram' | 'facebook' | 'linkedin' | 'twitter' | 'youtube'
-type SocialLink   = { label: string; href: string; icon: SocialIcon }
+import type { FooterLink, FooterColumn, SocialIcon, SocialLink } from '../types'
 
 type Props = {
   columns?: FooterColumn[]
@@ -34,10 +31,7 @@ const icons: Record<SocialIcon, string> = {
 }
 ---
 
-<footer
-  class:list={['footer', `footer--${theme}`]}
-  role="contentinfo"
->
+<footer class:list={['footer', `footer--${theme}`]}>
   <div class="footer__inner">
 
     <div class:list={['footer__top', !hasColumns && 'footer__top--brand-only']}>
@@ -66,7 +60,6 @@ const icons: Record<SocialIcon, string> = {
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     aria-hidden="true"
-                    focusable="false"
                     width="18"
                     height="18"
                   >
