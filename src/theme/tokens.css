@@ -6,6 +6,12 @@
   --vf-color-primary-hover:      oklch(0.50 0.190 26);
   --vf-color-primary-foreground: oklch(1.000 0.000 0);
 
+  /* on-primary — text and borders sitting on --vf-color-primary background */
+  --vf-color-on-primary:        oklch(1.000 0.000 0);
+  --vf-color-on-primary-muted:  oklch(1 0 0 / 0.70);
+  --vf-color-on-primary-subtle: oklch(1 0 0 / 0.40);
+  --vf-color-on-primary-border: oklch(1 0 0 / 0.22);
+
   --vf-color-secondary:            oklch(0.40 0.015 26);
   --vf-color-secondary-hover:      oklch(0.32 0.015 26);
   --vf-color-secondary-foreground: oklch(1.000 0.000 0);

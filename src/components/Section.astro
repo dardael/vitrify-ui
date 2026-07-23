@@ -1,0 +1,77 @@
+---
+type Props = {
+  title?: string
+  lead?: string
+  theme?: 'light' | 'dark'
+  as?: 'h2' | 'h3'
+}
+
+const { title, lead, theme = 'light', as: Tag = 'h2' } = Astro.props
+---
+
+<section
+  class:list={['vf-section', `vf-section--${theme}`]}
+  aria-label={title}
+>
+  <div class="vf-section__inner">
+    {(title || lead) && (
+      <header class="vf-section__header">
+        {title && <Tag class="vf-section__title">{title}</Tag>}
+        {lead && <p class="vf-section__lead">{lead}</p>}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .vf-section__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  .vf-section__header {
+    margin-bottom: var(--vf-spacing-12);
+  }
+
+  .vf-section__title {
+    font-family: var(--vf-font-display);
+    font-size: var(--vf-font-size-heading);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--vf-spacing-4);
+    text-wrap: balance;
+  }
+
+  .vf-section__lead {
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    max-width: 54ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ── Light ── */
+  .vf-section--light {
+    background: var(--vf-color-background);
+  }
+
+  .vf-section--light .vf-section__title { color: var(--vf-color-primary); }
+  .vf-section--light .vf-section__lead  { color: var(--vf-color-text-muted); }
+
+  /* ── Dark ── sets cascade context tokens for child components ── */
+  .vf-section--dark {
+    background: var(--vf-color-primary);
+    color: var(--vf-color-on-primary);
+
+    --vf-color-on-section:        var(--vf-color-on-primary);
+    --vf-color-on-section-muted:  var(--vf-color-on-primary-muted);
+    --vf-color-on-section-subtle: var(--vf-color-on-primary-subtle);
+    --vf-color-on-section-border: var(--vf-color-on-primary-border);
+  }
+
+  .vf-section--dark .vf-section__title { color: var(--vf-color-on-primary); }
+  .vf-section--dark .vf-section__lead  { color: var(--vf-color-on-primary-muted); }
+</style>

@@ -1,0 +1,185 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Section from '../../components/Section.astro'
+import Features from '../../components/Features.astro'
+
+const plombier = [
+  {
+    title: 'Dépannage urgent',
+    body: "Intervention dans l'heure sur Lyon et agglomération, 7j/7. Fuite, canalisation bouchée, chauffe-eau en panne — on répond présent.",
+  },
+  {
+    title: 'Installation sanitaire',
+    body: "Pose de baignoires, douches à l'italienne, WC suspendus. On travaille proprement et on repart sans laisser de trace.",
+  },
+  {
+    title: 'Rénovation salle de bain',
+    body: "De la démolition à la finition. Carrelage, plomberie, électricité — un seul interlocuteur pour tout le chantier.",
+  },
+]
+
+const architecte = [
+  {
+    title: 'Conception architecturale',
+    body: "De l'esquisse au permis de construire. Chaque projet est traité avec le soin d'une commande unique, quel que soit le programme.",
+  },
+  {
+    title: 'Réhabilitation',
+    body: "Transformer l'existant sans perdre l'âme du lieu. On écoute l'histoire d'un bâtiment avant de proposer la moindre intervention.",
+  },
+  {
+    title: 'Coordination de travaux',
+    body: "Un interlocuteur unique du chantier à la livraison. Planning, entreprises, réserves — on suit jusqu'à la remise des clés.",
+  },
+  {
+    title: 'Conseil en espace',
+    body: "Une heure de consultation pour clarifier votre projet avant d'engager les premières dépenses. Sans engagement, sans jargon.",
+  },
+]
+---
+
+<ShowcasePage component="Section + Features">
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Section + Features</h1>
+      <p>
+        Deux composants complémentaires : <code>Section</code> enveloppe un bloc de page
+        (sémantique, titre, thème) et <code>Features</code> affiche une grille de services
+        numérotés. <code>Features</code> hérite le thème de son <code>Section</code> parent
+        via la cascade CSS — pas de prop redondante.
+      </p>
+    </div>
+  </header>
+
+  <!-- Dark variant -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+    <Section
+      title="Nos prestations"
+      lead="Intervention rapide, travail soigné. Du dépannage d'urgence à la rénovation complète, chaque chantier est traité avec le même soin."
+      theme="dark"
+    >
+      <Features features={plombier} />
+    </Section>
+  </div>
+
+  <!-- Light variant -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="light" (défaut)</p>
+    </div>
+    <Section
+      title="Nos prestations"
+      lead="Intervention rapide, travail soigné. Du dépannage d'urgence à la rénovation complète, chaque chantier est traité avec le même soin."
+      theme="light"
+    >
+      <Features features={plombier} />
+    </Section>
+  </div>
+
+  <!-- 4 items variant -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">4 éléments — architecte</p>
+    </div>
+    <Section title="Notre approche" theme="light">
+      <Features features={architecte} />
+    </Section>
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-section-heading">
+      <p class="section-label" id="props-section-heading">Section — Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>title</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de section. Sans titre, aucun <code>&lt;header&gt;</code> n'est rendu.</td>
+            </tr>
+            <tr>
+              <td><code>lead</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Accroche sous le titre. Peut s'utiliser sans <code>title</code>.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisie. Propagé aux composants enfants via la cascade CSS.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label" style="margin-top: var(--vf-spacing-8)" id="props-features-heading">Features — Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>features</code></td>
+              <td><code>FeatureItem[]</code></td>
+              <td>—</td>
+              <td>Requis. Tableau d'objets <code>&#123; title, body, num? &#125;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>itemAs</code></td>
+              <td><code>'h2' | 'h3' | 'h4'</code></td>
+              <td><code>'h3'</code></td>
+              <td>Niveau sémantique des titres d'items.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Section, Features &#125; from 'vitrify-ui';
+
+const services = [
+  &#123; title: 'Dépannage urgent',    body: "Intervention dans l'heure." &#125;,
+  &#123; title: 'Installation',        body: "Pose et remplacement." &#125;,
+  &#123; title: 'Rénovation',          body: "Du sol au plafond." &#125;,
+];
+---
+
+&lt;!-- Section sombre — Features hérite le thème automatiquement --&gt;
+&lt;Section
+  title="Nos prestations"
+  lead="Intervention rapide, travail soigné."
+  theme="dark"
+&gt;
+  &lt;Features features=&#123;services&#125; /&gt;
+&lt;/Section&gt;
+
+&lt;!-- Section claire (défaut) --&gt;
+&lt;Section title="Notre approche"&gt;
+  &lt;Features features=&#123;services&#125; /&gt;
+&lt;/Section&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>

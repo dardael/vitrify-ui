@@ -65,10 +65,23 @@ const { title, component } = Astro.props
 </style>
 
 <style is:global>
-  /* ── Shared showcase prose styles ──
-     Applied via :global since they target slotted content from child pages.
-     Scoped to showcase pages only — ShowcasePage is never used on the public site.
+  /* ── Shared showcase utilities ──
+     All showcase pages use ShowcasePage, so shared layout and component
+     styles live here instead of being duplicated per page.
   ── */
+
+  /* Container */
+  .container {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 5vw, 3rem);
+  }
+
+  /* Page header */
+  .page-header {
+    padding: var(--vf-spacing-12) 0 var(--vf-spacing-8);
+    border-bottom: 1px solid var(--vf-color-border);
+  }
 
   .page-header h1 {
     font-size: var(--vf-font-size-heading);
@@ -84,6 +97,31 @@ const { title, component } = Astro.props
     color: var(--vf-color-text-muted);
     max-width: 60ch;
     line-height: var(--vf-line-height-relaxed);
+  }
+
+  .page-header code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.85em;
+  }
+
+  /* Variant blocks */
+  .variant-block { padding-top: var(--vf-spacing-8); }
+  .variant-block--bordered { border-top: 1px solid var(--vf-color-border); }
+
+  .variant-label {
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text-subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--vf-spacing-4);
+  }
+
+  /* Props & Usage content area */
+  .page {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-spacing-16) clamp(1rem, 5vw, 3rem);
   }
 
   .section {
@@ -110,5 +148,57 @@ const { title, component } = Astro.props
     line-height: var(--vf-line-height-relaxed);
     overflow-x: auto;
     white-space: pre;
+  }
+
+  /* Props tables */
+  .props-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-md);
+  }
+
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--vf-font-size-sm);
+    min-width: 520px;
+  }
+
+  .props-table th {
+    text-align: left;
+    padding: var(--vf-spacing-3) var(--vf-spacing-4);
+    background: var(--vf-color-surface);
+    color: var(--vf-color-text-muted);
+    font-weight: var(--vf-font-weight-semibold);
+    font-size: var(--vf-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--vf-color-border);
+  }
+
+  .props-table td {
+    padding: var(--vf-spacing-3) var(--vf-spacing-4);
+    color: var(--vf-color-text);
+    line-height: var(--vf-line-height-relaxed);
+    border-bottom: 1px solid var(--vf-color-border);
+    vertical-align: top;
+  }
+
+  .props-table tr:last-child td { border-bottom: none; }
+
+  .props-table code {
+    font-family: var(--vf-font-mono);
+    font-size: 0.8em;
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-sm);
+    padding: 1px 5px;
+    color: var(--vf-color-primary);
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .page-header { padding: var(--vf-spacing-8) 0 var(--vf-spacing-6); }
+    .page { padding: var(--vf-spacing-10) clamp(1rem, 5vw, 3rem); }
   }
 </style>

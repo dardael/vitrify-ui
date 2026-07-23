@@ -1,0 +1,119 @@
+---
+type FeatureItem = {
+  num?: string
+  title: string
+  body: string
+}
+
+type Props = {
+  features: FeatureItem[]
+  itemAs?: 'h2' | 'h3' | 'h4'
+}
+
+const { features, itemAs: ItemTag = 'h3' } = Astro.props
+const cols = Math.min(features.length, 4)
+---
+
+<div class="vf-features" style={`--_cols: ${cols}`}>
+  <div class="vf-features__grid">
+    {features.map((item, i) => (
+      <div class="vf-feature">
+        <span class="vf-feature__num" aria-hidden="true">
+          {item.num ?? String(i + 1).padStart(2, '0')}
+        </span>
+        <ItemTag class="vf-feature__title">{item.title}</ItemTag>
+        <p class="vf-feature__body">{item.body}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .vf-features__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--vf-spacing-6);
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 640px) {
+    .vf-features__grid {
+      grid-template-columns: repeat(var(--_cols), 1fr);
+      row-gap: 0;
+    }
+  }
+
+  /* ── Item — colors inherit from parent Section via cascade tokens ──
+     Fallbacks provide light-mode defaults for standalone use.       */
+  .vf-feature {
+    border-top: 1px solid var(--vf-color-on-section-border, var(--vf-color-border));
+    padding-top: var(--vf-spacing-6);
+  }
+
+  .vf-feature__num {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: var(--vf-font-weight-bold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--vf-spacing-4);
+    color: var(--vf-color-on-section-subtle, var(--vf-color-primary));
+  }
+
+  .vf-feature__title {
+    font-family: var(--vf-font-sans);
+    font-variation-settings: "wdth" 82, "wght" 650;
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-tight);
+    margin: 0 0 var(--vf-spacing-3);
+    text-wrap: balance;
+    color: var(--vf-color-on-section, var(--vf-color-text));
+  }
+
+  .vf-feature__body {
+    font-size: var(--vf-font-size-base);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0;
+    text-wrap: pretty;
+    color: var(--vf-color-on-section-muted, var(--vf-color-text-muted));
+  }
+
+  /* ── Motion — scroll reveal ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .vf-feature {
+      transition-property: opacity, transform;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      transition-duration: 0.45s;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.vf-features__grid').forEach((grid) => {
+    if (!('IntersectionObserver' in window)) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const items = Array.from(grid.querySelectorAll<HTMLElement>('.vf-feature'));
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          obs.unobserve(el);
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    items.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+      el.style.transitionDelay = `${i * 80}ms`;
+      io.observe(el);
+    });
+  });
+</script>
