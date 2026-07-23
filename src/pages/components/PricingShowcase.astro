@@ -1,0 +1,269 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Pricing from '../../components/Pricing.astro'
+
+import type { PricingPlan } from '../../components/Pricing.astro'
+
+const basePlans: PricingPlan[] = [
+  {
+    name: 'Essentiel',
+    price: 490,
+    period: '/ site',
+    description: 'Pour démarrer et livrer vos premiers sites clients.',
+    features: [
+      'Site Astro + Vitrify inclus',
+      "Jusqu'à 5 pages",
+      'Responsive & SEO natif',
+      'Formulaire de contact',
+      '1 mois de support',
+      'Livraison sous 10 jours',
+    ],
+    cta: 'Démarrer',
+    ctaHref: '#contact',
+  },
+  {
+    name: 'Pro',
+    price: 890,
+    period: '/ site',
+    description: "Pour les agences qui livrent plus vite et mieux.",
+    features: [
+      'Tout Essentiel',
+      "Jusqu'à 15 pages",
+      'Animations premium incluses',
+      'Blog ou catalogue produits',
+      'CMS headless (Decap ou Sanity)',
+      '3 mois de support prioritaire',
+      'Livraison sous 7 jours',
+    ],
+    cta: 'Choisir Pro',
+    ctaHref: '#contact',
+    featured: true,
+  },
+  {
+    name: 'Agence',
+    price: 'Sur devis',
+    description: 'Pour les studios qui produisent à volume.',
+    features: [
+      'Tout Pro',
+      'Volume illimité de sites',
+      'Thème blanc à vos couleurs',
+      'Formation équipe (4h)',
+      'SLA de livraison garanti',
+      'Chef de projet dédié',
+      'Accès prioritaire aux composants',
+    ],
+    cta: 'Nous contacter',
+    ctaHref: '#contact',
+    ctaVariant: 'primary',
+  },
+]
+
+const darkPlans: PricingPlan[] = basePlans.map((plan) =>
+  plan.featured
+    ? { ...plan, ctaVariant: 'primary' }
+    : { ...plan, ctaVariant: 'inverted' },
+)
+---
+
+<ShowcasePage component="Pricing">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Pricing</h1>
+      <p>
+        Tableau de tarifs avec cartes. Trois formules : <code>Essentiel</code>, <code>Pro</code>
+        (recommandé, fond cramoisie), <code>Agence</code>. Deux thèmes : <code>light</code> et
+        <code>dark</code>. Pas de JavaScript pour l'affichage — animation au défilement progressive.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant: light -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" (défaut)</p>
+    </div>
+    <Pricing
+      title="Nos formules"
+      lead="Des tarifs clairs, sans surprise. Adaptés aux agences web qui livrent régulièrement des sites vitrines à leurs clients."
+      plans={basePlans}
+      theme="light"
+    />
+  </div>
+
+  <!-- Variant: dark -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+    <Pricing
+      title="Nos formules"
+      lead="Des tarifs clairs, sans surprise. Adaptés aux agences web qui livrent régulièrement des sites vitrines à leurs clients."
+      plans={darkPlans}
+      theme="dark"
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="types-heading">
+      <p class="section-label" id="types-heading">Types</p>
+      <pre class="code-block">type PricingPlan = &#123;
+  name:        string                                           // nom de la formule
+  price:       string | number                                 // nombre → affiche "€ / period", string → affiché tel quel
+  period?:     string                                          // ex : "/ site", "/ mois" (ignoré si price est string)
+  description?: string                                         // sous-titre de la carte
+  features:    string[]                                        // liste des inclusions
+  cta:         string                                          // texte du bouton
+  ctaHref?:    string                                          // URL du bouton (défaut : "#")
+  featured?:   boolean                                         // fond cramoisie + ombre, bouton inverted par défaut
+  ctaVariant?: 'primary' | 'secondary' | 'ghost' | 'inverted' // surcharge le variant du bouton
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>plans</code></td>
+              <td><code>PricingPlan[]</code></td>
+              <td>—</td>
+              <td>Tableau de formules. Requis.</td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section (h2 ou h3 selon <code>titleAs</code>).</td>
+            </tr>
+            <tr>
+              <td><code>lead</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Paragraphe introductif sous le titre.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc avec cartes bordées, ou fond cramoisie avec carte vedette blanche.</td>
+            </tr>
+            <tr>
+              <td><code>titleAs</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau de titre pour respecter la hiérarchie sémantique de la page.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cta-variants-heading">
+      <p class="section-label" id="cta-variants-heading">Variants de bouton par thème</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Contexte</th>
+              <th>Formule</th>
+              <th>ctaVariant recommandé</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>theme="light"</td>
+              <td>non featured</td>
+              <td><code>secondary</code> (défaut)</td>
+            </tr>
+            <tr>
+              <td>theme="light"</td>
+              <td>featured</td>
+              <td><code>inverted</code> (défaut)</td>
+            </tr>
+            <tr>
+              <td>theme="dark"</td>
+              <td>non featured</td>
+              <td><code>inverted</code> (à passer explicitement)</td>
+            </tr>
+            <tr>
+              <td>theme="dark"</td>
+              <td>featured</td>
+              <td><code>primary</code> (à passer explicitement)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Pricing &#125; from 'vitrify-ui';
+
+const plans = [
+  &#123;
+    name: 'Essentiel',
+    price: 490,
+    period: '/ site',
+    description: 'Pour démarrer et livrer vos premiers sites clients.',
+    features: ['Site Astro inclus', 'Jusqu\'à 5 pages', 'SEO natif', '1 mois de support'],
+    cta: 'Démarrer',
+    ctaHref: '/contact',
+  &#125;,
+  &#123;
+    name: 'Pro',
+    price: 890,
+    period: '/ site',
+    description: 'Pour les agences qui livrent plus vite et mieux.',
+    features: ['Tout Essentiel', 'Jusqu\'à 15 pages', 'CMS headless', '3 mois de support'],
+    cta: 'Choisir Pro',
+    ctaHref: '/contact',
+    featured: true,
+  &#125;,
+  &#123;
+    name: 'Agence',
+    price: 'Sur devis',
+    description: 'Pour les studios qui produisent à volume.',
+    features: ['Tout Pro', 'Volume illimité', 'Chef de projet dédié'],
+    cta: 'Nous contacter',
+    ctaHref: '/contact',
+    ctaVariant: 'primary',
+  &#125;,
+];
+---
+
+&lt;!-- Thème light --&gt;
+&lt;Pricing
+  title="Nos formules"
+  lead="Des tarifs clairs, sans surprise."
+  plans=&#123;plans&#125;
+/&gt;
+
+&lt;!-- Thème dark — adapter les ctaVariant pour le contraste --&gt;
+&lt;Pricing
+  title="Nos formules"
+  lead="Des tarifs clairs, sans surprise."
+  plans=&#123;plans.map(p =&gt; p.featured
+    ? &#123; ...p, ctaVariant: 'primary' &#125;
+    : &#123; ...p, ctaVariant: 'inverted' &#125;
+  )&#125;
+  theme="dark"
+/&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
