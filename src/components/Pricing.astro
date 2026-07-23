@@ -1,0 +1,446 @@
+---
+import Button from './Button.astro'
+
+export type PricingPlan = {
+  name: string
+  price: string | number
+  period?: string
+  description?: string
+  features: string[]
+  cta: string
+  ctaHref?: string
+  featured?: boolean
+  ctaVariant?: 'primary' | 'secondary' | 'ghost' | 'inverted'
+}
+
+export type Props = {
+  title?: string
+  lead?: string
+  plans: PricingPlan[]
+  theme?: 'light' | 'dark'
+  titleAs?: 'h2' | 'h3'
+}
+
+const {
+  title,
+  lead,
+  plans,
+  theme = 'light',
+  titleAs: TitleTag = 'h2',
+} = Astro.props
+
+function ctaVariantFor(plan: PricingPlan): 'primary' | 'secondary' | 'ghost' | 'inverted' {
+  if (plan.ctaVariant) return plan.ctaVariant
+  if (theme === 'dark') return plan.featured ? 'primary' : 'inverted'
+  return plan.featured ? 'inverted' : 'secondary'
+}
+---
+
+<section
+  class:list={['vf-pricing', `vf-pricing--${theme}`]}
+  aria-label={title ?? 'Nos tarifs'}
+>
+  <div class="vf-pricing__inner">
+    {(title || lead) && (
+      <header class="vf-pricing__header">
+        {title && <TitleTag class="vf-pricing__title">{title}</TitleTag>}
+        {lead && <p class="vf-pricing__lead">{lead}</p>}
+      </header>
+    )}
+
+    <div class="vf-pricing__grid">
+      {plans.map((plan) => (
+        <article
+          class:list={['vf-plan', plan.featured ? 'vf-plan--featured' : 'vf-plan--default']}
+          aria-label={plan.featured ? `${plan.name} — recommandé` : plan.name}
+        >
+          <div class="vf-plan__head">
+            <h3 class="vf-plan__name">{plan.name}</h3>
+            {plan.description && (
+              <p class="vf-plan__desc">{plan.description}</p>
+            )}
+          </div>
+
+          <div class="vf-plan__price">
+            {typeof plan.price === 'number' ? (
+              <div class="vf-plan__price-row">
+                <span class="vf-plan__amount">{plan.price}</span>
+                <div class="vf-plan__price-meta">
+                  <span class="vf-plan__currency">€</span>
+                  {plan.period && (
+                    <span class="vf-plan__period">{plan.period}</span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span class="vf-plan__amount vf-plan__amount--text">
+                {plan.price}
+              </span>
+            )}
+          </div>
+
+          <ul class="vf-plan__features" role="list">
+            {plan.features.map((feature) => (
+              <li class="vf-plan__feature">
+                <svg
+                  class="vf-plan__check"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                  fill="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M2 7.5l3.75 3.75 7.25-7.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="vf-plan__cta">
+            <Button
+              href={plan.ctaHref ?? '#'}
+              variant={ctaVariantFor(plan)}
+              size="md"
+              fullWidth
+            >
+              {plan.cta}
+            </Button>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Section — private shadow tokens (replace with --vf-shadow-* when theme adds them) ── */
+  .vf-pricing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --_shadow-featured:           0 12px 40px -8px oklch(0.57 0.195 26 / 0.40),
+                                  0  4px 12px -2px oklch(0.57 0.195 26 / 0.25);
+    --_shadow-featured-hover:     0 16px 48px -8px oklch(0.57 0.195 26 / 0.50),
+                                  0  6px 16px -2px oklch(0.57 0.195 26 / 0.30);
+    --_shadow-dark-featured:      0 16px 48px -8px oklch(0.20 0.018 26 / 0.30),
+                                  0  4px 16px -2px oklch(0.20 0.018 26 / 0.15);
+    --_shadow-dark-featured-hover:0 16px 48px -8px oklch(0.15 0.03  26 / 0.35),
+                                  0  6px 16px -2px oklch(0.15 0.03  26 / 0.20);
+    --_shadow-dark-default-hover: 0  4px 20px      oklch(0.15 0.03  26 / 0.30);
+  }
+
+  .vf-pricing__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  /* ── Header ── */
+  .vf-pricing__header {
+    margin-bottom: var(--vf-spacing-12);
+  }
+
+  .vf-pricing__title {
+    font-family: var(--vf-font-display);
+    font-size: var(--vf-font-size-heading);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--vf-spacing-4);
+    text-wrap: balance;
+  }
+
+  .vf-pricing__lead {
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    max-width: 54ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ── Grid ── */
+  .vf-pricing__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-4);
+  }
+
+  @media (min-width: 768px) {
+    .vf-pricing__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--vf-spacing-6);
+      align-items: center;
+    }
+  }
+
+  /* ── Plan base ── */
+  .vf-plan {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-6);
+    border-radius: var(--vf-radius-xl);
+    padding: var(--vf-spacing-8);
+    transition-property: box-shadow, transform;
+    transition-duration: var(--vf-duration-base);
+    transition-timing-function: var(--vf-ease-out);
+  }
+
+  /*
+   * Scoped color vars — set once per card variant, consumed by all children.
+   * Theme overrides just flip these two rules; no per-element cascade needed.
+   */
+  .vf-plan--default {
+    background: var(--vf-color-background);
+    border: 1px solid var(--vf-color-border);
+    --c-text:   var(--vf-color-text);
+    --c-muted:  var(--vf-color-text-muted);
+    --c-border: var(--vf-color-border);
+    --c-check:  var(--vf-color-primary);
+  }
+
+  .vf-plan--featured {
+    background: var(--vf-color-primary);
+    color: var(--vf-color-on-primary);
+    box-shadow: var(--_shadow-featured);
+    position: relative;
+    z-index: 1;
+    --c-text:   var(--vf-color-on-primary);
+    --c-muted:  var(--vf-color-on-primary-muted);
+    --c-border: var(--vf-color-on-primary-border);
+    --c-check:  var(--vf-color-on-primary);
+  }
+
+  @media (min-width: 768px) {
+    .vf-plan--default  { padding-block: var(--vf-spacing-8); }
+    .vf-plan--featured { padding-block: var(--vf-spacing-12); }
+  }
+
+  /* ── Plan name ── */
+  .vf-plan__name {
+    font-family: var(--vf-font-sans);
+    font-variation-settings: "wdth" 82, "wght" 700;
+    font-size: var(--vf-font-size-xl);
+    line-height: var(--vf-line-height-tight);
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--vf-spacing-2);
+    text-wrap: balance;
+    color: var(--c-text);
+  }
+
+  /* ── Description ── */
+  .vf-plan__desc {
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0;
+    text-wrap: pretty;
+    color: var(--c-muted);
+  }
+
+  /* ── Price block ── */
+  .vf-plan__price {
+    padding-block: var(--vf-spacing-6);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .vf-plan__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--vf-spacing-2);
+  }
+
+  /* ── Amount — condensed display ── */
+  .vf-plan__amount {
+    font-family: var(--vf-font-display);
+    font-variation-settings: "wdth" 65, "wght" 800;
+    font-size: clamp(2.75rem, 5vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--c-text);
+  }
+
+  .vf-plan__amount--text {
+    font-size: var(--vf-font-size-subhead);
+    font-variation-settings: "wdth" 80, "wght" 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Currency + period ── */
+  .vf-plan__price-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    padding-bottom: 0.2rem;
+    align-self: flex-end;
+  }
+
+  .vf-plan__currency {
+    font-size: var(--vf-font-size-lg);
+    font-weight: var(--vf-font-weight-semibold);
+    line-height: 1;
+    color: var(--c-muted);
+  }
+
+  .vf-plan__period {
+    font-size: var(--vf-font-size-xs);
+    white-space: nowrap;
+    color: var(--c-muted);
+  }
+
+  /* ── Feature list ── */
+  .vf-plan__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-3);
+    flex: 1;
+  }
+
+  .vf-plan__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vf-spacing-3);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    color: var(--c-muted);
+  }
+
+  .vf-plan__check {
+    flex-shrink: 0;
+    margin-top: 0.3em;
+    color: var(--c-check);
+  }
+
+  /* ── CTA — pinned to bottom ── */
+  .vf-plan__cta {
+    margin-top: auto;
+  }
+
+  /* ── Light theme ── */
+  .vf-pricing--light {
+    background: var(--vf-color-background);
+  }
+
+  .vf-pricing--light .vf-pricing__title {
+    color: var(--vf-color-primary);
+  }
+
+  .vf-pricing--light .vf-pricing__lead {
+    color: var(--vf-color-text-muted);
+  }
+
+  /* ── Dark theme — crimson ocean, white featured card ── */
+  .vf-pricing--dark {
+    background: var(--vf-color-primary);
+  }
+
+  .vf-pricing--dark .vf-pricing__title {
+    color: var(--vf-color-on-primary);
+  }
+
+  .vf-pricing--dark .vf-pricing__lead {
+    color: var(--vf-color-on-primary-muted);
+  }
+
+  /* Dark: flip card palettes via scoped vars — no per-element overrides needed */
+  .vf-pricing--dark .vf-plan--default {
+    background: var(--vf-color-primary-hover);
+    border-color: var(--vf-color-on-primary-border);
+    --c-text:   var(--vf-color-on-primary);
+    --c-muted:  var(--vf-color-on-primary-muted);
+    --c-border: var(--vf-color-on-primary-border);
+    --c-check:  var(--vf-color-on-primary-subtle);
+  }
+
+  .vf-pricing--dark .vf-plan--featured {
+    background: var(--vf-color-background);
+    color: var(--vf-color-text);
+    box-shadow: var(--_shadow-dark-featured);
+    --c-text:   var(--vf-color-text);
+    --c-muted:  var(--vf-color-text-muted);
+    --c-border: var(--vf-color-border);
+    --c-check:  var(--vf-color-primary);
+  }
+
+  /* ── Hover — lift on interaction ── */
+  @media (prefers-reduced-motion: no-preference) {
+    .vf-plan--default:hover {
+      box-shadow: var(--vf-shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .vf-plan--featured:hover {
+      box-shadow: var(--_shadow-featured-hover);
+      transform: translateY(-6px);
+    }
+
+    .vf-pricing--dark .vf-plan--default:hover {
+      box-shadow: var(--_shadow-dark-default-hover);
+      transform: translateY(-2px);
+    }
+
+    .vf-pricing--dark .vf-plan--featured:hover {
+      box-shadow: var(--_shadow-dark-featured-hover);
+      transform: translateY(-6px);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.vf-pricing__grid').forEach((grid) => {
+    if (!('IntersectionObserver' in window)) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const plans = Array.from(grid.querySelectorAll<HTMLElement>('.vf-plan'))
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const el = entry.target as HTMLElement
+
+          el.style.opacity = '1'
+          el.style.transform = 'translateY(0) scale(1)'
+          obs.unobserve(el)
+
+          // Clear inline styles after the last transition property finishes,
+          // so CSS hover rules can take over cleanly.
+          el.addEventListener('transitionend', function onRevealEnd(e) {
+            if (e.propertyName !== 'transform') return
+            el.removeEventListener('transitionend', onRevealEnd)
+            el.style.cssText = ''
+          })
+        })
+      },
+      { threshold: 0.08 },
+    )
+
+    plans.forEach((el, i) => {
+      const isFeatured = el.classList.contains('vf-plan--featured')
+
+      el.style.opacity = '0'
+      el.style.transform = isFeatured
+        ? 'translateY(20px) scale(0.97)'
+        : 'translateY(14px)'
+
+      // Full reveal transition lives here — not split across CSS and inline
+      el.style.transitionProperty = 'opacity, transform'
+      el.style.transitionDuration = '0.5s'
+      el.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)'
+      el.style.transitionDelay = `${i * 100}ms`
+      el.style.willChange = 'transform, opacity'
+
+      io.observe(el)
+    })
+  })
+</script>

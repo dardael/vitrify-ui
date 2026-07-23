@@ -3,7 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "description": "Astro UI component library for vitrine sites",
-  "keywords": ["astro", "component-library", "ui", "vitrine"],
+  "keywords": [
+    "astro",
+    "component-library",
+    "ui",
+    "vitrine"
+  ],
   "engines": {
     "node": ">=22.12.0"
   },
@@ -28,6 +33,8 @@
     "astro": ">=4.0.0"
   },
   "devDependencies": {
-    "astro": "^7.1.3"
+    "@astrojs/check": "^0.9.9",
+    "astro": "^7.1.3",
+    "typescript": "^6.0.3"
   }
 }

@@ -2,11 +2,10 @@
 import ShowcaseLayout from './ShowcaseLayout.astro'
 
 interface Props {
-  title: string
   component: string
 }
 
-const { title, component } = Astro.props
+const { component } = Astro.props
 ---
 
 <ShowcaseLayout title={`${component} — Vitrify Showcase`}>
