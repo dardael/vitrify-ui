@@ -8,5 +8,4 @@ export { default as Footer }       from './components/Footer.astro';
 export { default as Testimonials } from './components/Testimonials.astro';
 
 // Types
-export type { FooterLink, FooterColumn, SocialIcon, SocialLink } from './types';
-export type { Testimonial } from './types';
+export type { FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial } from './types';

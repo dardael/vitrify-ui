@@ -1,5 +1,6 @@
 ---
 import type { Testimonial } from '../types'
+import Stars from './Stars.astro'
 
 type HeadingLevel = 'h2' | 'h3' | 'h4'
 
@@ -21,15 +22,10 @@ const {
   featured    = false,
 } = Astro.props
 
-const featuredItem = (featured && items.length > 0) ? items[0] : null
-const gridItems    = featured ? items.slice(1) : items
-
 const hasHeader = heading || subheading || Astro.slots.has('header')
 
 const getInitials = (name: string) =>
   name.trim().split(/\s+/).map(w => w[0] ?? '').join('').toUpperCase().slice(0, 2)
-
-const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z'
 ---
 
 <section class:list={['testimonials', `testimonials--${theme}`]}>
@@ -44,72 +40,16 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
       </header>
     )}
 
-    {featuredItem && (
-      <figure class="testimonials__featured">
-
-        {featuredItem.rating && (
-          <div class="testimonials__stars" role="img" aria-label={`${featuredItem.rating} étoiles sur 5`}>
-            {Array.from({ length: 5 }, (_, i) => (
-              <svg
-                class:list={['testimonials__star', i < (featuredItem.rating ?? 0) && 'testimonials__star--on']}
-                viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
-                stroke-linejoin="round" stroke-linecap="round"
-              >
-                <path d={STAR} />
-              </svg>
-            ))}
-          </div>
-        )}
-
-        <blockquote class="testimonials__featured-quote">
-          <p>{featuredItem.quote}</p>
-        </blockquote>
-
-        <figcaption class="testimonials__attribution">
-          <div class="testimonials__avatar" aria-hidden="true">
-            {featuredItem.avatar ? (
-              <img
-                src={featuredItem.avatar}
-                alt={featuredItem.avatarAlt ?? featuredItem.author}
-                width="48" height="48"
-                loading="lazy"
-              />
-            ) : (
-              <span class="testimonials__initials">{getInitials(featuredItem.author)}</span>
-            )}
-          </div>
-          <div class="testimonials__author-info">
-            <strong class="testimonials__author">{featuredItem.author}</strong>
-            {(featuredItem.role || featuredItem.company) && (
-              <span class="testimonials__role">
-                {[featuredItem.role, featuredItem.company].filter(Boolean).join(' · ')}
-              </span>
-            )}
-          </div>
-        </figcaption>
-
-      </figure>
-    )}
-
-    {gridItems.length > 0 && (
+    {items.length > 0 && (
       <ul class="testimonials__grid" role="list">
-        {gridItems.map((item, i) => (
-          <li class="testimonials__item" style={`--i: ${i}`}>
+        {items.map((item, i) => (
+          <li
+            class:list={['testimonials__item', featured && i === 0 && 'testimonials__item--featured']}
+            style={`--i: ${i}`}
+          >
             <figure class="testimonials__card">
 
-              {item.rating && (
-                <div class="testimonials__stars" role="img" aria-label={`${item.rating} étoiles sur 5`}>
-                  {Array.from({ length: 5 }, (_, j) => (
-                    <svg
-                      class:list={['testimonials__star', j < (item.rating ?? 0) && 'testimonials__star--on']}
-                      viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"
-                      stroke-linejoin="round" stroke-linecap="round"
-                    >
-                      <path d={STAR} />
-                    </svg>
-                  ))}
-                </div>
-              )}
+              {item.rating && <Stars rating={item.rating} />}
 
               <blockquote class="testimonials__quote">
                 <p>{item.quote}</p>
@@ -121,7 +61,7 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
                     <img
                       src={item.avatar}
                       alt={item.avatarAlt ?? item.author}
-                      width="40" height="40"
+                      width="48" height="48"
                       loading="lazy"
                     />
                   ) : (
@@ -225,69 +165,6 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     line-height: var(--vf-line-height-tight);
   }
 
-  /* ── Stars ── */
-  .testimonials__stars {
-    display: flex;
-    gap: 2px;
-    margin-bottom: var(--vf-spacing-4);
-  }
-
-  .testimonials__star {
-    flex-shrink: 0;
-    color: var(--_star-off);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-  }
-
-  .testimonials__star--on {
-    color: var(--_star-on);
-    fill: currentColor;
-    stroke: none;
-  }
-
-  /* ── Quote mark (shared) ── */
-  .testimonials__featured-quote::before,
-  .testimonials__quote::before {
-    content: '\201C';
-    font-family: var(--vf-font-display);
-    font-variation-settings: "wdth" 75, "wght" 800;
-    line-height: 0.75;
-    color: var(--_mark);
-    display: block;
-    margin-bottom: var(--vf-spacing-3);
-    user-select: none;
-  }
-
-  .testimonials__featured-quote::before {
-    font-size: clamp(3rem, 6vw, 5rem);
-  }
-
-  .testimonials__quote::before {
-    font-size: 2.5rem;
-  }
-
-  /* ── Featured ── */
-  .testimonials__featured {
-    margin: 0;
-    padding-top: var(--vf-spacing-8);
-    border-top: 2px solid var(--_featured-border);
-  }
-
-  .testimonials__featured-quote {
-    margin: 0 0 var(--vf-spacing-8);
-  }
-
-  .testimonials__featured-quote p {
-    font-size: var(--vf-font-size-subhead);
-    line-height: var(--vf-line-height-relaxed);
-    color: var(--_text);
-    font-weight: var(--vf-font-weight-medium);
-    max-width: 68ch;
-    margin: 0;
-    text-wrap: pretty;
-  }
-
   /* ── Grid ── */
   .testimonials__grid {
     list-style: none;
@@ -309,6 +186,11 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     display: flex;
   }
 
+  .testimonials__item--featured {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Card ── */
   .testimonials__card {
     margin: 0;
     padding-top: var(--vf-spacing-6);
@@ -318,12 +200,38 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     width: 100%;
   }
 
-  /* ── Grid quote ── */
+  .testimonials__item--featured .testimonials__card {
+    padding-top: var(--vf-spacing-8);
+    border-top: 2px solid var(--_featured-border);
+  }
+
+  /* ── Quote ── */
   .testimonials__quote {
     margin: 0;
     flex: 1;
     display: flex;
     flex-direction: column;
+  }
+
+  .testimonials__quote::before {
+    content: '\201C';
+    font-family: var(--vf-font-display);
+    font-variation-settings: "wdth" 75, "wght" 800;
+    font-size: 2.5rem;
+    line-height: 0.75;
+    color: var(--_mark);
+    display: block;
+    margin-bottom: var(--vf-spacing-3);
+    user-select: none;
+  }
+
+  .testimonials__item--featured .testimonials__quote {
+    flex: none;
+    margin-bottom: var(--vf-spacing-8);
+  }
+
+  .testimonials__item--featured .testimonials__quote::before {
+    font-size: clamp(3rem, 6vw, 5rem);
   }
 
   .testimonials__quote p {
@@ -335,7 +243,14 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     flex: 1;
   }
 
-  /* ── Attribution (shared) ── */
+  .testimonials__item--featured .testimonials__quote p {
+    font-size: var(--vf-font-size-subhead);
+    font-weight: var(--vf-font-weight-medium);
+    max-width: 68ch;
+    margin-bottom: 0;
+  }
+
+  /* ── Attribution ── */
   .testimonials__attribution {
     display: flex;
     align-items: center;
@@ -345,7 +260,7 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     margin-top: auto;
   }
 
-  .testimonials__featured .testimonials__attribution {
+  .testimonials__item--featured .testimonials__attribution {
     margin-top: 0;
   }
 
@@ -362,7 +277,7 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
     justify-content: center;
   }
 
-  .testimonials__featured .testimonials__avatar {
+  .testimonials__item--featured .testimonials__avatar {
     width: 48px;
     height: 48px;
   }
@@ -417,18 +332,6 @@ const STAR = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14
       to   { transform: translateY(0); }
     }
 
-    /* Featured: stagger children instead of the whole figure */
-    .testimonials__featured .testimonials__stars,
-    .testimonials__featured-quote,
-    .testimonials__featured .testimonials__attribution {
-      animation: testimonial-rise var(--vf-duration-slow) var(--vf-ease-out) both;
-    }
-
-    .testimonials__featured .testimonials__stars    { animation-delay: 0ms; }
-    .testimonials__featured-quote                  { animation-delay: 90ms; }
-    .testimonials__featured .testimonials__attribution { animation-delay: 180ms; }
-
-    /* Grid: each item is one semantic chunk, stagger by index */
     .testimonials__item {
       animation: testimonial-rise var(--vf-duration-slow) var(--vf-ease-out) both;
       animation-delay: calc(var(--i, 0) * 75ms + 90ms);
