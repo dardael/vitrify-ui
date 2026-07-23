@@ -1,0 +1,299 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Footer from '../../components/Footer.astro'
+import type { SocialLink } from '../../types'
+
+const columns = [
+  {
+    heading: 'Services',
+    links: [
+      { label: 'Dépannage d\'urgence', href: '#' },
+      { label: 'Installation sanitaire', href: '#' },
+      { label: 'Chauffe-eau & chaudière', href: '#' },
+      { label: 'Rénovation salle de bain', href: '#' },
+    ],
+  },
+  {
+    heading: 'Zones d\'intervention',
+    links: [
+      { label: 'Lyon centre', href: '#' },
+      { label: 'Villeurbanne', href: '#' },
+      { label: 'Bron', href: '#' },
+      { label: 'Caluire-et-Cuire', href: '#' },
+    ],
+  },
+  {
+    heading: 'À propos',
+    links: [
+      { label: 'Notre histoire', href: '#' },
+      { label: 'Certifications RGE', href: '#' },
+      { label: 'Rejoindre l\'équipe', href: '#' },
+      { label: 'Témoignages clients', href: '#' },
+    ],
+  },
+]
+
+const socials: SocialLink[] = [
+  { label: 'Facebook', href: '#', icon: 'facebook' },
+  { label: 'Instagram', href: '#', icon: 'instagram' },
+]
+
+const year = new Date().getFullYear()
+---
+
+<ShowcasePage component="Footer">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Footer</h1>
+      <p>
+        Pied de page responsive pour sites vitrines. Deux thèmes : <code>light</code> (fond blanc)
+        et <code>dark</code> (fond cramoisie). Colonnes de liens, réseaux sociaux, bandeau légal.
+        Zéro JavaScript.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant: light -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" (défaut)</p>
+    </div>
+    <div class="demo-frame demo-frame--light">
+      <Footer
+        theme="light"
+        columns={columns}
+        socials={socials}
+        tagline="Plombier professionnel à Lyon depuis 1989. Intervention rapide, devis gratuit."
+        legal={`© ${year} PlombPro Lyon — Tous droits réservés`}
+      >
+        <a href="/" slot="logo">PlombPro Lyon</a>
+        <nav slot="legal" aria-label="Liens légaux">
+          <a href="#">Mentions légales</a>
+          <a href="#">Confidentialité</a>
+        </nav>
+      </Footer>
+    </div>
+  </div>
+
+  <!-- Variant: dark -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+    <div class="demo-frame demo-frame--dark">
+      <Footer
+        theme="dark"
+        columns={columns}
+        socials={socials}
+        tagline="Plombier professionnel à Lyon depuis 1989. Intervention rapide, devis gratuit."
+        legal={`© ${year} PlombPro Lyon — Tous droits réservés`}
+      >
+        <a href="/" slot="logo">PlombPro Lyon</a>
+        <nav slot="legal" aria-label="Liens légaux">
+          <a href="#">Mentions légales</a>
+          <a href="#">Confidentialité</a>
+        </nav>
+      </Footer>
+    </div>
+  </div>
+
+  <!-- Variant: minimal -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">Minimal — logo + bandeau légal uniquement</p>
+    </div>
+    <div class="demo-frame demo-frame--light">
+      <Footer
+        theme="light"
+        tagline="Composants Astro pour sites vitrines — beaux par défaut, thématisables par nature."
+        legal={`© ${year} Vitrify — Tous droits réservés`}
+        socials={[
+          { label: 'GitHub', href: '#', icon: 'github' as const },
+          { label: 'Twitter', href: '#', icon: 'twitter' as const },
+        ]}
+      >
+        <a href="/" slot="logo">Vitrify</a>
+      </Footer>
+    </div>
+  </div>
+
+  <!-- Variant: dark minimal -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">Minimal — thème dark</p>
+    </div>
+    <div class="demo-frame demo-frame--dark">
+      <Footer
+        theme="dark"
+        tagline="Composants Astro pour sites vitrines — beaux par défaut, thématisables par nature."
+        legal={`© ${year} Vitrify — Tous droits réservés`}
+        socials={[
+          { label: 'GitHub', href: '#', icon: 'github' as const },
+          { label: 'LinkedIn', href: '#', icon: 'linkedin' as const },
+          { label: 'Instagram', href: '#', icon: 'instagram' as const },
+        ]}
+      >
+        <a href="/" slot="logo">Vitrify</a>
+      </Footer>
+    </div>
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisie avec texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>columns</code></td>
+              <td><code>FooterColumn[]</code></td>
+              <td><code>[]</code></td>
+              <td>Colonnes de navigation. Chaque colonne : <code>&#123; heading, links[] &#125;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>socials</code></td>
+              <td><code>SocialLink[]</code></td>
+              <td><code>[]</code></td>
+              <td>Liens vers les réseaux sociaux. Icônes SVG intégrées, aucune dépendance externe.</td>
+            </tr>
+            <tr>
+              <td><code>tagline</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Courte description de l'entreprise, affichée sous le logo.</td>
+            </tr>
+            <tr>
+              <td><code>legal</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte de copyright (côté gauche du bandeau légal).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label section-label--spaced">Slots</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>logo</code></td>
+              <td>Logo ou nom de marque. Mettre un <code>&lt;a href="/"&gt;</code> pour le lien retour accueil. Accepte aussi une <code>&lt;img&gt;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>legal</code></td>
+              <td>Contenu additionnel dans le bandeau légal (côté droit). Utiliser un <code>&lt;nav&gt;</code> avec des <code>&lt;a&gt;</code> pour les liens mentions légales / confidentialité.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label" style="margin-top: var(--vf-spacing-8)">Types</p>
+      <pre class="code-block">type FooterLink = &#123;
+  label: string   // texte du lien
+  href:  string   // URL cible
+&#125;
+
+type FooterColumn = &#123;
+  heading: string        // intitulé de la colonne
+  links:   FooterLink[]  // liens de la colonne
+&#125;
+
+type SocialIcon = 'github' | 'instagram' | 'facebook' | 'linkedin' | 'twitter' | 'youtube'
+
+type SocialLink = &#123;
+  label: string      // texte accessible (aria-label)
+  href:  string      // URL du profil
+  icon:  SocialIcon  // nom de l'icône SVG intégrée
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Footer &#125; from 'vitrify-ui';
+
+const columns = [
+  &#123;
+    heading: 'Services',
+    links: [
+      &#123; label: 'Dépannage d\'urgence', href: '/services/depannage' &#125;,
+      &#123; label: 'Installation sanitaire', href: '/services/installation' &#125;,
+    ],
+  &#125;,
+  &#123;
+    heading: 'À propos',
+    links: [
+      &#123; label: 'Notre histoire', href: '/a-propos' &#125;,
+      &#123; label: 'Contact',        href: '/contact' &#125;,
+    ],
+  &#125;,
+];
+
+const socials = [
+  &#123; label: 'Facebook',  href: 'https://facebook.com/...', icon: 'facebook'  &#125;,
+  &#123; label: 'Instagram', href: 'https://instagram.com/...', icon: 'instagram' &#125;,
+];
+---
+
+&lt;!-- Thème light (défaut) --&gt;
+&lt;Footer
+  columns=&#123;columns&#125;
+  socials=&#123;socials&#125;
+  tagline="Plombier professionnel à Lyon depuis 1989."
+  legal=&#123;`© $&#123;new Date().getFullYear()&#125; MonEntreprise`&#125;
+&gt;
+  &lt;a href="/" slot="logo"&gt;MonEntreprise&lt;/a&gt;
+  &lt;nav slot="legal" aria-label="Liens légaux"&gt;
+    &lt;a href="/mentions-legales"&gt;Mentions légales&lt;/a&gt;
+    &lt;a href="/confidentialite"&gt;Confidentialité&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/Footer&gt;
+
+&lt;!-- Thème dark (fond cramoisie) --&gt;
+&lt;Footer theme="dark" columns=&#123;columns&#125; socials=&#123;socials&#125; legal="© 2024 MonEntreprise"&gt;
+  &lt;a href="/" slot="logo"&gt;MonEntreprise&lt;/a&gt;
+&lt;/Footer&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .demo-frame--light {
+    background: var(--vf-color-surface);
+  }
+
+  .demo-frame--dark {
+    background: var(--vf-color-primary);
+  }
+
+  .section-label--spaced {
+    margin-top: var(--vf-spacing-8);
+  }
+</style>

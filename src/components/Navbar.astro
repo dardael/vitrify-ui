@@ -15,10 +15,7 @@ const { links = [], theme = 'light', sticky = false } = Astro.props
 const hasCta = Astro.slots.has('cta')
 ---
 
-<header
-  class:list={['navbar', `navbar--${theme}`, sticky && 'navbar--sticky']}
-  role="banner"
->
+<header class:list={['navbar', `navbar--${theme}`, sticky && 'navbar--sticky']}>
   <div class="navbar__inner">
 
     <div class="navbar__logo">
