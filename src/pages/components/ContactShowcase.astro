@@ -1,0 +1,288 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Contact from '../../components/Contact.astro'
+---
+
+<ShowcasePage component="Contact">
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Contact</h1>
+      <p>
+        Section de contact avec formulaire et informations pratiques. Layout
+        <code>split</code> (formulaire + sidebar) ou <code>stacked</code> (formulaire pleine largeur puis infos).
+        Carte Google intégrée en option. Thèmes <code>light</code> et <code>dark</code>. Zéro JavaScript.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1: Split light — plombier avec toutes les infos + carte -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="split" — toutes les infos + carte Google</p>
+    </div>
+    <Contact
+      heading="Contactez-nous"
+      subheading="Morel Plomberie · Lyon"
+      info={{
+        phone:   '04 78 12 34 56',
+        email:   'contact@morel-plomberie.fr',
+        address: '14 rue des Canuts, 69004 Lyon',
+        hours:   'Lun–Ven  8h–18h  ·  Sam  8h–12h',
+      }}
+      mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d44588.887640504976!2d4.7827584!3d45.7578037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ea516ae922e1%3A0x408ab2ae4bb21f0!2sLyon%2C+France!5e0!3m2!1sfr!2sfr!4v1"
+    />
+  </div>
+
+  <!-- Variant 2: Split dark — cabinet d'architecte sans carte -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — sans carte</p>
+    </div>
+    <Contact
+      heading="Nous contacter"
+      subheading="Cabinet Lecomte & Associés · Architecture"
+      theme="dark"
+      info={{
+        email:   'bonjour@lecomte-archi.fr',
+        address: '8 avenue de la Gare, 67000 Strasbourg',
+        hours:   'Lun–Ven  9h–18h',
+      }}
+      submitLabel="Envoyer ma demande"
+    />
+  </div>
+
+  <!-- Variant 3: Stacked light — restaurant, email + horaires, avec sujet -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">layout="stacked" — infos en grille, showSubject</p>
+    </div>
+    <Contact
+      heading="Une question ? Une réservation ?"
+      subheading="Restaurant Le Cèdre · Bordeaux"
+      layout="stacked"
+      showSubject={true}
+      info={{
+        phone:  '05 56 00 11 22',
+        email:  'reservation@lecedre-bordeaux.fr',
+        address: '3 place du Parlement, 33000 Bordeaux',
+        hours:  'Mar–Sam  12h–14h30  ·  19h–22h30',
+      }}
+      submitLabel="Réserver une table"
+    />
+  </div>
+
+  <!-- Variant 4: Formulaire seul, centré -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">sans sidebar — formulaire centré, showSubject</p>
+    </div>
+    <Contact
+      heading="Parlons de votre projet"
+      subheading="Archipel Studio · Agence web"
+      showSubject={true}
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>heading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section.</td>
+            </tr>
+            <tr>
+              <td><code>subheading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte secondaire au-dessus du titre.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h2' | 'h3' | 'h4'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisi avec texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>layout</code></td>
+              <td><code>'split' | 'stacked'</code></td>
+              <td><code>'split'</code></td>
+              <td><code>split</code> : formulaire à gauche, sidebar à droite (≥768px). <code>stacked</code> : formulaire pleine largeur, infos en grille en dessous.</td>
+            </tr>
+            <tr>
+              <td><code>info</code></td>
+              <td><code>ContactInfo</code></td>
+              <td>—</td>
+              <td>Informations pratiques (téléphone, email, adresse, horaires). Tous les champs sont optionnels.</td>
+            </tr>
+            <tr>
+              <td><code>mapSrc</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>URL d'intégration Google Maps (<em>Partager → Intégrer une carte → copier le src</em>). Affiche une carte dans la sidebar.</td>
+            </tr>
+            <tr>
+              <td><code>action</code></td>
+              <td><code>string</code></td>
+              <td><code>'#'</code></td>
+              <td>URL de soumission du formulaire (<code>method="POST"</code>).</td>
+            </tr>
+            <tr>
+              <td><code>submitLabel</code></td>
+              <td><code>string</code></td>
+              <td><code>'Envoyer le message'</code></td>
+              <td>Libellé du bouton de soumission.</td>
+            </tr>
+            <tr>
+              <td><code>showSubject</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Affiche un champ « Sujet » optionnel entre l'email et le message.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label section-label--spaced">Type ContactInfo</p>
+      <pre class="code-block">type ContactInfo = &#123;
+  phone?:   string   // affiché avec lien tel:
+  email?:   string   // affiché avec lien mailto:
+  address?: string   // texte libre (rue, code postal, ville)
+  hours?:   string   // texte libre (ex : "Lun–Ven 9h–18h")
+&#125;</pre>
+
+      <p class="section-label section-label--spaced">Slots</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>header</code></td>
+              <td>Remplace le rendu titre/sous-titre par défaut.</td>
+            </tr>
+            <tr>
+              <td><code>after-form</code></td>
+              <td>Contenu injecté sous le bouton d'envoi (ex : mention RGPD, lien CGU).</td>
+            </tr>
+            <tr>
+              <td><code>sidebar-extra</code></td>
+              <td>Contenu supplémentaire dans la sidebar, après la carte.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Contact &#125; from 'vitrify-ui';
+
+// Formulaire seul
+// &lt;Contact heading="Parlons de votre projet" /&gt;
+
+// Avec toutes les infos + carte
+// &lt;Contact
+//   heading="Contactez-nous"
+//   subheading="Morel Plomberie · Lyon"
+//   info=&#123;&#123;
+//     phone:   '04 78 12 34 56',
+//     email:   'contact@morel-plomberie.fr',
+//     address: '14 rue des Canuts, 69004 Lyon',
+//     hours:   'Lun–Ven 8h–18h · Sam 8h–12h',
+//   &#125;&#125;
+//   mapSrc="https://www.google.com/maps/embed?pb=..."
+//   action="/api/contact"
+// /&gt;
+---
+
+&lt;!-- Formulaire minimal --&gt;
+&lt;Contact
+  heading="Nous contacter"
+  action="/api/contact"
+/&gt;
+
+&lt;!-- Split avec infos --&gt;
+&lt;Contact
+  heading="Contactez-nous"
+  info=&#123;&#123; phone: '04 78 …', email: 'contact@…' &#125;&#125;
+  action="/api/contact"
+/&gt;
+
+&lt;!-- Dark theme --&gt;
+&lt;Contact
+  heading="Nous contacter"
+  theme="dark"
+  info=&#123;&#123; email: 'bonjour@…', hours: 'Lun–Ven 9h–18h' &#125;&#125;
+  action="/api/contact"
+/&gt;
+
+&lt;!-- Stacked avec sujet --&gt;
+&lt;Contact
+  heading="Une question ?"
+  layout="stacked"
+  showSubject=&#123;true&#125;
+  info=&#123;&#123; phone: '…', email: '…', address: '…', hours: '…' &#125;&#125;
+  action="/api/contact"
+/&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="schema-heading">
+      <p class="section-label" id="schema-heading">Schema.org</p>
+      <p style="color: var(--vf-color-text-muted); font-size: var(--vf-font-size-sm); line-height: var(--vf-line-height-relaxed); margin-bottom: var(--vf-spacing-4);">
+        Enrichir la page avec le markup <code>LocalBusiness</code> pour que Google affiche les infos dans le Knowledge Graph.
+      </p>
+      <pre class="code-block">&lt;script type="application/ld+json"&gt;
+&#123;
+  "@context": "https://schema.org",
+  "@type": "Plumber",
+  "name": "Morel Plomberie",
+  "telephone": "+33478123456",
+  "email": "contact@morel-plomberie.fr",
+  "address": &#123;
+    "@type": "PostalAddress",
+    "streetAddress": "14 rue des Canuts",
+    "postalCode": "69004",
+    "addressLocality": "Lyon",
+    "addressCountry": "FR"
+  &#125;,
+  "openingHours": ["Mo-Fr 08:00-18:00", "Sa 08:00-12:00"]
+&#125;
+&lt;/script&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .section-label--spaced {
+    margin-top: var(--vf-spacing-8);
+  }
+</style>

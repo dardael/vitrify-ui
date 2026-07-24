@@ -45,3 +45,10 @@ export type TeamMember = {
   photoAlt?: string
   social?:   TeamSocial
 }
+
+export type ContactInfo = {
+  phone?:   string
+  email?:   string
+  address?: string
+  hours?:   string
+}

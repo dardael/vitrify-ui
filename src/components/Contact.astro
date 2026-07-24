@@ -1,0 +1,561 @@
+---
+import type { ContactInfo, HeadingLevel } from '../types'
+
+export type Props = {
+  heading?:     string
+  subheading?:  string
+  as?:          HeadingLevel
+  theme?:       'light' | 'dark'
+  info?:        ContactInfo
+  mapSrc?:      string
+  action?:      string
+  submitLabel?: string
+  layout?:      'split' | 'stacked'
+  showSubject?: boolean
+}
+
+const {
+  heading,
+  subheading,
+  as: Tag     = 'h2',
+  theme       = 'light',
+  info,
+  mapSrc,
+  action      = '#',
+  submitLabel = 'Envoyer le message',
+  layout      = 'split',
+  showSubject = false,
+} = Astro.props
+
+type InfoItem = { label: string; value: string; href?: string; icon: string }
+
+const ICON_PHONE   = `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.85-.85a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/>`
+const ICON_MAIL    = `<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`
+const ICON_PIN     = `<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>`
+const ICON_CLOCK   = `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`
+
+const infoItems: InfoItem[] = []
+if (info?.phone)   infoItems.push({ label: 'Téléphone', value: info.phone,   href: `tel:${info.phone.replace(/[\s.]/g, '')}`, icon: ICON_PHONE })
+if (info?.email)   infoItems.push({ label: 'E-mail',    value: info.email,   href: `mailto:${info.email}`,                    icon: ICON_MAIL  })
+if (info?.address) infoItems.push({ label: 'Adresse',   value: info.address,                                                  icon: ICON_PIN   })
+if (info?.hours)   infoItems.push({ label: 'Horaires',  value: info.hours,                                                    icon: ICON_CLOCK })
+
+const hasHeader    = !!(heading || subheading || Astro.slots.has('header'))
+const hasInfoItems = infoItems.length > 0
+const hasSidebar   = hasInfoItems || !!mapSrc || Astro.slots.has('sidebar-extra')
+---
+
+<section
+  class:list={['contact', `contact--${theme}`, `contact--${layout}`, !hasSidebar && 'contact--solo']}
+>
+  <div class="contact__inner">
+
+    {hasHeader && (
+      <header class="contact__header">
+        <slot name="header">
+          {subheading && <p class="contact__sub">{subheading}</p>}
+          {heading    && <Tag class="contact__heading">{heading}</Tag>}
+        </slot>
+      </header>
+    )}
+
+    <div class="contact__body">
+
+      <form class="contact__form" method="POST" action={action}>
+        <div class="contact__fields">
+
+          <div class="contact__row contact__row--2">
+            <div class="contact__field">
+              <label class="contact__label" for="contact-name">Nom complet</label>
+              <input
+                class="contact__input"
+                type="text"
+                id="contact-name"
+                name="name"
+                autocomplete="name"
+                required
+                placeholder="Marie Dupont"
+              />
+            </div>
+
+            <div class="contact__field">
+              <label class="contact__label" for="contact-email">Adresse e-mail</label>
+              <input
+                class="contact__input"
+                type="email"
+                id="contact-email"
+                name="email"
+                autocomplete="email"
+                required
+                placeholder="marie@exemple.fr"
+              />
+            </div>
+          </div>
+
+          {showSubject && (
+            <div class="contact__field">
+              <label class="contact__label" for="contact-subject">Sujet</label>
+              <input
+                class="contact__input"
+                type="text"
+                id="contact-subject"
+                name="subject"
+                placeholder="Demande de devis"
+              />
+            </div>
+          )}
+
+          <div class="contact__field">
+            <label class="contact__label" for="contact-message">Message</label>
+            <textarea
+              class="contact__input contact__input--textarea"
+              id="contact-message"
+              name="message"
+              rows={6}
+              required
+              placeholder="Bonjour, je souhaite…"
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="contact__actions">
+          <button class="contact__submit" type="submit">
+            {submitLabel}
+            <svg
+              class="contact__submit-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <slot name="after-form" />
+      </form>
+
+      {hasSidebar && (
+        <aside class="contact__sidebar" aria-label="Informations de contact">
+
+          {hasInfoItems && (
+            <ul class="contact__info" role="list">
+              {infoItems.map((item, i) => (
+                <li class="contact__info-item" style={`--i:${i}`}>
+                  <span class="contact__icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={item.icon} />
+                  </span>
+                  <div class="contact__info-content">
+                    <span class="contact__info-label">{item.label}</span>
+                    {item.href
+                      ? <a class="contact__info-value contact__info-link" href={item.href}>{item.value}</a>
+                      : <span class="contact__info-value">{item.value}</span>
+                    }
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {mapSrc && (
+            <div class="contact__map-wrap">
+              <iframe
+                class="contact__map"
+                src={mapSrc}
+                title="Localisation sur la carte"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
+          )}
+
+          <slot name="sidebar-extra" />
+        </aside>
+      )}
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Theme tokens ── */
+  .contact--light {
+    --_bg:                   var(--vf-color-background);
+    --_text:                 var(--vf-color-text);
+    --_muted:                var(--vf-color-text-muted);
+    --_heading:              var(--vf-color-text);
+    --_accent:               var(--vf-color-primary);
+    --_accent-hover:         var(--vf-color-primary-hover);
+    --_accent-fg:            var(--vf-color-primary-foreground);
+    --_field-bg:             var(--vf-color-background);
+    --_field-border:         var(--vf-color-border);
+    --_field-focus:          var(--vf-color-primary);
+    --_field-shadow-focus:   0 0 0 3px oklch(0.57 0.195 26 / 0.14);
+    --_field-text:           var(--vf-color-text);
+    --_field-ph:             var(--vf-color-text-subtle);
+    --_field-invalid:        var(--vf-color-danger);
+    --_field-shadow-invalid: 0 0 0 3px oklch(0.52 0.200 26 / 0.14);
+    --_icon-color:           var(--vf-color-primary);
+    --_icon-bg:              oklch(0.95 0.015 26);
+    --_info-label:           var(--vf-color-text-muted);
+    --_info-value:           var(--vf-color-text);
+    --_info-link-hover:      var(--vf-color-primary);
+    --_map-border:           var(--vf-color-border);
+  }
+
+  .contact--dark {
+    --_bg:                   var(--vf-color-primary);
+    --_text:                 var(--vf-color-on-primary);
+    --_muted:                var(--vf-color-on-primary-muted);
+    --_heading:              var(--vf-color-on-primary);
+    --_accent:               var(--vf-color-on-primary);
+    --_accent-hover:         oklch(0.92 0.000 0);
+    --_accent-fg:            var(--vf-color-primary);
+    --_field-bg:             oklch(1 0 0 / 0.10);
+    --_field-border:         var(--vf-color-on-primary-border);
+    --_field-focus:          var(--vf-color-on-primary);
+    --_field-shadow-focus:   0 0 0 3px oklch(1 0 0 / 0.22);
+    --_field-text:           var(--vf-color-on-primary);
+    --_field-ph:             var(--vf-color-on-primary-muted);
+    --_field-invalid:        oklch(0.82 0.135 74);
+    --_field-shadow-invalid: 0 0 0 3px oklch(0.82 0.135 74 / 0.28);
+    --_icon-color:           var(--vf-color-on-primary);
+    --_icon-bg:              oklch(1 0 0 / 0.12);
+    --_info-label:           var(--vf-color-on-primary-muted);
+    --_info-value:           var(--vf-color-on-primary);
+    --_info-link-hover:      var(--vf-color-on-primary);
+    --_map-border:           var(--vf-color-on-primary-border);
+  }
+
+  /* ── Base ── */
+  .contact {
+    background: var(--_bg);
+    width: 100%;
+    font-family: var(--vf-font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .contact__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-12);
+  }
+
+  /* ── Header ── */
+  .contact__header {
+    max-width: 52ch;
+  }
+
+  .contact__sub {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    color: var(--_muted);
+    margin: 0 0 var(--vf-spacing-3);
+    letter-spacing: 0.01em;
+    text-wrap: pretty;
+  }
+
+  .contact__heading {
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--_heading);
+    margin: 0;
+    text-wrap: balance;
+    line-height: var(--vf-line-height-tight);
+  }
+
+  /* ── Body layout ── */
+  .contact__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-12);
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .contact--split:not(.contact--solo) .contact__body {
+      grid-template-columns: 3fr 2fr;
+      gap: clamp(var(--vf-spacing-12), 6vw, var(--vf-spacing-20));
+    }
+
+    .contact--stacked:not(.contact--solo) .contact__info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--vf-spacing-6) var(--vf-spacing-8);
+    }
+  }
+
+  .contact--solo .contact__form {
+    max-width: 600px;
+  }
+
+  /* ── Form ── */
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-6);
+  }
+
+  .contact__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-4);
+  }
+
+  .contact__row--2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-4);
+  }
+
+  @media (min-width: 480px) {
+    .contact__row--2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-2);
+  }
+
+  .contact__label {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    color: var(--_text);
+    line-height: var(--vf-line-height-normal);
+    user-select: none;
+  }
+
+  .contact__input {
+    width: 100%;
+    padding: calc(var(--vf-spacing-3) + 1px) var(--vf-spacing-4);
+    background: var(--_field-bg);
+    border: 1px solid var(--_field-border);
+    border-radius: var(--vf-radius-md);
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-base);
+    color: var(--_field-text);
+    line-height: var(--vf-line-height-normal);
+    transition:
+      border-color var(--vf-duration-fast) var(--vf-ease-out),
+      box-shadow   var(--vf-duration-fast) var(--vf-ease-out);
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    min-height: 48px;
+  }
+
+  .contact__input::placeholder {
+    color: var(--_field-ph);
+  }
+
+  .contact__input:focus {
+    outline: none;
+    border-color: var(--_field-focus);
+    box-shadow: var(--_field-shadow-focus);
+  }
+
+  .contact__input:user-invalid {
+    border-color: var(--_field-invalid);
+  }
+
+  .contact__input:user-invalid:focus {
+    box-shadow: var(--_field-shadow-invalid);
+  }
+
+  .contact__input--textarea {
+    resize: vertical;
+    min-height: 152px;
+    padding-top: var(--vf-spacing-3);
+  }
+
+  /* ── Submit ── */
+  .contact__actions {
+    display: flex;
+    align-items: center;
+    padding-top: var(--vf-spacing-2);
+  }
+
+  .contact__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vf-spacing-3);
+    padding: 0 var(--vf-spacing-8);
+    background: var(--_accent);
+    color: var(--_accent-fg);
+    border: none;
+    border-radius: var(--vf-radius-md);
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-base);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    min-height: 52px;
+    white-space: nowrap;
+    transition:
+      background  var(--vf-duration-fast) var(--vf-ease-out),
+      transform   var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .contact__submit:hover {
+    background: var(--_accent-hover);
+  }
+
+  .contact__submit:active {
+    transform: scale(0.96);
+  }
+
+  .contact__submit:focus-visible {
+    outline: 2px solid var(--_accent);
+    outline-offset: 3px;
+  }
+
+  .contact__submit-icon {
+    flex-shrink: 0;
+    transition: transform var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .contact__submit:hover .contact__submit-icon {
+    transform: translateX(3px);
+  }
+
+  /* ── Sidebar ── */
+  .contact__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-8);
+  }
+
+  /* ── Info list ── */
+  .contact__info {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-6);
+  }
+
+  .contact__info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vf-spacing-4);
+  }
+
+  .contact__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--_icon-color);
+    background: var(--_icon-bg);
+    border-radius: var(--vf-radius-md);
+    margin-top: 1px;
+  }
+
+  .contact__info-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-1);
+    min-width: 0;
+  }
+
+  .contact__info-label {
+    font-size: var(--vf-font-size-xs);
+    font-weight: var(--vf-font-weight-semibold);
+    color: var(--_info-label);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .contact__info-value {
+    font-size: var(--vf-font-size-base);
+    color: var(--_info-value);
+    line-height: var(--vf-line-height-normal);
+    text-wrap: pretty;
+  }
+
+  .contact__info-link {
+    text-decoration: none;
+    display: inline-block;
+    padding-block: var(--vf-spacing-3);
+    margin-block: calc(-1 * var(--vf-spacing-3));
+    transition: color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .contact__info-link:hover {
+    color: var(--_info-link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact__info-link:focus-visible {
+    outline: 2px solid var(--_icon-color);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ── Map ── */
+  .contact__map-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--vf-radius-lg);
+    border: 1px solid var(--_map-border);
+    aspect-ratio: 4 / 3;
+  }
+
+  .contact__map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ── Entrance animation ── */
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes contact-rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .contact__info-item {
+      animation: contact-rise var(--vf-duration-slow) var(--vf-ease-out) both;
+      animation-delay: calc(var(--i, 0) * 70ms + 180ms);
+    }
+
+    .contact__map-wrap {
+      animation: contact-rise var(--vf-duration-slow) var(--vf-ease-out) both;
+      animation-delay: 380ms;
+    }
+  }
+</style>
