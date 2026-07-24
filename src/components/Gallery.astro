@@ -1,12 +1,5 @@
 ---
-export type GalleryItem = {
-  src: string
-  alt: string
-  title?: string
-  category?: string
-  href?: string
-  featured?: boolean
-}
+import type { GalleryItem } from '../types'
 
 export type Props = {
   items: GalleryItem[]
@@ -32,7 +25,7 @@ const gapValue = { tight: '4px', normal: '12px', loose: '24px' }[gap]
 const categories = [
   ...new Set(items.map(i => i.category).filter((c): c is string => Boolean(c))),
 ]
-const hasFilters = (showFilters ?? categories.length > 1) && categories.length > 1
+const hasFilters = showFilters !== false && categories.length > 1
 ---
 
 <div
@@ -66,9 +59,9 @@ const hasFilters = (showFilters ?? categories.length > 1) && categories.length >
             'vf-gallery__item',
             item.featured && 'vf-gallery__item--featured',
           ]}
-          href={item.href ?? undefined}
+          href={item.href}
           aria-label={item.href ? (item.title ?? item.alt) : undefined}
-          data-category={item.category ?? undefined}
+          data-category={item.category}
           style={`--_i: ${Math.min(i, 6)}`}
         >
           <img
@@ -95,10 +88,11 @@ const hasFilters = (showFilters ?? categories.length > 1) && categories.length >
   const root = document.getElementById(uid)
   if (!root) throw new Error(`[vf-gallery] #${uid} not found`)
 
+  const gridItems = root.querySelectorAll('.vf-gallery__item')
+
   // ── Category filter ──
   if (hasFilters) {
     const pills = root.querySelectorAll('.vf-gallery__pill')
-    const gridItems = root.querySelectorAll('.vf-gallery__item')
 
     pills.forEach(pill => {
       pill.addEventListener('click', () => {
@@ -118,7 +112,6 @@ const hasFilters = (showFilters ?? categories.length > 1) && categories.length >
   }
 
   // ── Staggered entrance via IntersectionObserver ──
-  const gridItems = root.querySelectorAll('.vf-gallery__item')
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (prefersReduced) {
