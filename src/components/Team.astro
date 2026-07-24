@@ -65,7 +65,7 @@ const getSocialLinks = (member: TeamMember): SocialEntry[] =>
         role="list"
         style={`--_cols: ${columns}`}
       >
-        {members.map((member, i) => {
+        {members.map((member: TeamMember, i: number) => {
           const links    = getSocialLinks(member)
           const initials = getInitials(member.name)
           const featured = layout === 'featured' && i === 0

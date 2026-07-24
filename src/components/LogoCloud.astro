@@ -31,7 +31,7 @@ const {
 
     {layout === 'row' && (
       <ul class="vf-logocloud__row" role="list">
-        {logos.map((logo, i) => (
+        {logos.map((logo: Logo, i: number) => (
           <li class="vf-logocloud__item" style={`--i: ${i}`}>
             {logo.href ? (
               <a
@@ -70,7 +70,7 @@ const {
       <div class="vf-logocloud__marquee">
         <div class="vf-logocloud__tracks">
           <ul class="vf-logocloud__track" role="list">
-            {logos.map((logo) => (
+            {logos.map((logo: Logo) => (
               <li class="vf-logocloud__item">
                 <img
                   class="vf-logocloud__logo"
@@ -85,7 +85,7 @@ const {
             ))}
           </ul>
           <ul class="vf-logocloud__track vf-logocloud__track--dup" role="list" aria-hidden="true">
-            {logos.map((logo) => (
+            {logos.map((logo: Logo) => (
               <li class="vf-logocloud__item">
                 <img
                   class="vf-logocloud__logo"
