@@ -8,6 +8,15 @@ export type FooterColumn = { heading: string; links: FooterLink[] }
 export type SocialIcon   = 'github' | 'instagram' | 'facebook' | 'linkedin' | 'twitter' | 'youtube'
 export type SocialLink   = { label: string; href: string; icon: SocialIcon }
 
+export type GalleryItem = {
+  src: string
+  alt: string
+  title?: string
+  category?: string
+  href?: string
+  featured?: boolean
+}
+
 export type Testimonial = {
   quote:      string
   author:     string
