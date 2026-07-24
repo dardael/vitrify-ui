@@ -13,6 +13,7 @@
     "node": ">=22.12.0"
   },
   "files": [
+    "src/layouts/SiteLayout.astro",
     "src/components",
     "src/templates",
     "src/theme",
