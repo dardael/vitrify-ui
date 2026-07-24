@@ -10,6 +10,7 @@ export { default as Testimonials } from './components/Testimonials.astro';
 export { default as FAQ }          from './components/FAQ.astro';
 export { default as Team }         from './components/Team.astro';
 export { default as Contact }      from './components/Contact.astro';
+export { default as LogoCloud }    from './components/LogoCloud.astro';
 
 // Types
-export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem, TeamSocial, TeamMember, ContactInfo, HeadingLevel } from './types';
+export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem, TeamSocial, TeamMember, ContactInfo, HeadingLevel, Logo } from './types';

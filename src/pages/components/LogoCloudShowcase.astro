@@ -1,7 +1,7 @@
 ---
 import ShowcasePage from '../../layouts/ShowcasePage.astro'
 import LogoCloud from '../../components/LogoCloud.astro'
-import type { Logo } from '../../components/LogoCloud.astro'
+import type { Logo } from '../../types'
 
 const logos6: Logo[] = [
   { name: 'Maison Roux',     src: '/logos/logo-maison-roux.svg' },
@@ -195,6 +195,7 @@ const logos = [
         <li>Le marquee se <strong>met en pause au survol</strong> pour permettre la lecture.</li>
         <li><strong>Mouvement réduit :</strong> si <code>prefers-reduced-motion</code> est actif, le marquee s'affiche en grille statique.</li>
         <li>Chaque logo est un <code>&lt;img&gt;</code> avec <code>alt</code> — le nom sert de texte alternatif pour l'accessibilité.</li>
+        <li>Le champ <code>href</code> des logos n'est pris en compte qu'en mode <code>row</code> — le mode <code>marquee</code> ne supporte pas les liens (défilement continu).</li>
       </ul>
     </section>
 
