@@ -344,6 +344,9 @@ const hasCta = Astro.slots.has('cta')
     width: 44px;
     height: 44px;
     margin-left: auto;
+    /* Optical alignment: 12px dead zone between 20px icon and 44px hit
+       area — pull it past the edge so the icon lines up with content */
+    margin-right: -12px;
     padding: 0;
     background: transparent;
     border: none;
