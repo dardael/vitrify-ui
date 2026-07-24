@@ -1,3 +1,5 @@
+export type HeadingLevel = 'h2' | 'h3' | 'h4'
+
 export type FAQItem = {
   question: string
   answer:   string  // supports inline HTML: <a>, <strong>, <code>…

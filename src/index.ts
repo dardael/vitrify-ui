@@ -11,4 +11,4 @@ export { default as FAQ }          from './components/FAQ.astro';
 export { default as Team }         from './components/Team.astro';
 
 // Types
-export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem, TeamSocial, TeamMember } from './types';
+export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem, TeamSocial, TeamMember, HeadingLevel } from './types';

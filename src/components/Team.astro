@@ -1,7 +1,5 @@
 ---
-import type { TeamMember, TeamSocial } from '../types'
-
-type HeadingLevel = 'h2' | 'h3'
+import type { TeamMember, TeamSocial, HeadingLevel } from '../types'
 
 export type Props = {
   members:     TeamMember[]
@@ -31,27 +29,22 @@ const getInitials = (name: string) =>
 type SocialKey = keyof TeamSocial
 type SocialEntry = { key: SocialKey; href: string; label: string }
 
-const getSocialLinks = (member: TeamMember): SocialEntry[] => {
-  if (!member.social) return []
-  const pairs: [SocialKey, string][] = [
-    ['linkedin',  member.social.linkedin  ?? ''],
-    ['instagram', member.social.instagram ?? ''],
-    ['github',    member.social.github    ?? ''],
-    ['website',   member.social.website   ?? ''],
-  ]
-  return pairs
-    .filter(([, href]) => href.length > 0)
-    .map(([key, href]) => {
-      const labels: Record<SocialKey, string> = {
-        linkedin:  `LinkedIn de ${member.name}`,
-        twitter:   `Twitter de ${member.name}`,
-        instagram: `Instagram de ${member.name}`,
-        github:    `GitHub de ${member.name}`,
-        website:   `Site web de ${member.name}`,
-      }
-      return { key, href, label: labels[key] }
-    })
+const SOCIAL_LABEL: Record<SocialKey, string> = {
+  linkedin:  'LinkedIn',
+  twitter:   'Twitter',
+  instagram: 'Instagram',
+  github:    'GitHub',
+  website:   'Site web',
 }
+
+const SOCIAL_ORDER: SocialKey[] = ['linkedin', 'instagram', 'github', 'website', 'twitter']
+
+const getSocialLinks = (member: TeamMember): SocialEntry[] =>
+  member.social
+    ? SOCIAL_ORDER
+        .filter(k => member.social![k])
+        .map(k => ({ key: k, href: member.social![k]!, label: `${SOCIAL_LABEL[k]} de ${member.name}` }))
+    : []
 ---
 
 <section class:list={['team', `team--${theme}`]}>
@@ -139,6 +132,18 @@ const getSocialLinks = (member: TeamMember): SocialEntry[] => {
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                                 <polyline points="15 3 21 3 21 9"/>
                                 <line x1="10" y1="14" x2="21" y2="3"/>
+                              </svg>
+                            )}
+                            {key === 'twitter' && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.5 4.3 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                              </svg>
+                            )}
+                            {!['linkedin','instagram','github','website','twitter'].includes(key) && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                               </svg>
                             )}
                           </a>
