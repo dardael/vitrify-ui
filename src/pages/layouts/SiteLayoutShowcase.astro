@@ -1,0 +1,157 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+---
+
+<ShowcasePage component="SiteLayout">
+
+  <div class="container">
+    <header class="page-header">
+      <h1>SiteLayout</h1>
+      <p>
+        Coquille HTML complète pour un site vitrine : <code>&lt;head&gt;</code> SEO
+        (title, description, canonical, Open Graph), injection des tokens de thème,
+        chargement de la police, lien d'évitement, <code>&lt;main&gt;</code> avec
+        footer collé en bas de viewport. Tous les templates s'appuient dessus.
+      </p>
+    </header>
+  </div>
+
+  <div class="page">
+
+    <section class="section">
+      <h2 class="section-label">Démo live</h2>
+      <p class="demo-note">
+        SiteLayout rend le document entier — il ne peut pas être imbriqué dans une
+        page showcase. La démo est une vraie page vitrine construite dessus :
+      </p>
+      <a class="demo-link" href="/layouts/SiteLayoutDemo">
+        Voir la démo — Atelier Ferrand, menuiserie à Bordeaux
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <section class="section">
+      <h2 class="section-label">Usage</h2>
+      <pre class="code-block">---
+import &#123; SiteLayout, Navbar, Footer &#125; from 'vitrify-ui'
+---
+
+&lt;SiteLayout
+  title="Plombier à Lyon — Dupont &amp; Fils"
+  description="Dépannage plomberie 7j/7 à Lyon. Intervention en moins d'une heure."
+  canonical="https://dupont-plomberie.fr/"
+  ogImage="https://dupont-plomberie.fr/og.jpg"
+&gt;
+  &lt;Fragment slot="head"&gt;
+    &lt;!-- JSON-LD, analytics, meta supplémentaires --&gt;
+  &lt;/Fragment&gt;
+
+  &lt;Navbar slot="header" links=&#123;links&#125; sticky&gt;…&lt;/Navbar&gt;
+
+  &lt;!-- contenu de page — rendu dans &lt;main&gt; --&gt;
+
+  &lt;Footer slot="footer" columns=&#123;columns&#125;&gt;…&lt;/Footer&gt;
+&lt;/SiteLayout&gt;</pre>
+    </section>
+
+    <section class="section">
+      <h2 class="section-label">Props</h2>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>requis</td><td>Titre du document, rendu tel quel</td></tr>
+            <tr><td><code>description</code></td><td><code>string</code></td><td>requis</td><td>Meta description — obligatoire, un site vitrine vit du SEO</td></tr>
+            <tr><td><code>lang</code></td><td><code>string</code></td><td><code>'fr'</code></td><td>Langue du document (<code>&lt;html lang&gt;</code>)</td></tr>
+            <tr><td><code>canonical</code></td><td><code>string</code></td><td>—</td><td>URL canonique absolue ; alimente aussi <code>og:url</code></td></tr>
+            <tr><td><code>ogImage</code></td><td><code>string</code></td><td>—</td><td>Image Open Graph absolue ; active <code>twitter:card</code></td></tr>
+            <tr><td><code>ogType</code></td><td><code>'website' | 'article'</code></td><td><code>'website'</code></td><td>Type Open Graph</td></tr>
+            <tr><td><code>robots</code></td><td><code>string</code></td><td>—</td><td>Directive robots, ex. <code>'noindex'</code> — omise si absente</td></tr>
+            <tr><td><code>favicon</code></td><td><code>string</code></td><td><code>'/favicon.svg'</code></td><td>Chemin du favicon</td></tr>
+            <tr><td><code>fonts</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Charge Bricolage Grotesque via Google Fonts ; <code>false</code> si la police est auto-hébergée ou surchargée</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-label">Slots</h2>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr><th>Slot</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>header</code></td><td>Navbar — rendu avant <code>&lt;main&gt;</code></td></tr>
+            <tr><td>défaut</td><td>Contenu de page — rendu dans <code>&lt;main id="contenu"&gt;</code></td></tr>
+            <tr><td><code>footer</code></td><td>Footer — rendu après <code>&lt;main&gt;</code>, collé en bas sur pages courtes</td></tr>
+            <tr><td><code>head</code></td><td>Contenu <code>&lt;head&gt;</code> additionnel : JSON-LD, analytics, meta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-label">Inclus d'office</h2>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr><th>Fonction</th><th>Détail</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Tokens de thème</td><td><code>src/theme/tokens.css</code> injecté — surcharger les <code>--vf-*</code> au niveau <code>:root</code></td></tr>
+            <tr><td>Lien d'évitement</td><td>« Aller au contenu » visible au focus clavier, cible <code>#contenu</code></td></tr>
+            <tr><td>Footer collant</td><td><code>body</code> en colonne flex, <code>main</code> en <code>flex: 1</code> — pas de footer flottant sur pages courtes</td></tr>
+            <tr><td>Reset minimal</td><td><code>box-sizing</code>, marges à zéro, médias fluides (<code>max-width: 100%</code>)</td></tr>
+            <tr><td>Typo soignée</td><td><code>text-wrap: balance</code> sur h1–h3, <code>pretty</code> sur les paragraphes</td></tr>
+            <tr><td>Défilement doux</td><td><code>scroll-behavior: smooth</code>, désactivé si <code>prefers-reduced-motion</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</ShowcasePage>
+
+<style>
+  .demo-note {
+    color: var(--vf-color-text-muted);
+    margin-bottom: var(--vf-spacing-4);
+    max-width: 60ch;
+  }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vf-spacing-2);
+    min-height: 44px;
+    padding: var(--vf-spacing-2) var(--vf-spacing-4);
+    margin-left: calc(-1 * var(--vf-spacing-4));
+    color: var(--vf-color-primary);
+    font-weight: var(--vf-font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--vf-radius-md);
+    transition: background-color var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .demo-link:hover {
+    background: var(--vf-color-surface);
+  }
+
+  .demo-link:focus-visible {
+    outline: 2px solid var(--vf-color-primary);
+    outline-offset: 2px;
+  }
+
+  .demo-link svg {
+    transition: transform var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .demo-link:hover svg {
+    transform: translateX(2px);
+  }
+</style>
