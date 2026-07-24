@@ -1,0 +1,178 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Stats from '../../components/Stats.astro'
+
+import type { Stat } from '../../components/Stats.astro'
+
+const statsPlombier: Stat[] = [
+  {
+    value: '+200',
+    label: 'chantiers réalisés',
+    description: 'En Île-de-France depuis 2014',
+  },
+  {
+    value: '10 ans',
+    label: "d'expérience",
+    description: 'Artisan certifié RGE',
+  },
+  {
+    value: '98%',
+    label: 'de satisfaction client',
+    description: 'Noté 4,9/5 sur Google',
+  },
+  {
+    value: '7j/7',
+    label: 'disponibilité',
+    description: 'Urgences comprises',
+  },
+]
+
+const statsRestaurant: Stat[] = [
+  {
+    value: '1972',
+    label: 'Année de fondation',
+  },
+  {
+    value: '80',
+    label: 'couverts par service',
+  },
+  {
+    value: '3',
+    label: 'générations',
+  },
+]
+---
+
+<ShowcasePage component="Stats">
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Stats</h1>
+      <p>
+        Chiffres clés — valeurs phares à afficher en un coup d'œil.
+        Deux thèmes : <code>light</code> et <code>dark</code>.
+        Responsive 2 colonnes → rangée unique. Animation au défilement progressive.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant: light, 4 stats -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="light" — 4 stats (avec titre et description)</p>
+    </div>
+    <Stats
+      title="En chiffres"
+      lead="Des engagements concrets, vérifiables. Parce que la confiance se construit sur des faits."
+      stats={statsPlombier}
+      theme="light"
+    />
+  </div>
+
+  <!-- Variant: light, no header -->
+  <div class="variant-block variant-block--surface">
+    <div class="container">
+      <p class="variant-label">theme="light" — sans titre ni lead, 3 stats</p>
+    </div>
+    <Stats stats={statsRestaurant} theme="light" />
+  </div>
+
+  <!-- Variant: dark, 4 stats -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">theme="dark"</p>
+    </div>
+    <Stats
+      title="En chiffres"
+      lead="Des engagements concrets, vérifiables. Parce que la confiance se construit sur des faits."
+      stats={statsPlombier}
+      theme="dark"
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="types-heading">
+      <p class="section-label" id="types-heading">Types</p>
+      <pre class="code-block">type Stat = &#123;
+  value:        string  // "500+", "10 ans", "95%", "N°1"
+  label:        string  // "clients accompagnés", "d'expérience"
+  description?: string  // détail optionnel (ex : "noté 4,9/5 sur Google")
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>stats</code></td>
+              <td><code>Stat[]</code></td>
+              <td>—</td>
+              <td>Tableau de chiffres clés. Requis.</td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section (h2 ou h3 selon <code>titleAs</code>).</td>
+            </tr>
+            <tr>
+              <td><code>lead</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Paragraphe introductif sous le titre.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc avec chiffres cramoisis, ou fond cramoisi avec chiffres blancs.</td>
+            </tr>
+            <tr>
+              <td><code>titleAs</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau de titre pour la hiérarchie sémantique.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Stats &#125; from 'vitrify-ui';
+
+const stats = [
+  &#123; value: '+200', label: 'chantiers réalisés', description: 'En Île-de-France depuis 2014' &#125;,
+  &#123; value: '10 ans', label: "d'expérience", description: 'Artisan certifié RGE' &#125;,
+  &#123; value: '98%', label: 'de satisfaction client' &#125;,
+  &#123; value: '7j/7', label: 'disponibilité' &#125;,
+];
+---
+
+&lt;!-- Thème light (défaut) --&gt;
+&lt;Stats title="En chiffres" lead="..." stats=&#123;stats&#125; /&gt;
+
+&lt;!-- Thème dark --&gt;
+&lt;Stats title="En chiffres" stats=&#123;stats&#125; theme="dark" /&gt;
+
+&lt;!-- Sans titre, intégré dans une page --&gt;
+&lt;Stats stats=&#123;stats&#125; titleAs="h3" /&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
