@@ -1,0 +1,459 @@
+---
+import type { TeamMember, TeamSocial } from '../types'
+
+type HeadingLevel = 'h2' | 'h3'
+
+export type Props = {
+  members:     TeamMember[]
+  heading?:    string
+  subheading?: string
+  as?:         HeadingLevel
+  theme?:      'light' | 'dark'
+  layout?:     'grid' | 'featured'
+  columns?:    2 | 3 | 4
+}
+
+const {
+  members    = [],
+  heading,
+  subheading,
+  as: Tag    = 'h2',
+  theme      = 'light',
+  layout     = 'grid',
+  columns    = 3,
+} = Astro.props
+
+const hasHeader = heading || subheading || Astro.slots.has('header')
+
+const getInitials = (name: string) =>
+  name.trim().split(/\s+/).map(w => w[0] ?? '').join('').toUpperCase().slice(0, 2)
+
+type SocialKey = keyof TeamSocial
+type SocialEntry = { key: SocialKey; href: string; label: string }
+
+const getSocialLinks = (member: TeamMember): SocialEntry[] => {
+  if (!member.social) return []
+  const pairs: [SocialKey, string][] = [
+    ['linkedin',  member.social.linkedin  ?? ''],
+    ['instagram', member.social.instagram ?? ''],
+    ['github',    member.social.github    ?? ''],
+    ['website',   member.social.website   ?? ''],
+  ]
+  return pairs
+    .filter(([, href]) => href.length > 0)
+    .map(([key, href]) => {
+      const labels: Record<SocialKey, string> = {
+        linkedin:  `LinkedIn de ${member.name}`,
+        twitter:   `Twitter de ${member.name}`,
+        instagram: `Instagram de ${member.name}`,
+        github:    `GitHub de ${member.name}`,
+        website:   `Site web de ${member.name}`,
+      }
+      return { key, href, label: labels[key] }
+    })
+}
+---
+
+<section class:list={['team', `team--${theme}`]}>
+  <div class="team__inner">
+
+    {hasHeader && (
+      <header class="team__header">
+        <slot name="header">
+          {subheading && <p class="team__sub">{subheading}</p>}
+          {heading    && <Tag class="team__heading">{heading}</Tag>}
+        </slot>
+      </header>
+    )}
+
+    {members.length > 0 && (
+      <ul
+        class:list={['team__grid', layout === 'featured' && 'team__grid--featured']}
+        role="list"
+        style={`--_cols: ${columns}`}
+      >
+        {members.map((member, i) => {
+          const links    = getSocialLinks(member)
+          const initials = getInitials(member.name)
+          const featured = layout === 'featured' && i === 0
+          return (
+            <li
+              class:list={['team__item', featured && 'team__item--featured']}
+              style={`--i: ${i}`}
+            >
+              <article class="team__card">
+
+                <div class="team__photo-wrap">
+                  {member.photo ? (
+                    <img
+                      class="team__photo-img"
+                      src={member.photo}
+                      alt={member.photoAlt ?? member.name}
+                      width="600"
+                      height="800"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                  ) : (
+                    <div class="team__initials-wrap" aria-hidden="true">
+                      <span class="team__initials">{initials}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div class="team__info">
+                  <strong class="team__name">{member.name}</strong>
+                  <span class="team__role">{member.role}</span>
+                  {member.bio && <p class="team__bio">{member.bio}</p>}
+                  {links.length > 0 && (
+                    <ul class="team__social" role="list">
+                      {links.map(({ key, href, label }) => (
+                        <li>
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={label}
+                            class="team__social-link"
+                          >
+                            {key === 'linkedin' && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect x="2" y="9" width="4" height="12"/>
+                                <circle cx="4" cy="4" r="2"/>
+                              </svg>
+                            )}
+                            {key === 'instagram' && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                              </svg>
+                            )}
+                            {key === 'github' && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                              </svg>
+                            )}
+                            {key === 'website' && (
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                              </svg>
+                            )}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+              </article>
+            </li>
+          )
+        })}
+      </ul>
+    )}
+
+  </div>
+</section>
+
+<style>
+  /* ── Theme tokens ── */
+  .team--light {
+    --_bg:           var(--vf-color-background);
+    --_text:         var(--vf-color-text);
+    --_muted:        var(--vf-color-text-muted);
+    --_heading:      var(--vf-color-text);
+    --_accent:       var(--vf-color-primary);
+    --_initials-bg:  var(--vf-color-primary);
+    --_initials-fg:  var(--vf-color-primary-foreground);
+    --_img-outline:  oklch(0 0 0 / 0.10);
+    --_social-fg:    var(--vf-color-text-muted);
+    --_social-hover: var(--vf-color-primary);
+  }
+
+  .team--dark {
+    --_bg:           var(--vf-color-primary);
+    --_text:         var(--vf-color-on-primary);
+    --_muted:        var(--vf-color-on-primary-muted);
+    --_heading:      var(--vf-color-on-primary);
+    --_accent:       var(--vf-color-on-primary);
+    --_initials-bg:  var(--vf-color-on-primary-subtle);
+    --_initials-fg:  var(--vf-color-on-primary);
+    --_img-outline:  oklch(1 0 0 / 0.10);
+    --_social-fg:    var(--vf-color-on-primary-muted);
+    --_social-hover: var(--vf-color-on-primary);
+  }
+
+  /* ── Base ── */
+  .team {
+    background: var(--_bg);
+    width: 100%;
+    font-family: var(--vf-font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .team__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-12);
+  }
+
+  /* ── Header ── */
+  .team__header {
+    max-width: 52ch;
+  }
+
+  .team__sub {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    color: var(--_muted);
+    margin: 0 0 var(--vf-spacing-3);
+    letter-spacing: 0.01em;
+    text-wrap: pretty;
+  }
+
+  .team__heading {
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--_heading);
+    margin: 0;
+    text-wrap: balance;
+    line-height: var(--vf-line-height-tight);
+  }
+
+  /* ── Grid ── */
+  .team__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--vf-spacing-12) var(--vf-spacing-6);
+  }
+
+  @media (min-width: 480px) {
+    .team__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .team__grid {
+      grid-template-columns: repeat(var(--_cols, 3), 1fr);
+    }
+  }
+
+  /* ── Card ── */
+  .team__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* ── Photo ── */
+  .team__photo-wrap {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: var(--vf-radius-md);
+    margin-bottom: var(--vf-spacing-4);
+    background: var(--_initials-bg);
+    flex-shrink: 0;
+  }
+
+  .team__photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    outline: 1px solid var(--_img-outline);
+    outline-offset: -1px;
+  }
+
+  .team__initials-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .team__initials {
+    font-family: var(--vf-font-display);
+    font-variation-settings: "wdth" 68, "wght" 700;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--_initials-fg);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* ── Info ── */
+  .team__info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .team__name {
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-subhead);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--_text);
+    line-height: var(--vf-line-height-tight);
+    text-wrap: balance;
+    display: block;
+    margin-bottom: var(--vf-spacing-1);
+    position: relative;
+    padding-bottom: 3px;
+  }
+
+  .team__name::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--_accent);
+    transition: width var(--vf-duration-base) var(--vf-ease-out);
+  }
+
+  .team__card:hover .team__name::after {
+    width: 2rem;
+  }
+
+  .team__role {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    color: var(--_muted);
+    line-height: var(--vf-line-height-normal);
+    display: block;
+  }
+
+  .team__bio {
+    font-size: var(--vf-font-size-sm);
+    color: var(--_muted);
+    line-height: var(--vf-line-height-relaxed);
+    margin: var(--vf-spacing-3) 0 0;
+    text-wrap: pretty;
+    max-width: 38ch;
+    flex: 1;
+  }
+
+  /* ── Social ── */
+  .team__social {
+    list-style: none;
+    margin: var(--vf-spacing-4) 0 0;
+    padding: 0;
+    display: flex;
+    gap: var(--vf-spacing-1);
+    align-items: center;
+  }
+
+  .team__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--_social-fg);
+    border-radius: var(--vf-radius-sm);
+    text-decoration: none;
+    transition: color var(--vf-duration-fast) var(--vf-ease-out),
+                transform var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .team__social-link:hover {
+    color: var(--_social-hover);
+  }
+
+  .team__social-link:active {
+    transform: scale(0.96);
+  }
+
+  .team__social-link:focus-visible {
+    outline: 2px solid var(--_accent);
+    outline-offset: 2px;
+  }
+
+  /* ── Featured variant ── */
+  @media (min-width: 768px) {
+    .team__grid--featured .team__item--featured {
+      grid-column: 1 / -1;
+    }
+
+    .team__grid--featured .team__item--featured .team__card {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: clamp(var(--vf-spacing-8), 5vw, var(--vf-spacing-16));
+    }
+
+    .team__grid--featured .team__item--featured .team__photo-wrap {
+      width: clamp(160px, 30%, 260px);
+      margin-bottom: 0;
+    }
+
+    .team__grid--featured .team__item--featured .team__info {
+      padding-top: var(--vf-spacing-4);
+    }
+
+    .team__grid--featured .team__item--featured .team__name {
+      font-size: var(--vf-font-size-heading);
+    }
+
+    .team__grid--featured .team__item--featured .team__role {
+      font-size: var(--vf-font-size-base);
+      margin-top: var(--vf-spacing-2);
+    }
+
+    .team__grid--featured .team__item--featured .team__bio {
+      font-size: var(--vf-font-size-base);
+      max-width: 52ch;
+      margin-top: var(--vf-spacing-4);
+    }
+
+    .team__grid--featured .team__item--featured .team__social {
+      margin-top: var(--vf-spacing-6);
+    }
+  }
+
+  /* ── Animation ── */
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes team-rise {
+      from { transform: translateY(22px); }
+      to   { transform: translateY(0); }
+    }
+
+    .team__item {
+      animation: team-rise var(--vf-duration-slow) var(--vf-ease-out) both;
+      animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+    }
+
+    .team__photo-img {
+      transition: transform var(--vf-duration-slow) var(--vf-ease-out);
+    }
+
+    .team__card:hover .team__photo-img {
+      transform: scale(1.05);
+    }
+
+    .team__initials-wrap {
+      transition: opacity var(--vf-duration-base) var(--vf-ease-out);
+    }
+
+    .team__card:hover .team__initials-wrap {
+      opacity: 0.85;
+    }
+  }
+</style>
