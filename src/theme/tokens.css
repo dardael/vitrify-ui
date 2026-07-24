@@ -43,7 +43,9 @@
   --vf-font-mono:    ui-monospace, 'Courier New', monospace;
 
   /* Display variation — condensed bold for headings */
-  --vf-font-display-settings: "wdth" 80, "wght" 700;
+  --vf-font-display-settings:       "wdth" 80, "wght" 700;
+  /* Extra-condensed heavy — stat values, large price numerals */
+  --vf-font-display-settings-heavy: "wdth" 68, "wght" 800;
 
   /* Fluid scale */
   --vf-font-size-display: clamp(2.5rem, 5vw, 4.5rem);

@@ -74,6 +74,7 @@ const {
     letter-spacing: -0.025em;
     margin: 0 0 var(--vf-spacing-4);
     text-wrap: balance;
+    color: var(--c-value);
   }
 
   .vf-stats__lead {
@@ -82,6 +83,7 @@ const {
     max-width: 54ch;
     margin: 0;
     text-wrap: pretty;
+    color: var(--c-muted);
   }
 
   /* ── Stat list — mobile-first: 2 columns ── */
@@ -132,7 +134,7 @@ const {
   .vf-stat__value {
     font-family: var(--vf-font-display);
     font-weight: 800;
-    font-variation-settings: "wdth" 68, "wght" 800;
+    font-variation-settings: var(--vf-font-display-settings-heavy);
     font-size: clamp(2.75rem, 7vw, 5rem);
     line-height: 1;
     letter-spacing: -0.03em;
@@ -166,14 +168,6 @@ const {
     --c-separator: var(--vf-color-border);
   }
 
-  .vf-stats--light .vf-stats__title {
-    color: var(--vf-color-primary);
-  }
-
-  .vf-stats--light .vf-stats__lead {
-    color: var(--vf-color-text-muted);
-  }
-
   /* ── Dark theme — crimson bg, white numbers ── */
   .vf-stats--dark {
     background: var(--vf-color-primary);
@@ -181,14 +175,6 @@ const {
     --c-label:     var(--vf-color-on-primary);
     --c-muted:     var(--vf-color-on-primary-muted);
     --c-separator: var(--vf-color-on-primary-border);
-  }
-
-  .vf-stats--dark .vf-stats__title {
-    color: var(--vf-color-on-primary);
-  }
-
-  .vf-stats--dark .vf-stats__lead {
-    color: var(--vf-color-on-primary-muted);
   }
 </style>
 
