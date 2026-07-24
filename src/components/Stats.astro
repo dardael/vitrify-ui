@@ -1,0 +1,234 @@
+---
+export type Stat = {
+  value: string       // "500+", "10 ans", "95%", "N°1"
+  label: string       // "clients accompagnés", "d'expérience"
+  description?: string
+}
+
+export type Props = {
+  title?: string
+  lead?: string
+  stats: Stat[]
+  theme?: 'light' | 'dark'
+  titleAs?: 'h2' | 'h3'
+}
+
+const {
+  title,
+  lead,
+  stats,
+  theme = 'light',
+  titleAs: TitleTag = 'h2',
+} = Astro.props
+---
+
+<section
+  class:list={['vf-stats', `vf-stats--${theme}`]}
+  aria-label={title ?? 'Chiffres clés'}
+>
+  <div class="vf-stats__inner">
+    {(title || lead) && (
+      <header class="vf-stats__header">
+        {title && <TitleTag class="vf-stats__title">{title}</TitleTag>}
+        {lead && <p class="vf-stats__lead">{lead}</p>}
+      </header>
+    )}
+
+    <ul class="vf-stats__list" role="list">
+      {stats.map((stat) => (
+        <li class="vf-stat">
+          <strong class="vf-stat__value">{stat.value}</strong>
+          <span class="vf-stat__label">{stat.label}</span>
+          {stat.description && (
+            <span class="vf-stat__desc">{stat.description}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* ── Section ── */
+  .vf-stats {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .vf-stats__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  /* ── Header ── */
+  .vf-stats__header {
+    margin-bottom: var(--vf-spacing-12);
+  }
+
+  .vf-stats__title {
+    font-family: var(--vf-font-display);
+    font-size: var(--vf-font-size-heading);
+    font-variation-settings: var(--vf-font-display-settings);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--vf-spacing-4);
+    text-wrap: balance;
+  }
+
+  .vf-stats__lead {
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-relaxed);
+    max-width: 54ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ── Stat list — mobile-first: 2 columns ── */
+  .vf-stats__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* ── Stat item ── */
+  .vf-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-2);
+    padding: var(--vf-spacing-8) var(--vf-spacing-6);
+    border-top: 1px solid var(--c-separator);
+  }
+
+  /* Even stat in 2-col mobile gets a left border to divide columns */
+  .vf-stat:nth-child(2n) {
+    border-left: 1px solid var(--c-separator);
+  }
+
+  /* ── Desktop: single auto-fit row ── */
+  @media (min-width: 640px) {
+    .vf-stats__list {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    /* Reset mobile even-child rule */
+    .vf-stat:nth-child(2n) {
+      border-left: none;
+    }
+
+    /* All stats except first get a left border (column divider) */
+    .vf-stat + .vf-stat {
+      border-left: 1px solid var(--c-separator);
+    }
+
+    .vf-stat {
+      padding: var(--vf-spacing-8) clamp(var(--vf-spacing-6), 3vw, var(--vf-spacing-12));
+    }
+  }
+
+  /* ── Value — condensed display numerals ── */
+  .vf-stat__value {
+    font-family: var(--vf-font-display);
+    font-weight: 800;
+    font-variation-settings: "wdth" 68, "wght" 800;
+    font-size: clamp(2.75rem, 7vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--c-value);
+  }
+
+  /* ── Label ── */
+  .vf-stat__label {
+    font-size: var(--vf-font-size-base);
+    font-weight: var(--vf-font-weight-medium);
+    line-height: var(--vf-line-height-normal);
+    color: var(--c-label);
+    text-wrap: balance;
+  }
+
+  /* ── Optional description ── */
+  .vf-stat__desc {
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    color: var(--c-muted);
+    text-wrap: pretty;
+  }
+
+  /* ── Light theme ── */
+  .vf-stats--light {
+    background: var(--vf-color-background);
+    --c-value:     var(--vf-color-primary);
+    --c-label:     var(--vf-color-text);
+    --c-muted:     var(--vf-color-text-muted);
+    --c-separator: var(--vf-color-border);
+  }
+
+  .vf-stats--light .vf-stats__title {
+    color: var(--vf-color-primary);
+  }
+
+  .vf-stats--light .vf-stats__lead {
+    color: var(--vf-color-text-muted);
+  }
+
+  /* ── Dark theme — crimson bg, white numbers ── */
+  .vf-stats--dark {
+    background: var(--vf-color-primary);
+    --c-value:     var(--vf-color-on-primary);
+    --c-label:     var(--vf-color-on-primary);
+    --c-muted:     var(--vf-color-on-primary-muted);
+    --c-separator: var(--vf-color-on-primary-border);
+  }
+
+  .vf-stats--dark .vf-stats__title {
+    color: var(--vf-color-on-primary);
+  }
+
+  .vf-stats--dark .vf-stats__lead {
+    color: var(--vf-color-on-primary-muted);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.vf-stats__list').forEach((list) => {
+    if (!('IntersectionObserver' in window)) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const items = Array.from(list.querySelectorAll<HTMLElement>('.vf-stat'))
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const el = entry.target as HTMLElement
+
+          el.style.opacity = '1'
+          el.style.transform = 'translateY(0)'
+          obs.unobserve(el)
+
+          el.addEventListener('transitionend', function cleanup(e) {
+            if (e.propertyName !== 'transform') return
+            el.removeEventListener('transitionend', cleanup)
+            el.style.cssText = ''
+          })
+        })
+      },
+      { threshold: 0.1 },
+    )
+
+    items.forEach((el, i) => {
+      el.style.opacity = '0'
+      el.style.transform = 'translateY(16px)'
+      el.style.transitionProperty = 'opacity, transform'
+      el.style.transitionDuration = '0.45s'
+      el.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)'
+      el.style.transitionDelay = `${i * 80}ms`
+      el.style.willChange = 'transform, opacity'
+
+      io.observe(el)
+    })
+  })
+</script>
