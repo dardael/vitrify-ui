@@ -1,0 +1,175 @@
+---
+import '../theme/tokens.css'
+
+type Props = {
+  /** Document title — rendered as-is, compose your own suffix */
+  title: string
+  /** Meta description — required, vitrine sites live on SEO */
+  description: string
+  /** Page language (default 'fr') */
+  lang?: string
+  /** Canonical URL — absolute, e.g. https://exemple.fr/services */
+  canonical?: string
+  /** Open Graph image — absolute URL */
+  ogImage?: string
+  /** og:type (default 'website') */
+  ogType?: 'website' | 'article'
+  /** Robots directive, e.g. 'noindex, nofollow' — omitted when unset */
+  robots?: string
+  /** Favicon href (default '/favicon.svg') */
+  favicon?: string
+  /** Load Bricolage Grotesque from Google Fonts (default true).
+      Set false when the consuming site self-hosts or overrides --vf-font-* */
+  fonts?: boolean
+}
+
+const {
+  title,
+  description,
+  lang = 'fr',
+  canonical,
+  ogImage,
+  ogType = 'website',
+  robots,
+  favicon = '/favicon.svg',
+  fonts = true,
+} = Astro.props
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:card" content="summary_large_image" />}
+
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+
+    {fonts && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap"
+          rel="stylesheet"
+        />
+      </>
+    )}
+
+    <slot name="head" />
+  </head>
+
+  <body>
+    <a class="vf-skip-link" href="#contenu">Aller au contenu</a>
+
+    <slot name="header" />
+
+    <main id="contenu" tabindex="-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Anchor targets clear a sticky navbar; override per site if taller */
+  [id] {
+    scroll-margin-top: var(--vf-scroll-offset, 5rem);
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-base);
+    line-height: var(--vf-line-height-normal);
+    color: var(--vf-color-text);
+    background: var(--vf-color-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Footer sticks to viewport bottom on short pages */
+  main {
+    flex: 1;
+  }
+
+  main:focus {
+    outline: none;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Skip link — hidden until keyboard focus */
+  .vf-skip-link {
+    position: fixed;
+    top: var(--vf-spacing-3);
+    left: var(--vf-spacing-3);
+    z-index: 999;
+    padding: var(--vf-spacing-3) var(--vf-spacing-6);
+    background: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--vf-radius-md);
+    box-shadow: var(--vf-shadow-lg);
+    transform: translateY(calc(-100% - var(--vf-spacing-6)));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vf-skip-link {
+      transition-property: transform;
+      transition-duration: var(--vf-duration-fast);
+      transition-timing-function: var(--vf-ease-out);
+    }
+  }
+
+  .vf-skip-link:focus {
+    transform: none;
+    outline: 2px solid var(--vf-color-primary-foreground);
+    outline-offset: -5px;
+  }
+</style>

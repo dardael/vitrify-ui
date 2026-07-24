@@ -11,10 +11,9 @@ type Props = {
 }
 
 const { features, itemAs: ItemTag = 'h3' } = Astro.props
-const cols = Math.min(features.length, 4)
 ---
 
-<div class="vf-features" style={`--_cols: ${cols}`}>
+<div class="vf-features">
   <div class="vf-features__grid">
     {features.map((item, i) => (
       <div class="vf-feature">
@@ -31,16 +30,11 @@ const cols = Math.min(features.length, 4)
 <style>
   .vf-features__grid {
     display: grid;
-    grid-template-columns: 1fr;
-    row-gap: var(--vf-spacing-6);
+    /* Breakpoint-free: columns form only when they'd be ≥15rem wide,
+       so 3-up → 2-up → 1-up follows the viewport, never squeezes */
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    row-gap: var(--vf-spacing-8);
     column-gap: clamp(1.5rem, 4vw, 3rem);
-  }
-
-  @media (min-width: 640px) {
-    .vf-features__grid {
-      grid-template-columns: repeat(var(--_cols), 1fr);
-      row-gap: 0;
-    }
   }
 
   /* ── Item — colors inherit from parent Section via cascade tokens ──

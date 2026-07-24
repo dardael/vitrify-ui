@@ -1,6 +1,7 @@
 ---
 import ShowcaseLayout from '../layouts/ShowcaseLayout.astro'
 
+const layoutPaths = Object.keys(import.meta.glob('./layouts/*Showcase.astro'))
 const componentPaths = Object.keys(import.meta.glob('./components/*.astro'))
 const templatePaths = Object.keys(import.meta.glob('./templates/*.astro'))
 
@@ -14,6 +15,19 @@ const toHref = (path: string) =>
 <ShowcaseLayout title="Vitrify — Showcase">
   <main class="page">
     <h1>Vitrify Showcase</h1>
+
+    <h2>Layouts</h2>
+    {layoutPaths.length > 0 ? (
+      <div class="grid">
+        {layoutPaths.map((p) => (
+          <a class="card" href={toHref(p)}>{toName(p)}</a>
+        ))}
+      </div>
+    ) : (
+      <p class="empty">
+        Aucun layout — créer des pages dans <code>src/pages/layouts/</code>
+      </p>
+    )}
 
     <h2>Composants</h2>
     {componentPaths.length > 0 ? (

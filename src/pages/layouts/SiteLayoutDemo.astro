@@ -1,0 +1,117 @@
+---
+/**
+ * Live demo — full vitrine page built on SiteLayout.
+ * SiteLayout owns the document shell, so this page bypasses ShowcaseLayout:
+ * what you see is exactly what a consuming site ships.
+ */
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import Navbar from '../../components/Navbar.astro'
+import Hero from '../../components/Hero.astro'
+import Section from '../../components/Section.astro'
+import Features from '../../components/Features.astro'
+import CTA from '../../components/CTA.astro'
+import Footer from '../../components/Footer.astro'
+import Button from '../../components/Button.astro'
+
+const navLinks = [
+  { label: 'Réalisations', href: '#realisations' },
+  { label: 'Savoir-faire', href: '#savoir-faire' },
+  { label: 'Contact', href: '#contact' },
+]
+
+const features = [
+  {
+    title: 'Agencement sur mesure',
+    body: 'Bibliothèques, dressings et cuisines dessinés au millimètre pour votre intérieur, du relevé de cotes à la pose.',
+  },
+  {
+    title: 'Restauration de menuiseries anciennes',
+    body: 'Fenêtres, portes et boiseries d’époque restaurées dans les règles de l’art, en conservant les bois d’origine.',
+  },
+  {
+    title: 'Escaliers & pièces maîtresses',
+    body: 'Escaliers balancés, verrières bois et mobilier d’exception, façonnés dans notre atelier bordelais.',
+  },
+]
+
+const footerColumns = [
+  {
+    heading: 'Atelier',
+    links: [
+      { label: 'Réalisations', href: '#realisations' },
+      { label: 'Savoir-faire', href: '#savoir-faire' },
+      { label: 'Contact', href: '#contact' },
+    ],
+  },
+  {
+    heading: 'Informations',
+    links: [
+      { label: 'Mentions légales', href: '#' },
+      { label: 'Devis gratuit', href: '#contact' },
+    ],
+  },
+]
+---
+
+<SiteLayout
+  title="Atelier Ferrand — Menuiserie d'art à Bordeaux"
+  description="Menuiserie d'art à Bordeaux depuis 1987 : agencement sur mesure, restauration de boiseries anciennes, escaliers et mobilier d'exception."
+  canonical="https://atelier-ferrand.fr/"
+>
+  <Fragment slot="head">
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'Atelier Ferrand',
+        description: "Menuiserie d'art à Bordeaux",
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Bordeaux',
+          addressCountry: 'FR',
+        },
+      })}
+    />
+  </Fragment>
+
+  <Navbar slot="header" links={navLinks} sticky>
+    <a slot="logo" href="/layouts/SiteLayoutDemo">Atelier Ferrand</a>
+    <Button slot="cta" href="#contact" size="sm">Demander un devis</Button>
+  </Navbar>
+
+  <Hero
+    headline="Le bois travaillé comme il se doit, depuis 1987"
+    tagline="Agencement sur mesure, restauration de boiseries et pièces d'exception — un seul atelier, un seul niveau d'exigence."
+  >
+    <Fragment slot="cta">
+      <Button href="#contact">Demander un devis</Button>
+      <Button href="#realisations" variant="secondary">Voir les réalisations</Button>
+    </Fragment>
+  </Hero>
+
+  <Section
+    id="savoir-faire"
+    title="Notre savoir-faire"
+    lead="Trois métiers, un même geste : le bois massif travaillé dans les règles de l'art."
+  >
+    <Features features={features} itemAs="h3" />
+  </Section>
+
+  <CTA
+    headline="Un projet en tête ?"
+    lead="Parlons-en autour d'un plan. Déplacement et devis gratuits dans toute la métropole bordelaise."
+    ctaLabel="Prendre rendez-vous"
+    ctaHref="#contact"
+  />
+
+  <Footer
+    slot="footer"
+    columns={footerColumns}
+    tagline="Menuiserie d'art à Bordeaux — sur mesure, restauration, création."
+    legal="© 2026 Atelier Ferrand. Tous droits réservés."
+  >
+    <a slot="logo" href="/layouts/SiteLayoutDemo">Atelier Ferrand</a>
+  </Footer>
+</SiteLayout>

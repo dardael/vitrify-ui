@@ -4,12 +4,15 @@ export type Props = {
   lead?: string
   theme?: 'light' | 'dark'
   as?: 'h2' | 'h3'
+  /** Anchor id — cible des liens de navigation (#services…) */
+  id?: string
 }
 
-const { title, lead, theme = 'light', as: Tag = 'h2' } = Astro.props
+const { title, lead, theme = 'light', as: Tag = 'h2', id } = Astro.props
 ---
 
 <section
+  id={id}
   class:list={['vf-section', `vf-section--${theme}`]}
   aria-label={title}
 >

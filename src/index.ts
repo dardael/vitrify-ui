@@ -1,3 +1,6 @@
+// Layouts
+export { default as SiteLayout }   from './layouts/SiteLayout.astro';
+
 // Components
 export { default as Button }       from './components/Button.astro';
 export { default as Gallery }      from './components/Gallery.astro';
