@@ -52,3 +52,9 @@ export type ContactInfo = {
   address?: string
   hours?:   string
 }
+
+export type Logo = {
+  name: string
+  src:  string
+  href?: string
+}

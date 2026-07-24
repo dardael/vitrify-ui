@@ -1,0 +1,330 @@
+---
+import type { Logo } from '../types'
+
+export type Props = {
+  heading?: string
+  logos:    Logo[]
+  theme?:   'light' | 'dark'
+  layout?:  'row' | 'marquee'
+  as?:      'h2' | 'h3'
+}
+
+const {
+  heading,
+  logos,
+  theme  = 'light',
+  layout = 'row',
+  as: HeadingTag = 'h2',
+} = Astro.props
+---
+
+<section
+  class:list={['vf-logocloud', `vf-logocloud--${theme}`, `vf-logocloud--${layout}`]}
+  aria-label={heading ?? 'Clients et partenaires'}
+  style={layout === 'marquee' ? `--vf-marquee-duration: ${logos.length * 3}s` : undefined}
+>
+  <div class="vf-logocloud__inner">
+
+    {heading && (
+      <HeadingTag class="vf-logocloud__heading">{heading}</HeadingTag>
+    )}
+
+    {layout === 'row' && (
+      <ul class="vf-logocloud__row" role="list">
+        {logos.map((logo, i) => (
+          <li class="vf-logocloud__item" style={`--i: ${i}`}>
+            {logo.href ? (
+              <a
+                class="vf-logocloud__link"
+                href={logo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  class="vf-logocloud__logo"
+                  src={logo.src}
+                  alt={logo.name}
+                  width="160"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            ) : (
+              <img
+                class="vf-logocloud__logo"
+                src={logo.src}
+                alt={logo.name}
+                width="160"
+                height="48"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {layout === 'marquee' && (
+      <div class="vf-logocloud__marquee">
+        <div class="vf-logocloud__tracks">
+          <ul class="vf-logocloud__track" role="list">
+            {logos.map((logo) => (
+              <li class="vf-logocloud__item">
+                <img
+                  class="vf-logocloud__logo"
+                  src={logo.src}
+                  alt={logo.name}
+                  width="160"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </li>
+            ))}
+          </ul>
+          <ul class="vf-logocloud__track vf-logocloud__track--dup" role="list" aria-hidden="true">
+            {logos.map((logo) => (
+              <li class="vf-logocloud__item">
+                <img
+                  class="vf-logocloud__logo"
+                  src={logo.src}
+                  alt=""
+                  width="160"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    )}
+
+  </div>
+</section>
+
+<style>
+  /* ── Base ── */
+  .vf-logocloud {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .vf-logocloud__inner {
+    max-width: var(--vf-container);
+    margin: 0 auto;
+    padding: var(--vf-section-padding) clamp(1rem, 5vw, 3rem);
+  }
+
+  /* ── Heading — sentence case, understated ── */
+  .vf-logocloud__heading {
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0 0 var(--vf-spacing-8);
+    text-wrap: balance;
+    color: var(--c-label);
+  }
+
+  /* ── Logo image ── */
+  .vf-logocloud__logo {
+    display: block;
+    height: clamp(28px, 4.5vw, 40px);
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    transition-property: filter, transform;
+    transition-duration: var(--vf-duration-slow);
+    transition-timing-function: var(--vf-ease-out);
+  }
+
+  /* ── Row layout ── */
+  .vf-logocloud__row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vf-spacing-8) clamp(var(--vf-spacing-8), 6vw, var(--vf-spacing-20));
+  }
+
+  .vf-logocloud--row .vf-logocloud__item {
+    flex-shrink: 0;
+  }
+
+  /* ── Link wrapper — 44×44 touch target (make-interfaces-feel-better §16) ── */
+  .vf-logocloud__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--vf-spacing-2);
+    border-radius: var(--vf-radius-sm);
+    outline: none;
+    transition-property: transform;
+    transition-duration: var(--vf-duration-fast);
+    transition-timing-function: var(--vf-ease-out);
+  }
+
+  /* Scale on press — 0.96, never below 0.95 (make-interfaces-feel-better §12) */
+  .vf-logocloud__link:active {
+    transform: scale(0.96);
+  }
+
+  .vf-logocloud__link:focus-visible {
+    outline: 2px solid var(--vf-color-primary);
+    outline-offset: 4px;
+  }
+
+  /* ── Marquee layout ── */
+  .vf-logocloud__marquee {
+    overflow: hidden;
+    /* Edge fade */
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+
+  .vf-logocloud__tracks {
+    display: flex;
+    /* GPU-composited transform only (make-interfaces-feel-better §15) */
+    will-change: transform;
+    animation: vf-logocloud-marquee var(--vf-marquee-duration, 24s) linear infinite;
+  }
+
+  .vf-logocloud__marquee:hover .vf-logocloud__tracks {
+    animation-play-state: paused;
+  }
+
+  .vf-logocloud__track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0 clamp(2rem, 6vw, 4rem) 0 0; /* trailing gap = inter-logo gap for seamless loop */
+    gap: clamp(2rem, 6vw, 4rem);
+  }
+
+  @keyframes vf-logocloud-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Reduced motion: pause marquee, wrap to grid (make-interfaces-feel-better §4) */
+  @media (prefers-reduced-motion: reduce) {
+    .vf-logocloud__tracks {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      will-change: auto;
+    }
+
+    .vf-logocloud__marquee {
+      overflow: visible;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .vf-logocloud__track {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-right: 0;
+    }
+
+    /* Hide duplicate track when not animating */
+    .vf-logocloud__track--dup {
+      display: none;
+    }
+  }
+
+  /* ── Light theme ── */
+  .vf-logocloud--light {
+    background: var(--vf-color-background);
+    --c-label: var(--vf-color-text-muted);
+  }
+
+  .vf-logocloud--light .vf-logocloud__logo {
+    filter: grayscale(1) opacity(0.50);
+  }
+
+  .vf-logocloud--light .vf-logocloud__item:hover .vf-logocloud__logo,
+  .vf-logocloud--light .vf-logocloud__link:hover .vf-logocloud__logo,
+  .vf-logocloud--light .vf-logocloud__link:focus-visible .vf-logocloud__logo {
+    filter: grayscale(0) opacity(1);
+  }
+
+  /* ── Dark theme — crimson bg, logos inverted to white ── */
+  .vf-logocloud--dark {
+    background: var(--vf-color-primary);
+    --c-label: var(--vf-color-on-primary-muted);
+  }
+
+  .vf-logocloud--dark .vf-logocloud__logo {
+    filter: brightness(0) invert(1) opacity(0.60);
+  }
+
+  .vf-logocloud--dark .vf-logocloud__item:hover .vf-logocloud__logo,
+  .vf-logocloud--dark .vf-logocloud__link:hover .vf-logocloud__logo,
+  .vf-logocloud--dark .vf-logocloud__link:focus-visible .vf-logocloud__logo {
+    filter: brightness(0) invert(1) opacity(1);
+  }
+</style>
+
+<script>
+  /* Row layout: staggered entrance — split + stagger (make-interfaces-feel-better §5) */
+  document.querySelectorAll<HTMLElement>('.vf-logocloud--row .vf-logocloud__row').forEach((row) => {
+    if (!('IntersectionObserver' in window)) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const items = Array.from(row.querySelectorAll<HTMLElement>('.vf-logocloud__item'))
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const el = entry.target as HTMLElement
+          el.style.opacity = '1'
+          el.style.transform = 'translateY(0)'
+          obs.unobserve(el)
+          el.addEventListener('transitionend', function cleanup(e) {
+            if (e.propertyName !== 'transform') return
+            el.removeEventListener('transitionend', cleanup)
+            el.style.cssText = ''
+          })
+        })
+      },
+      { threshold: 0.1 },
+    )
+
+    items.forEach((el, i) => {
+      el.style.opacity = '0'
+      el.style.transform = 'translateY(10px)'
+      el.style.transitionProperty = 'opacity, transform' /* never 'all' (§14) */
+      el.style.transitionDuration = '0.4s'
+      el.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)'
+      el.style.transitionDelay = `${i * 55}ms`
+      el.style.willChange = 'transform, opacity' /* GPU composite only (§15) */
+      io.observe(el)
+    })
+  })
+</script>

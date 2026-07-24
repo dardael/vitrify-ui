@@ -1,0 +1,217 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import LogoCloud from '../../components/LogoCloud.astro'
+import type { Logo } from '../../types'
+
+const logos6: Logo[] = [
+  { name: 'Maison Roux',     src: '/logos/logo-maison-roux.svg' },
+  { name: 'Archis',          src: '/logos/logo-archis.svg' },
+  { name: 'Nova',            src: '/logos/logo-nova.svg' },
+  { name: 'Éclat Studio',    src: '/logos/logo-eclat.svg' },
+  { name: 'Construire',      src: '/logos/logo-construire.svg' },
+  { name: 'VitaClinic',      src: '/logos/logo-vitaclinic.svg' },
+]
+
+const logos6linked: Logo[] = logos6.map((l) => ({ ...l, href: '#' }))
+
+const logos8: Logo[] = [
+  ...logos6,
+  { name: 'Château Bellevue', src: '/logos/logo-chateau.svg' },
+  { name: 'Cabinet Bernard',  src: '/logos/logo-bernard.svg' },
+]
+---
+
+<ShowcasePage component="LogoCloud">
+
+  <header class="page-header">
+    <div class="container">
+      <h1>LogoCloud</h1>
+      <p>
+        Rangée de logos clients ou partenaires — signal de confiance.
+        Deux layouts : <code>row</code> (flex wrappé, animation au défilement) et
+        <code>marquee</code> (défilement infini CSS). Deux thèmes :
+        <code>light</code> et <code>dark</code>. Logos grisés par défaut,
+        couleur au survol.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1 : row / light / heading -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="row" · theme="light" · avec heading</p>
+    </div>
+    <LogoCloud
+      heading="Ils nous font confiance"
+      logos={logos6}
+      theme="light"
+      layout="row"
+      as="h3"
+    />
+  </div>
+
+  <!-- Variant 2 : row / light / avec liens -->
+  <div class="variant-block variant-block--surface">
+    <div class="container">
+      <p class="variant-label">layout="row" · theme="light" · logos cliquables (href)</p>
+    </div>
+    <LogoCloud
+      logos={logos6linked}
+      theme="light"
+      layout="row"
+    />
+  </div>
+
+  <!-- Variant 3 : row / dark -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="row" · theme="dark"</p>
+    </div>
+    <LogoCloud
+      heading="Ils nous font confiance"
+      logos={logos6}
+      theme="dark"
+      layout="row"
+      as="h3"
+    />
+  </div>
+
+  <!-- Variant 4 : marquee / light -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="marquee" · theme="light" · 8 logos</p>
+    </div>
+    <LogoCloud
+      heading="Rejoignez nos partenaires"
+      logos={logos8}
+      theme="light"
+      layout="marquee"
+      as="h3"
+    />
+  </div>
+
+  <!-- Variant 5 : marquee / dark -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="marquee" · theme="dark" · 8 logos</p>
+    </div>
+    <LogoCloud
+      heading="Rejoignez nos partenaires"
+      logos={logos8}
+      theme="dark"
+      layout="marquee"
+      as="h3"
+    />
+  </div>
+
+  <!-- Props & usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="types-heading">
+      <p class="section-label" id="types-heading">Types</p>
+      <pre class="code-block">type Logo = &#123;
+  name:  string   // texte alternatif (accessibilité)
+  src:   string   // URL de l'image (SVG, PNG, WebP…)
+  href?: string   // lien optionnel (ouvre dans un nouvel onglet)
+&#125;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>logos</code></td>
+              <td><code>Logo[]</code></td>
+              <td>—</td>
+              <td>Tableau de logos. Requis.</td>
+            </tr>
+            <tr>
+              <td><code>heading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Phrase de contexte affichée au-dessus des logos (ex : "Ils nous font confiance").</td>
+            </tr>
+            <tr>
+              <td><code>layout</code></td>
+              <td><code>'row' | 'marquee'</code></td>
+              <td><code>'row'</code></td>
+              <td><code>row</code> : flex wrappé avec animation d'entrée. <code>marquee</code> : défilement infini CSS (recommandé à partir de 6 logos).</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc avec logos grisés, ou fond cramoisi avec logos blancs.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau de titre du heading pour la hiérarchie sémantique.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; LogoCloud &#125; from 'vitrify-ui';
+
+const logos = [
+  &#123; name: 'Maison Roux',  src: '/logos/maison-roux.svg' &#125;,
+  &#123; name: 'Archis',       src: '/logos/archis.svg', href: 'https://archis.fr' &#125;,
+  &#123; name: 'Nova',         src: '/logos/nova.svg' &#125;,
+  // ...
+];
+---
+
+&lt;!-- Rangée simple (défaut) --&gt;
+&lt;LogoCloud heading="Ils nous font confiance" logos=&#123;logos&#125; /&gt;
+
+&lt;!-- Défilement infini --&gt;
+&lt;LogoCloud logos=&#123;logos&#125; layout="marquee" /&gt;
+
+&lt;!-- Fond cramoisi --&gt;
+&lt;LogoCloud heading="Nos partenaires" logos=&#123;logos&#125; theme="dark" layout="marquee" as="h3" /&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="notes-heading">
+      <p class="section-label" id="notes-heading">Notes</p>
+      <ul class="notes-list">
+        <li>Les logos doivent être des fichiers <strong>sombres sur fond transparent</strong> (SVG ou PNG). Le thème dark applique automatiquement un filtre CSS pour les rendre blancs.</li>
+        <li>Le mode <code>marquee</code> est optimisé pour <strong>6 logos minimum</strong> — en dessous, la bande peut laisser apparaître des espaces vides.</li>
+        <li>Le marquee se <strong>met en pause au survol</strong> pour permettre la lecture.</li>
+        <li><strong>Mouvement réduit :</strong> si <code>prefers-reduced-motion</code> est actif, le marquee s'affiche en grille statique.</li>
+        <li>Chaque logo est un <code>&lt;img&gt;</code> avec <code>alt</code> — le nom sert de texte alternatif pour l'accessibilité.</li>
+        <li>Le champ <code>href</code> des logos n'est pris en compte qu'en mode <code>row</code> — le mode <code>marquee</code> ne supporte pas les liens (défilement continu).</li>
+      </ul>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .notes-list {
+    list-style: disc;
+    padding-left: var(--vf-spacing-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-spacing-3);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    color: var(--vf-color-text-muted);
+  }
+</style>

@@ -1,0 +1,5 @@
+<svg viewBox="0 0 160 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 34V22h5v4h4v-4h5v4h4v-4h5v12H8Z" stroke="#1a0d0b" stroke-width="1.4" stroke-linejoin="round"/>
+  <text x="40" y="23" font-family="sans-serif" font-size="10" font-weight="700" fill="#1a0d0b" letter-spacing="0.5">CHÂTEAU</text>
+  <text x="40" y="36" font-family="sans-serif" font-size="10" font-weight="400" fill="#1a0d0b" letter-spacing="2">BELLEVUE</text>
+</svg>
