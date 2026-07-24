@@ -1,3 +1,5 @@
+export type HeadingLevel = 'h2' | 'h3' | 'h4'
+
 export type FAQItem = {
   question: string
   answer:   string  // supports inline HTML: <a>, <strong>, <code>…
@@ -25,4 +27,21 @@ export type Testimonial = {
   rating?:    1 | 2 | 3 | 4 | 5
   avatar?:    string
   avatarAlt?: string
+}
+
+export type TeamSocial = {
+  linkedin?:  string
+  twitter?:   string
+  instagram?: string
+  github?:    string
+  website?:   string
+}
+
+export type TeamMember = {
+  name:      string
+  role:      string
+  bio?:      string
+  photo?:    string
+  photoAlt?: string
+  social?:   TeamSocial
 }

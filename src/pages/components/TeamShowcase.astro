@@ -1,0 +1,321 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Team from '../../components/Team.astro'
+import type { TeamMember } from '../../types'
+
+const agence: TeamMember[] = [
+  {
+    name: 'Julie Marchand',
+    role: 'Fondatrice & Directrice créative',
+    bio:  'Designer de formation, 12 ans d\'expérience en identité de marque et direction artistique pour PME françaises.',
+    social: { linkedin: '#', website: '#' },
+  },
+  {
+    name: 'Romain Fabre',
+    role: 'Développeur fullstack',
+    bio:  'Spécialiste Astro, React et performance web. Passionné par les expériences rapides et accessibles.',
+    social: { linkedin: '#', github: '#' },
+  },
+  {
+    name: 'Aïcha Benali',
+    role: 'Chargée de projet & SEO',
+    bio:  'Pilote les projets de A à Z et optimise la visibilité en ligne de nos clients artisans et commerçants.',
+    social: { linkedin: '#' },
+  },
+]
+
+const cabinet: TeamMember[] = [
+  {
+    name: 'Sophie Lecomte',
+    role: 'Architecte associée — fondatrice',
+    bio:  'Diplômée de l\'ENSA Paris-La Villette. Sophie porte la vision du cabinet depuis 2010 : une architecture sobre, durable et profondément ancrée dans son environnement. Lauréate du Prix de la Construction Bois 2022.',
+    social: { linkedin: '#', website: '#' },
+  },
+  {
+    name: 'Thomas Nguyen',
+    role: 'Architecte — rénovation',
+    social: { linkedin: '#' },
+  },
+  {
+    name: 'Clara Dubois',
+    role: 'Architecte — neuf & extension',
+    social: { linkedin: '#' },
+  },
+  {
+    name: 'Lucas Bernard',
+    role: 'BET structure & thermique',
+  },
+]
+
+const brigade: TeamMember[] = [
+  {
+    name: 'Marco Ferreira',
+    role: 'Chef de cuisine',
+  },
+  {
+    name: 'Élise Vernet',
+    role: 'Sous-chef',
+  },
+  {
+    name: 'Hassan Mimouni',
+    role: 'Chef pâtissier',
+  },
+  {
+    name: 'Nora Dupont',
+    role: 'Responsable de salle',
+  },
+]
+
+const duo: TeamMember[] = [
+  {
+    name: 'Pierre Morel',
+    role: 'Maître plombier',
+    bio:  'Artisan certifié QualiPac, 20 ans de métier. Intervient sur tout le bassin grenoblois.',
+    social: { website: '#' },
+  },
+  {
+    name: 'Antoine Morel',
+    role: 'Technicien chauffagiste',
+    bio:  'Spécialiste pompe à chaleur et chauffe-eau thermodynamique. RGE depuis 2019.',
+  },
+]
+---
+
+<ShowcasePage component="Team">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Team</h1>
+      <p>
+        Section équipe pour sites vitrines. Cartes portrait (3:4) avec monogramme en fallback.
+        Deux layouts : <code>grid</code> et <code>featured</code> (premier membre mis en avant).
+        Deux thèmes : <code>light</code> et <code>dark</code>. Liens sociaux optionnels. Zéro JavaScript.
+      </p>
+    </div>
+  </header>
+
+  <!-- Variant 1: Grid, 3 cols, light -->
+  <div class="variant-block">
+    <div class="container">
+      <p class="variant-label">layout="grid" — 3 colonnes (défaut)</p>
+    </div>
+    <Team
+      heading="L'équipe"
+      subheading="Agence Archipel · Paris"
+      members={agence}
+    />
+  </div>
+
+  <!-- Variant 2: Featured, light -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">layout="featured" — premier membre en vedette</p>
+    </div>
+    <Team
+      heading="Notre équipe"
+      subheading="Cabinet Lecomte & Associés · Architecture"
+      members={cabinet}
+      layout="featured"
+    />
+  </div>
+
+  <!-- Variant 3: Grid, dark, 4 cols -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">theme="dark" — 4 colonnes</p>
+    </div>
+    <Team
+      heading="La brigade"
+      subheading="Restaurant Le Cèdre · Bordeaux"
+      members={brigade}
+      theme="dark"
+      columns={4}
+    />
+  </div>
+
+  <!-- Variant 4: 2 cols, no heading -->
+  <div class="variant-block variant-block--bordered">
+    <div class="container">
+      <p class="variant-label">columns={2} — sans en-tête</p>
+    </div>
+    <Team
+      members={duo}
+      columns={2}
+    />
+  </div>
+
+  <!-- Props & Usage -->
+  <main class="page">
+
+    <section class="section" aria-labelledby="props-heading">
+      <p class="section-label" id="props-heading">Props</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>members</code></td>
+              <td><code>TeamMember[]</code></td>
+              <td><code>[]</code></td>
+              <td>Liste des membres à afficher.</td>
+            </tr>
+            <tr>
+              <td><code>heading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Titre de la section.</td>
+            </tr>
+            <tr>
+              <td><code>subheading</code></td>
+              <td><code>string</code></td>
+              <td>—</td>
+              <td>Texte secondaire affiché au-dessus du titre.</td>
+            </tr>
+            <tr>
+              <td><code>as</code></td>
+              <td><code>'h2' | 'h3'</code></td>
+              <td><code>'h2'</code></td>
+              <td>Niveau sémantique du titre — adapter selon la hiérarchie de la page.</td>
+            </tr>
+            <tr>
+              <td><code>theme</code></td>
+              <td><code>'light' | 'dark'</code></td>
+              <td><code>'light'</code></td>
+              <td>Fond blanc ou fond cramoisi avec texte blanc.</td>
+            </tr>
+            <tr>
+              <td><code>layout</code></td>
+              <td><code>'grid' | 'featured'</code></td>
+              <td><code>'grid'</code></td>
+              <td><code>featured</code> : premier membre en pleine largeur avec mise en page horizontale.</td>
+            </tr>
+            <tr>
+              <td><code>columns</code></td>
+              <td><code>2 | 3 | 4</code></td>
+              <td><code>3</code></td>
+              <td>Nombre de colonnes sur desktop (≥1024px). Mobile toujours 1 col, tablette toujours 2 cols.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label section-label--spaced">Type TeamMember</p>
+      <pre class="code-block">type TeamMember = &#123;
+  name:      string      // nom complet
+  role:      string      // poste ou titre
+  bio?:      string      // courte biographie (optionnel)
+  photo?:    string      // URL de la photo portrait
+  photoAlt?: string      // alt text (défaut : le nom)
+  social?:   TeamSocial  // liens sociaux (optionnel)
+&#125;
+
+type TeamSocial = &#123;
+  linkedin?:  string
+  twitter?:   string
+  instagram?: string
+  github?:    string
+  website?:   string
+&#125;</pre>
+
+      <p class="section-label section-label--spaced">Slot</p>
+      <div class="props-table-wrap">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>header</code></td>
+              <td>Remplace le rendu par défaut du titre. Utile pour insérer un logo, un badge ou tout HTML personnalisé.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="usage-heading">
+      <p class="section-label" id="usage-heading">Usage</p>
+      <pre class="code-block">---
+import &#123; Team &#125; from 'vitrify-ui';
+import type &#123; TeamMember &#125; from 'vitrify-ui';
+
+const equipe: TeamMember[] = [
+  &#123;
+    name:   'Marie Fontaine',
+    role:   'Gérante',
+    bio:    '15 ans d\'expérience en restauration traditionnelle.',
+    social: &#123; linkedin: 'https://...', instagram: 'https://...' &#125;,
+  &#125;,
+  &#123;
+    name:   'Paul Leroux',
+    role:   'Chef de cuisine',
+  &#125;,
+];
+---
+
+&lt;!-- Grille simple --&gt;
+&lt;Team heading="Notre équipe" members=&#123;equipe&#125; /&gt;
+
+&lt;!-- Premier membre mis en avant --&gt;
+&lt;Team
+  heading="L'équipe dirigeante"
+  members=&#123;equipe&#125;
+  layout="featured"
+/&gt;
+
+&lt;!-- Thème dark, 4 colonnes --&gt;
+&lt;Team
+  theme="dark"
+  heading="La brigade"
+  members=&#123;equipe&#125;
+  columns=&#123;4&#125;
+/&gt;</pre>
+    </section>
+
+    <section class="section" aria-labelledby="schema-heading">
+      <p class="section-label" id="schema-heading">Schema.org</p>
+      <p style="color: var(--vf-color-text-muted); font-size: var(--vf-font-size-sm); line-height: var(--vf-line-height-relaxed); margin-bottom: var(--vf-spacing-4);">
+        Pour le référencement, enrichir chaque membre avec le type <code>Person</code> au sein du <code>LocalBusiness</code> ou <code>Organization</code> parent.
+      </p>
+      <pre class="code-block">&lt;script type="application/ld+json"&gt;
+&#123;
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Cabinet Lecomte & Associés",
+  "employee": [
+    &#123;
+      "@type": "Person",
+      "name": "Sophie Lecomte",
+      "jobTitle": "Architecte associée",
+      "url": "https://example.com/equipe/sophie-lecomte"
+    &#125;,
+    &#123;
+      "@type": "Person",
+      "name": "Thomas Nguyen",
+      "jobTitle": "Architecte — rénovation"
+    &#125;
+  ]
+&#125;
+&lt;/script&gt;</pre>
+    </section>
+
+  </main>
+
+</ShowcasePage>
+
+<style>
+  .section-label--spaced {
+    margin-top: var(--vf-spacing-8);
+  }
+</style>

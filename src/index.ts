@@ -8,6 +8,7 @@ export { default as Features }     from './components/Features.astro';
 export { default as Footer }       from './components/Footer.astro';
 export { default as Testimonials } from './components/Testimonials.astro';
 export { default as FAQ }          from './components/FAQ.astro';
+export { default as Team }         from './components/Team.astro';
 
 // Types
-export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem } from './types';
+export type { GalleryItem, FooterLink, FooterColumn, SocialIcon, SocialLink, Testimonial, FAQItem, TeamSocial, TeamMember, HeadingLevel } from './types';
