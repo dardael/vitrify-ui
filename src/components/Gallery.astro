@@ -1,0 +1,398 @@
+---
+export type GalleryItem = {
+  src: string
+  alt: string
+  title?: string
+  category?: string
+  href?: string
+  featured?: boolean
+}
+
+export type Props = {
+  items: GalleryItem[]
+  columns?: 2 | 3 | 4
+  gap?: 'tight' | 'normal' | 'loose'
+  showFilters?: boolean
+  heading?: string
+  headingAs?: 'h2' | 'h3'
+}
+
+const {
+  items,
+  columns = 3,
+  gap = 'tight',
+  showFilters,
+  heading,
+  headingAs: HeadingTag = 'h2',
+} = Astro.props
+
+const uid = 'vf-gallery-' + Math.random().toString(36).slice(2, 9)
+const gapValue = { tight: '4px', normal: '12px', loose: '24px' }[gap]
+
+const categories = [
+  ...new Set(items.map(i => i.category).filter((c): c is string => Boolean(c))),
+]
+const hasFilters = (showFilters ?? categories.length > 1) && categories.length > 1
+---
+
+<div
+  id={uid}
+  class="vf-gallery"
+  style={`--_cols: ${columns}; --_gap: ${gapValue}`}
+>
+  {heading && (
+    <HeadingTag class="vf-gallery__heading">{heading}</HeadingTag>
+  )}
+
+  {hasFilters && (
+    <div class="vf-gallery__filters" role="group" aria-label="Filtrer par catégorie">
+      <button class="vf-gallery__pill is-active" data-filter="all" aria-pressed="true">
+        Tous
+      </button>
+      {categories.map(cat => (
+        <button class="vf-gallery__pill" data-filter={cat} aria-pressed="false">
+          {cat}
+        </button>
+      ))}
+    </div>
+  )}
+
+  <div class="vf-gallery__grid">
+    {items.map((item, i) => {
+      const Tag = item.href ? 'a' : 'div'
+      return (
+        <Tag
+          class:list={[
+            'vf-gallery__item',
+            item.featured && 'vf-gallery__item--featured',
+          ]}
+          href={item.href ?? undefined}
+          aria-label={item.href ? (item.title ?? item.alt) : undefined}
+          data-category={item.category ?? undefined}
+          style={`--_i: ${Math.min(i, 6)}`}
+        >
+          <img
+            src={item.src}
+            alt={item.alt}
+            loading={i < 3 ? 'eager' : 'lazy'}
+            decoding="async"
+            width={item.featured ? 1200 : 600}
+            height={item.featured ? 675 : 600}
+          />
+          {(item.title || item.category) && (
+            <div class="vf-gallery__overlay" aria-hidden="true">
+              {item.title && <span class="vf-gallery__title">{item.title}</span>}
+              {item.category && <span class="vf-gallery__cat">{item.category}</span>}
+            </div>
+          )}
+        </Tag>
+      )
+    })}
+  </div>
+</div>
+
+<script define:vars={{ uid, hasFilters }}>
+  const root = document.getElementById(uid)
+  if (!root) throw new Error(`[vf-gallery] #${uid} not found`)
+
+  // ── Category filter ──
+  if (hasFilters) {
+    const pills = root.querySelectorAll('.vf-gallery__pill')
+    const gridItems = root.querySelectorAll('.vf-gallery__item')
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const filter = pill.dataset.filter
+        pills.forEach(p => {
+          p.classList.remove('is-active')
+          p.setAttribute('aria-pressed', 'false')
+        })
+        pill.classList.add('is-active')
+        pill.setAttribute('aria-pressed', 'true')
+        gridItems.forEach(item => {
+          const match = filter === 'all' || item.dataset.category === filter
+          item.toggleAttribute('hidden', !match)
+        })
+      })
+    })
+  }
+
+  // ── Staggered entrance via IntersectionObserver ──
+  const gridItems = root.querySelectorAll('.vf-gallery__item')
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (prefersReduced) {
+    gridItems.forEach(item => item.classList.add('is-visible'))
+  } else {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
+    )
+    gridItems.forEach(item => observer.observe(item))
+  }
+</script>
+
+<style>
+  /* ── Container ── */
+  .vf-gallery {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Optional heading ── */
+  .vf-gallery__heading {
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-heading);
+    line-height: var(--vf-line-height-tight);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    color: var(--vf-color-text);
+    margin-bottom: var(--vf-spacing-8);
+  }
+
+  /* ── Filter pills ── */
+  .vf-gallery__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-spacing-2);
+    margin-bottom: var(--vf-spacing-6);
+  }
+
+  .vf-gallery__pill {
+    font-family: var(--vf-font-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    line-height: 1;
+    padding: 9px 16px;
+    min-height: 40px;
+    border-radius: var(--vf-radius-full);
+    border: 1px solid var(--vf-color-border);
+    background: transparent;
+    color: var(--vf-color-text-muted);
+    cursor: pointer;
+    transition:
+      background-color var(--vf-duration-fast) var(--vf-ease-out),
+      color            var(--vf-duration-fast) var(--vf-ease-out),
+      border-color     var(--vf-duration-fast) var(--vf-ease-out);
+  }
+
+  .vf-gallery__pill:hover {
+    border-color: var(--vf-color-text-muted);
+    color: var(--vf-color-text);
+  }
+
+  .vf-gallery__pill.is-active {
+    background: var(--vf-color-primary);
+    border-color: var(--vf-color-primary);
+    color: var(--vf-color-primary-foreground);
+  }
+
+  .vf-gallery__pill:focus-visible {
+    outline: 3px solid var(--vf-color-primary);
+    outline-offset: 2px;
+  }
+
+  /* ── Grid ── */
+  .vf-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row dense;
+    gap: var(--_gap, 4px);
+  }
+
+  @media (min-width: 640px) {
+    .vf-gallery__grid {
+      grid-template-columns: repeat(var(--_cols, 3), 1fr);
+    }
+  }
+
+  /* ── Item ── */
+  .vf-gallery__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--vf-radius-sm);
+    aspect-ratio: 1 / 1;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--vf-color-surface);
+    /* Entrance: start hidden */
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity   360ms var(--vf-ease-out) calc(var(--_i, 0) * 50ms),
+      transform 360ms var(--vf-ease-out) calc(var(--_i, 0) * 50ms);
+  }
+
+  .vf-gallery__item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Press feedback — placed after .is-visible so specificity wins */
+  .vf-gallery__item.is-visible:active {
+    transform: scale(0.98);
+    transition:
+      opacity   0ms,
+      transform 100ms var(--vf-ease-out);
+  }
+
+  .vf-gallery__item--featured {
+    grid-column: span 2;
+    aspect-ratio: 16 / 9;
+  }
+
+  .vf-gallery__item[hidden] {
+    display: none;
+  }
+
+  /* ── Image ── */
+  .vf-gallery__item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform var(--vf-duration-slow) var(--vf-ease-out);
+  }
+
+  /* Image outline — pure black, never tinted, to avoid color-cast on edges */
+  .vf-gallery__item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--vf-radius-sm);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.10);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* ── Overlay ── */
+  .vf-gallery__overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--vf-radius-sm);
+    background: linear-gradient(
+      to top,
+      oklch(0.10 0.02 26 / 0.82) 0%,
+      oklch(0.10 0.02 26 / 0.24) 55%,
+      transparent 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--vf-spacing-4);
+    z-index: 2;
+  }
+
+  /* Crimson brand accent — 2px line at top of overlay */
+  .vf-gallery__overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--vf-color-primary);
+    border-radius: var(--vf-radius-sm) var(--vf-radius-sm) 0 0;
+  }
+
+  .vf-gallery__title {
+    display: block;
+    font-family: var(--vf-font-display);
+    font-variation-settings: var(--vf-font-display-settings);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-tight);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    color: oklch(1 0 0);
+  }
+
+  .vf-gallery__item--featured .vf-gallery__title {
+    font-size: var(--vf-font-size-base);
+  }
+
+  .vf-gallery__cat {
+    display: block;
+    font-size: var(--vf-font-size-xs);
+    color: oklch(1 0 0 / 0.60);
+    margin-top: var(--vf-spacing-1);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Desktop: animated overlay on hover ── */
+  @media (hover: hover) and (pointer: fine) {
+    .vf-gallery__item:hover img {
+      transform: scale(1.04);
+    }
+
+    .vf-gallery__overlay {
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .vf-gallery__overlay::before {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 300ms var(--vf-ease-out) 40ms;
+    }
+
+    .vf-gallery__title {
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity   220ms ease 30ms,
+        transform 240ms var(--vf-ease-out) 30ms;
+    }
+
+    .vf-gallery__cat {
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity   220ms ease 60ms,
+        transform 240ms var(--vf-ease-out) 60ms;
+    }
+
+    .vf-gallery__item:hover .vf-gallery__overlay         { opacity: 1; }
+    .vf-gallery__item:hover .vf-gallery__overlay::before { transform: scaleX(1); }
+
+    .vf-gallery__item:hover .vf-gallery__title,
+    .vf-gallery__item:hover .vf-gallery__cat {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vf-gallery__item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .vf-gallery__item.is-visible:active {
+      transform: none;
+    }
+
+    .vf-gallery__item img {
+      transition: none;
+      will-change: auto;
+    }
+
+    .vf-gallery__overlay,
+    .vf-gallery__overlay::before,
+    .vf-gallery__title,
+    .vf-gallery__cat {
+      transition: none;
+    }
+  }
+</style>

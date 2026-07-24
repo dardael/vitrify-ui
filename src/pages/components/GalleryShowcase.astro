@@ -1,0 +1,288 @@
+---
+import ShowcasePage from '../../layouts/ShowcasePage.astro'
+import Gallery from '../../components/Gallery.astro'
+import type { GalleryItem } from '../../types'
+
+const BASE = 'https://images.unsplash.com'
+
+const items: GalleryItem[] = [
+  {
+    src: `${BASE}/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80`,
+    alt: 'Résidence privée avec piscine à débordement, Bordeaux',
+    title: 'Résidence Privée, Bordeaux',
+    category: 'Architecture',
+    href: '#',
+    featured: true,
+  },
+  {
+    src: `${BASE}/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80`,
+    alt: 'Salon haussmannien rénové, moulures et parquet point de Hongrie',
+    title: 'Appartement Haussmannien, Paris 8e',
+    category: 'Intérieur',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80`,
+    alt: 'Villa contemporaine, façade en verre et béton au coucher du soleil',
+    title: 'Villa Contemporaine, Biarritz',
+    category: 'Architecture',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80`,
+    alt: "Chambre principale avec verrière industrielle, poutres apparentes",
+    title: 'Loft Industriel, Nantes',
+    category: 'Intérieur',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80`,
+    alt: "Panorama alpin, domaine skiable au-dessus des nuages, Chamonix",
+    title: 'Domaine Alpin, Chamonix',
+    category: 'Paysage',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=600&q=80`,
+    alt: 'Cuisine ouverte en îlot central, plan de travail en marbre blanc',
+    title: 'Cuisine Ouverte, Lyon',
+    category: 'Intérieur',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80`,
+    alt: "Escalier en colimaçon acier et bois, vue depuis le bas vers la verrière",
+    title: "Escalier en Colimaçon, Bordeaux",
+    category: 'Architecture',
+    href: '#',
+  },
+  {
+    src: `${BASE}/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80`,
+    alt: "Jardin contemporain avec bassin miroir, glycines en fleur, Aix-en-Provence",
+    title: 'Jardin Contemporain, Aix-en-Provence',
+    category: 'Paysage',
+    href: '#',
+  },
+]
+
+const itemsLoose: GalleryItem[] = items.map(({ featured: _f, ...rest }) => rest)
+---
+
+<ShowcasePage component="Gallery">
+  <main class="page">
+
+    <header class="page-header container">
+      <h1>Gallery</h1>
+      <p>
+        Grille images/projets — mosaic art-directé, items <code>featured</code> en 16:9 sur 2 colonnes,
+        filtre par catégorie, overlay au hover avec titre et ligne cramoisi.
+        Zéro JS côté serveur ; filtre et animations via un script inline léger.
+      </p>
+    </header>
+
+    <!-- ── Défaut — 3 colonnes, gap tight, filtres actifs ── -->
+    <section class="showcase-section" aria-labelledby="default-heading">
+      <div class="container">
+        <p class="variant-label" id="default-heading">
+          Défaut — 3 colonnes, gap tight, filtres par catégorie
+        </p>
+        <Gallery
+          items={items}
+          heading="Réalisations"
+          headingAs="h2"
+        />
+      </div>
+    </section>
+
+    <!-- ── 4 colonnes, gap loose, sans filtres ── -->
+    <section class="showcase-section showcase-section--tinted" aria-labelledby="loose-heading">
+      <div class="container">
+        <p class="variant-label" id="loose-heading">
+          4 colonnes — gap loose, sans filtres, sans featured
+        </p>
+        <Gallery
+          items={itemsLoose}
+          columns={4}
+          gap="loose"
+          showFilters={false}
+        />
+      </div>
+    </section>
+
+    <!-- ── 2 colonnes, gap normal ── -->
+    <section class="showcase-section" aria-labelledby="two-col-heading">
+      <div class="container">
+        <p class="variant-label" id="two-col-heading">
+          2 colonnes — gap normal
+        </p>
+        <Gallery
+          items={items.slice(0, 4)}
+          columns={2}
+          gap="normal"
+          showFilters={false}
+        />
+      </div>
+    </section>
+
+    <!-- ── Props ── -->
+    <section class="showcase-section" aria-labelledby="props-heading">
+      <div class="container">
+        <p class="variant-label" id="props-heading">Props — Gallery</p>
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead>
+              <tr>
+                <th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>items</code></td>
+                <td><code>GalleryItem[]</code></td>
+                <td>—</td>
+                <td>Liste des éléments (obligatoire)</td>
+              </tr>
+              <tr>
+                <td><code>columns</code></td>
+                <td><code>2 | 3 | 4</code></td>
+                <td><code>3</code></td>
+                <td>Nombre de colonnes sur desktop (≥ 640px). Mobile : toujours 2 colonnes.</td>
+              </tr>
+              <tr>
+                <td><code>gap</code></td>
+                <td><code>'tight' | 'normal' | 'loose'</code></td>
+                <td><code>'tight'</code></td>
+                <td>Espace entre les items — 4px / 12px / 24px</td>
+              </tr>
+              <tr>
+                <td><code>showFilters</code></td>
+                <td><code>boolean</code></td>
+                <td>auto</td>
+                <td>Affiche les filtres par catégorie. Auto-activé si ≥ 2 catégories distinctes dans <code>items</code>.</td>
+              </tr>
+              <tr>
+                <td><code>heading</code></td>
+                <td><code>string</code></td>
+                <td>—</td>
+                <td>Titre optionnel affiché au-dessus de la galerie</td>
+              </tr>
+              <tr>
+                <td><code>headingAs</code></td>
+                <td><code>'h2' | 'h3'</code></td>
+                <td><code>'h2'</code></td>
+                <td>Niveau de titre pour respecter la hiérarchie de la page</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: var(--vf-spacing-6);">
+          <p class="variant-label">Props — GalleryItem</p>
+          <div class="props-table-wrap">
+            <table class="props-table">
+              <thead>
+                <tr>
+                  <th>Prop</th><th>Type</th><th>Défaut</th><th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>src</code></td>
+                  <td><code>string</code></td>
+                  <td>—</td>
+                  <td>URL de l'image (obligatoire)</td>
+                </tr>
+                <tr>
+                  <td><code>alt</code></td>
+                  <td><code>string</code></td>
+                  <td>—</td>
+                  <td>Texte alternatif (obligatoire)</td>
+                </tr>
+                <tr>
+                  <td><code>title</code></td>
+                  <td><code>string</code></td>
+                  <td>—</td>
+                  <td>Titre affiché dans l'overlay au hover / toujours visible sur mobile</td>
+                </tr>
+                <tr>
+                  <td><code>category</code></td>
+                  <td><code>string</code></td>
+                  <td>—</td>
+                  <td>Catégorie utilisée pour le filtre et affichée dans l'overlay</td>
+                </tr>
+                <tr>
+                  <td><code>href</code></td>
+                  <td><code>string</code></td>
+                  <td>—</td>
+                  <td>Rend l'item cliquable (rendu en <code>&lt;a&gt;</code>)</td>
+                </tr>
+                <tr>
+                  <td><code>featured</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>false</code></td>
+                  <td>Item principal — occupe 2 colonnes en 16:9, toujours full-width sur mobile</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Usage ── -->
+    <section class="showcase-section" aria-labelledby="usage-heading">
+      <div class="container">
+        <p class="variant-label" id="usage-heading">Usage</p>
+        <pre class="code-block">---
+import &#123; Gallery &#125; from 'vitrify-ui';
+import type &#123; GalleryItem &#125; from 'vitrify-ui';
+
+const items: GalleryItem[] = [
+  &#123;
+    src: '/images/residence-bordeaux.jpg',
+    alt: 'Résidence privée avec piscine, Bordeaux',
+    title: 'Résidence Privée, Bordeaux',
+    category: 'Architecture',
+    href: '/projets/bordeaux',
+    featured: true,   // occupe 2 colonnes en 16:9
+  &#125;,
+  &#123;
+    src: '/images/loft-nantes.jpg',
+    alt: 'Loft industriel rénové, Nantes',
+    title: 'Loft Industriel, Nantes',
+    category: 'Intérieur',
+    href: '/projets/nantes',
+  &#125;,
+  // ...
+];
+---
+
+&lt;!-- Défaut : 3 colonnes, gap tight, filtres auto ──&gt;
+&lt;Gallery items=&#123;items&#125; heading="Réalisations" /&gt;
+
+&lt;!-- 4 colonnes, gaps généreux, pas de filtres ──&gt;
+&lt;Gallery items=&#123;items&#125; columns=&#123;4&#125; gap="loose" showFilters=&#123;false&#125; /&gt;
+
+&lt;!-- 2 colonnes éditoriales ──&gt;
+&lt;Gallery items=&#123;items&#125; columns=&#123;2&#125; gap="normal" /&gt;</pre>
+      </div>
+    </section>
+
+  </main>
+</ShowcasePage>
+
+<style>
+  .page {
+    padding-bottom: var(--vf-spacing-24);
+  }
+
+  .showcase-section {
+    padding: var(--vf-spacing-12) 0;
+    border-top: 1px solid var(--vf-color-border);
+  }
+
+  .showcase-section--tinted {
+    background: var(--vf-color-surface);
+    border-color: transparent;
+  }
+</style>
